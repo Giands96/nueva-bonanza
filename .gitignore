@@ -22,3 +22,10 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# ai working files - keep repo clean
+Design.md
+DESIGN.md
+CLAUDE.md
+AGENTS.md
+GEMINI.md
