@@ -11,9 +11,9 @@ export interface Project {
   slug: string;
   region: string;
   name: string;
-  /** Descripción del mosaico de Proyectos (§5.6). */
+  /** Descripción del mosaico de Proyectos. */
   description: string;
-  /** Descripción corta del carrusel de Inicio (§5.4). */
+  /** Descripción corta del carrusel de Inicio. */
   shortDescription: string;
   cardImage: ImageMetadata;
   tileImage: ImageMetadata;
