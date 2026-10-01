@@ -1,0 +1,100 @@
+---
+import { companyHeading, companyText } from "../../data/about";
+import companyPhoto from "../../assets/img/empresa-surveyors.png";
+---
+<section class="company" aria-label="Nuestra empresa">
+  <div class="company__text">
+    <span class="company__kicker">NUESTRA EMPRESA</span>
+    <h2>{companyHeading}</h2>
+    <p>{companyText}</p>
+  </div>
+  <div
+    class="company__photo"
+    role="img"
+    aria-label="Equipo de topografía en campo"
+    style={`background-image:url(${companyPhoto.src})`}
+  ></div>
+</section>
+<style>
+  .company {
+    display: flex;
+    height: 750px;
+    background: var(--nb-cream);
+  }
+  .company__text {
+    flex: 1;
+    padding: 48px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 24px;
+  }
+  .company__kicker {
+    font: 700 24px / 1 var(--font-display);
+    color: var(--nb-gold);
+  }
+  .company h2 {
+    font: 700 64px / 1 var(--font-display);
+    color: #000;
+  }
+  .company p {
+    max-width: 620px;
+    margin-top: 24px;
+    font-size: 20px;
+    line-height: 1.5;
+    color: #000;
+  }
+  .company__photo {
+    position: relative;
+    flex: 1;
+    background-position: center;
+    background-size: cover;
+  }
+  .company__photo::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      270deg,
+      rgba(0, 0, 0, 0) 0%,
+      rgba(233, 231, 223, 0.25) 74%,
+      var(--nb-cream) 98%
+    );
+  }
+  @media (max-width: 1100px) {
+    .company {
+      height: auto;
+    }
+    .company__photo {
+      min-height: 420px;
+    }
+  }
+  @media (max-width: 760px) {
+    .company {
+      flex-direction: column;
+      height: auto;
+    }
+    .company__text {
+      padding: 48px 20px;
+    }
+    .company h2 {
+      font-size: 40px;
+    }
+    .company p {
+      font-size: 16px;
+      margin-top: 8px;
+    }
+    .company__photo {
+      flex: none;
+      height: 320px;
+    }
+    .company__photo::before {
+      background: linear-gradient(
+        0deg,
+        rgba(0, 0, 0, 0) 0%,
+        rgba(233, 231, 223, 0.25) 74%,
+        var(--nb-cream) 100%
+      );
+    }
+  }
+</style>

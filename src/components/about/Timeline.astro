@@ -1,0 +1,166 @@
+---
+import { milestones } from "../../data/about";
+import Rule from "../Rule.astro";
+import historyBg from "../../assets/img/hitos-plant.png";
+---
+<section class="history" aria-label="Nuestra historia" style={`--history-bg:url(${historyBg.src})`}>
+  <div class="history__head">
+    <b>NUESTROS HITOS</b>
+    <h2>NUESTRA HISTORIA</h2>
+  </div>
+  <ol class="timeline">
+    {milestones.map((m) => (
+      <li class="milestone">
+        <i aria-hidden="true"></i>
+        <b>{m.year}</b>
+        <p>{m.text}</p>
+      </li>
+    ))}
+  </ol>
+  <div class="history__note">
+    <Rule />
+    <p>
+      Más de una década construyendo una minería responsable,<br class="br-desktop" />{" "}
+      basada en seguridad, innovación y compromiso con el desarrollo del Perú
+    </p>
+  </div>
+</section>
+<style>
+  .history {
+    position: relative;
+    isolation: isolate;
+    padding: 80px 46px;
+    background: var(--nb-cream);
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+    overflow: hidden;
+  }
+  .history::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background: var(--history-bg) center / cover no-repeat;
+    filter: grayscale(1) sepia(0.2);
+  }
+  .history::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: rgba(248, 246, 238, 0.85);
+  }
+  .history__head {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .history__head b {
+    font: 500 24px / 1 var(--font-display);
+    letter-spacing: 0.02em;
+    color: var(--nb-gold);
+  }
+  .history__head h2 {
+    font: 700 56px / 1 var(--font-display);
+    color: var(--nb-ink-800);
+  }
+  .timeline {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    top: 8px;
+    left: 12.5%;
+    right: 12.5%;
+    height: 2px;
+    background: var(--nb-gold);
+  }
+  .milestone {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    text-align: center;
+  }
+  .milestone i {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--nb-gold);
+  }
+  .milestone b {
+    font: 700 40px / 1 var(--font-display);
+    color: var(--nb-ink-800);
+  }
+  .milestone p {
+    max-width: 240px;
+    font: 400 14px / 1.4 var(--font-body);
+    color: var(--nb-ink-800);
+  }
+  .history__note {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  .history__note p {
+    font: 400 18px / 1.5 var(--font-body);
+    color: var(--nb-ink-800);
+  }
+  @media (max-width: 760px) {
+    .history {
+      padding: 56px 20px;
+      gap: 36px;
+    }
+    .history__head h2 {
+      font-size: 40px;
+    }
+    .history__head b {
+      font-size: 20px;
+    }
+    .timeline {
+      grid-template-columns: 1fr;
+      gap: 28px;
+      padding-left: 40px;
+    }
+    .timeline::before {
+      left: 8px;
+      right: auto;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      height: auto;
+    }
+    .milestone {
+      align-items: flex-start;
+      text-align: left;
+      gap: 8px;
+    }
+    .milestone i {
+      position: absolute;
+      left: -40px;
+      top: 11px;
+    }
+    .milestone b {
+      font-size: 36px;
+    }
+    .milestone p {
+      max-width: none;
+    }
+    .history__note p {
+      font-size: 16px;
+    }
+    .br-desktop {
+      display: none;
+    }
+  }
+</style>

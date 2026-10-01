@@ -1,0 +1,71 @@
+---
+import type { ImageMetadata } from "astro";
+import Eyebrow from "./Eyebrow.astro";
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  text: string;
+  image: ImageMetadata;
+}
+
+const { eyebrow, title, text, image } = Astro.props;
+---
+<section class="phero" style={`background-image:url(${image.src})`}>
+  <div class="phero__content">
+    <Eyebrow filled>{eyebrow}</Eyebrow>
+    <h1>{title}</h1>
+    <p>{text}</p>
+  </div>
+</section>
+<style>
+  .phero {
+    position: relative;
+    height: 500px;
+    padding: 0 48px;
+    display: flex;
+    align-items: center;
+    background-position: center;
+    background-size: cover;
+  }
+  .phero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+  }
+  .phero__content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    max-width: 640px;
+    color: #fff;
+  }
+  .phero h1 {
+    font: 700 96px / 1 var(--font-display);
+  }
+  .phero p {
+    font-size: 20px;
+    line-height: 1.4;
+  }
+  @media (max-width: 1100px) {
+    .phero h1 {
+      font-size: 72px;
+    }
+  }
+  @media (max-width: 760px) {
+    .phero {
+      height: 420px;
+      padding: 0 20px 40px;
+      align-items: flex-end;
+    }
+    .phero h1 {
+      font-size: 56px;
+    }
+    .phero p {
+      font-size: 16px;
+    }
+  }
+</style>

@@ -1,0 +1,187 @@
+---
+import { mission, vision, values } from "../../data/about";
+import Rule from "../Rule.astro";
+import principlesPhoto from "../../assets/img/principios-worker.png";
+---
+<section class="principles" aria-label="Misión, visión y valores">
+  <div
+    class="principles__photo"
+    role="img"
+    aria-label="Trabajador con equipo de seguridad"
+    style={`background-image:url(${principlesPhoto.src})`}
+  ></div>
+  <div class="principles__body">
+    <div class="principles__head">
+      <b>NUESTROS PRINCIPIOS</b>
+      <h2>MISIÓN, VISIÓN Y VALORES</h2>
+    </div>
+    <div class="mv">
+      <div>
+        <Rule width={76} />
+        <h3>MISIÓN</h3>
+        <p>{mission}</p>
+      </div>
+      <div>
+        <Rule width={76} />
+        <h3>VISIÓN</h3>
+        <p>{vision}</p>
+      </div>
+    </div>
+    <ul class="values">
+      {values.map((v) => (
+        <li>
+          <b>{v.number}</b>
+          <div>
+            <h3>{v.title}</h3>
+            <p>{v.text}</p>
+          </div>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+<style>
+  .principles {
+    display: flex;
+    gap: 24px;
+    background: var(--nb-ink-800);
+  }
+  .principles__photo {
+    position: relative;
+    flex: 0 0 612px;
+    background-position: center;
+    background-size: cover;
+    filter: grayscale(0.6);
+  }
+  .principles__photo::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      rgba(102, 102, 102, 0) 0%,
+      rgb(31, 31, 31) 97%,
+      var(--nb-ink-800) 100%
+    );
+  }
+  .principles__body {
+    flex: 1;
+    padding: 64px 48px 64px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .principles__head b {
+    display: block;
+    margin-bottom: 16px;
+    font: 700 20px / 1 var(--font-display);
+    color: var(--nb-gold);
+  }
+  .principles__head h2 {
+    font: 700 48px / 1 var(--font-display);
+    color: #fff;
+  }
+  .mv {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .mv div {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .mv h3 {
+    font: 700 32px / 1 var(--font-display);
+    color: #fff;
+  }
+  .mv p {
+    font-size: 16px;
+    line-height: 1.5;
+    color: #fff;
+  }
+  .values {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .values li {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--nb-stone-2);
+  }
+  .values b {
+    flex: none;
+    width: 56px;
+    text-align: center;
+    font: 700 36px / 1 var(--font-display);
+    color: var(--nb-gold);
+  }
+  .values div {
+    flex: 1;
+    padding: 4px 22px;
+    border-left: 1px solid var(--nb-stone-2);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .values h3 {
+    font: 700 32px / 1 var(--font-display);
+    color: var(--nb-stone-2);
+  }
+  .values p {
+    font-size: 15px;
+    line-height: 1.4;
+    color: var(--nb-stone-2);
+  }
+  @media (max-width: 1100px) {
+    .principles {
+      flex-direction: column;
+      gap: 0;
+    }
+    .principles__photo {
+      flex: none;
+      height: 320px;
+    }
+    .principles__photo::before {
+      background: linear-gradient(180deg, rgba(102, 102, 102, 0) 0%, var(--nb-ink-800) 100%);
+    }
+    .principles__body {
+      padding: 32px 48px 56px;
+    }
+  }
+  @media (max-width: 760px) {
+    .principles {
+      flex-direction: column;
+      gap: 0;
+    }
+    .principles__photo {
+      flex: none;
+      height: 260px;
+    }
+    .principles__photo::before {
+      background: linear-gradient(180deg, rgba(102, 102, 102, 0) 0%, var(--nb-ink-800) 100%);
+    }
+    .principles__body {
+      padding: 32px 20px 48px;
+    }
+    .principles__head h2 {
+      font-size: 34px;
+    }
+    .mv {
+      grid-template-columns: 1fr;
+    }
+    .values h3 {
+      font-size: 24px;
+    }
+    .values b {
+      width: 44px;
+      font-size: 28px;
+    }
+  }
+</style>
