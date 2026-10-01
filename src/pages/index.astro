@@ -1,8 +1,17 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
-
-// Contenido definitivo en Fase 4 (Inicio).
+import ContactBand from "../components/ContactBand.astro";
+import HeroHome from "../components/home/HeroHome.astro";
+import AboutSplit from "../components/home/AboutSplit.astro";
+import ProjectsCarousel from "../components/home/ProjectsCarousel.astro";
+import Team from "../components/home/Team.astro";
 ---
 <BaseLayout title="Inicio" current="inicio">
-  <main></main>
+  <main>
+    <HeroHome />
+    <AboutSplit />
+    <ProjectsCarousel />
+    <Team />
+    <ContactBand />
+  </main>
 </BaseLayout>

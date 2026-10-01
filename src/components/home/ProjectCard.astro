@@ -1,0 +1,78 @@
+---
+import type { Project } from "../../data/projects";
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+---
+<a
+  class="project"
+  href={`/proyectos#${project.slug}`}
+  style={`background-image:url(${project.cardImage.src})`}
+>
+  <span class="project__region">{project.region}</span>
+  <span class="project__name">{project.name}</span>
+  <span class="project__desc"><span>{project.shortDescription}</span></span>
+</a>
+<style>
+  .project {
+    position: relative;
+    height: 480px;
+    background-position: center;
+    background-size: cover;
+    filter: grayscale(1);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 32px;
+    color: #fff;
+    transition: filter 300ms ease;
+  }
+  .project:hover { filter: grayscale(0); }
+  .project::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.57) 62.98%);
+  }
+  .project > * { position: relative; }
+  .project__desc {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 450ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .project__desc > span {
+    min-height: 0;
+    overflow: hidden;
+    padding-top: 0;
+    font: 400 16px / 1.5 var(--font-body);
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 450ms ease, transform 450ms cubic-bezier(0.2, 0.7, 0.2, 1), padding-top 450ms ease;
+  }
+  .project:hover .project__desc,
+  .project:focus-visible .project__desc { grid-template-rows: 1fr; }
+  .project:hover .project__desc > span,
+  .project:focus-visible .project__desc > span { opacity: 1; transform: none; padding-top: 12px; }
+  @media (hover: none) {
+    .project__desc { grid-template-rows: 1fr; }
+    .project__desc > span { opacity: 1; transform: none; padding-top: 12px; }
+  }
+  .project__region {
+    font: 600 16px / 1 var(--font-body);
+    letter-spacing: var(--ls-caps);
+  }
+  .project__name { font: 700 40px / 1 var(--font-display); }
+  @media (max-width: 760px) {
+    .project {
+      flex: 0 0 100%;
+      height: 420px;
+      scroll-snap-align: start;
+      padding: 24px;
+    }
+    .project__name { font-size: 36px; }
+  }
+</style>

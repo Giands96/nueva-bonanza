@@ -1,0 +1,65 @@
+---
+import { Image } from "astro:assets";
+import Eyebrow from "../Eyebrow.astro";
+import PolicyAccordion from "./PolicyAccordion.astro";
+import { policies } from "../../data/about";
+import operatorCabin from "../../assets/img/operator-cabin.png";
+---
+<section class="about" aria-label="Quiénes somos">
+  <div class="about__text">
+    <span class="about__eyebrow"><Eyebrow>NUESTRA IDENTIDAD</Eyebrow></span>
+    <h2 class="title about__title">QUIÉNES SOMOS</h2>
+    <p class="about__lead">
+      Somos una empresa minera arequipeña que opera con responsabilidad, pone
+      la seguridad de su gente por delante e incorpora innovación en cada etapa
+      de la operación, para generar valor sostenible para el Perú.
+    </p>
+    <h3 class="about__sub">POLÍTICAS Y COMPROMISOS</h3>
+    <PolicyAccordion policies={policies} />
+  </div>
+  <Image
+    class="about__photo"
+    src={operatorCabin}
+    alt="Operador con casco frente a pantallas de control"
+  />
+</section>
+<style>
+  .about {
+    display: flex;
+    gap: 48px;
+    align-items: center;
+    padding: 72px 48px;
+    background: #fff;
+  }
+  .about__text {
+    flex: 0 0 598px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  .about__eyebrow { font-weight: 700; }
+  .about__title { color: var(--nb-ink-700); }
+  .about__lead { font-size: 18px; line-height: 1.55; }
+  .about__sub {
+    font: 700 20px / 1 var(--font-display);
+    color: var(--nb-gold);
+  }
+  .about__photo {
+    flex: 1;
+    min-width: 0;
+    height: 640px;
+    border-radius: var(--radius-image);
+    object-fit: cover;
+  }
+  @media (max-width: 1100px) {
+    .about { flex-direction: column; align-items: stretch; }
+    .about__text { flex: none; }
+    .about__photo { flex: none; height: 440px; }
+  }
+  @media (max-width: 760px) {
+    .about { flex-direction: column; align-items: stretch; gap: 32px; padding: 48px 20px; }
+    .about__text { flex: none; }
+    .about__lead { font-size: 16px; }
+    .about__photo { flex: none; height: 360px; }
+  }
+</style>

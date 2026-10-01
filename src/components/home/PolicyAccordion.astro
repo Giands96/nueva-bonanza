@@ -1,0 +1,94 @@
+---
+import Icon from "../Icon.astro";
+import type { Policy } from "../../data/about";
+
+interface Props {
+  policies: Policy[];
+  defaultOpen?: string;
+}
+
+const { policies, defaultOpen = "gestion" } = Astro.props;
+---
+<ul class="policies" data-default-open={defaultOpen}>
+  {
+    policies.map((p) => (
+      <li class="policy" data-id={p.id} data-open="false">
+        <button type="button" class="policy__head" aria-expanded="false">
+          {p.title}<span class="policy__arrow"><Icon name="arrow-right" size={18} color="var(--nb-gold)" /></span>
+        </button>
+        <div class="policy__body">
+          <p>{p.text}</p>
+        </div>
+      </li>
+    ))
+  }
+</ul>
+<script>
+  const root = document.querySelector(".policies");
+  const items = [...(root?.querySelectorAll(".policy") ?? [])];
+  const setOpen = (active: Element | null) => {
+    items.forEach((item) => {
+      const open = item === active && item.getAttribute("data-open") !== "true";
+      item.setAttribute("data-open", String(open));
+      item.querySelector(".policy__head")?.setAttribute("aria-expanded", String(open));
+    });
+  };
+  // Desktop: primer item abierto; móvil: todos cerrados.
+  const initial = window.matchMedia("(max-width: 760px)").matches
+    ? null
+    : items.find((i) => i.getAttribute("data-id") === root?.getAttribute("data-default-open")) ?? null;
+  if (initial) {
+    initial.setAttribute("data-open", "true");
+    initial.querySelector(".policy__head")?.setAttribute("aria-expanded", "true");
+  }
+  root?.querySelectorAll(".policy__head").forEach((btn) => {
+    btn.addEventListener("click", () => setOpen(btn.closest(".policy")));
+  });
+</script>
+<style>
+  .policies { display: flex; flex-direction: column; gap: 12px; }
+  .policy { background: var(--nb-sand); }
+  .policy__head {
+    width: 100%;
+    border: 0;
+    background: none;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    font: 600 20px / 1 var(--font-display);
+    color: var(--nb-ink-700);
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 200ms ease;
+  }
+  .policy__head:hover { background: var(--nb-stone); }
+  .policy__arrow {
+    display: inline-flex;
+    transition: transform 350ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .policy[data-open="true"] .policy__arrow { transform: rotate(90deg); }
+  .policy__body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 400ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .policy__body p {
+    min-height: 0;
+    overflow: hidden;
+    padding: 0 24px;
+    font-size: 16px;
+    line-height: 1.55;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 350ms ease, transform 400ms cubic-bezier(0.2, 0.7, 0.2, 1), padding 400ms ease;
+  }
+  .policy[data-open="true"] .policy__body { grid-template-rows: 1fr; }
+  .policy[data-open="true"] .policy__body p { opacity: 1; transform: none; padding: 0 24px 22px; }
+  @media (max-width: 760px) {
+    .policy__head { padding: 18px 20px; font-size: 18px; }
+    .policy__body p { padding-left: 20px; padding-right: 20px; }
+    .policy[data-open="true"] .policy__body p { padding: 0 20px 20px; }
+  }
+</style>
