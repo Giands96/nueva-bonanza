@@ -6,19 +6,21 @@ import { projects } from "../../data/projects";
 
 const featured = projects.slice(0, 3);
 ---
+
 <section class="projects" aria-label="Proyectos">
   <div class="projects__head">
     <div class="projects__intro">
       <Eyebrow filled>NUESTRA OPERACIÓN</Eyebrow>
       <h2 class="title">PROYECTOS</h2>
       <p>
-        Operaciones en las principales regiones mineras del país, con
-        estándares técnicos y ambientales de primer nivel.
+        Operaciones en las principales regiones mineras del país, con estándares
+        técnicos y ambientales de primer nivel.
       </p>
     </div>
     <div class="carousel-ctl">
       <button type="button" data-dir="-1">
-        <span class="icon--flip"><Icon name="arrow-back" size={16} /></span>Atrás
+        <span class="icon--flip"><Icon name="arrow-back" size={16} /></span
+        >Atrás
       </button>
       <button type="button" data-dir="1">
         Siguiente<Icon name="arrow-forward" size={16} />
@@ -28,7 +30,9 @@ const featured = projects.slice(0, 3);
   <div class="projects__track">
     {featured.map((p) => <ProjectCard project={p} />)}
   </div>
-  <div class="dots" aria-hidden="true"><span></span><span></span><span></span></div>
+  <div class="dots" aria-hidden="true">
+    <span class="is-active"></span><span></span><span></span>
+  </div>
 </section>
 <script>
   const track = document.querySelector(".projects__track");
@@ -42,10 +46,17 @@ const featured = projects.slice(0, 3);
       });
     });
   });
-  track?.addEventListener("scroll", () => {
-    const i = Math.round((track.scrollLeft / step()) || 0);
-    dots.forEach((d, n) => d.classList.toggle("is-active", n === i));
-  }, { passive: true });
+  track?.addEventListener(
+    "scroll",
+    () => {
+      const activeIndex = Math.round(track.scrollLeft / step() || 0);
+      dots.forEach((dot, n) =>
+        
+        dot.classList.toggle("is-active", n === activeIndex),
+      );
+    },
+    { passive: true },
+  );
 </script>
 <style>
   .projects {
@@ -67,9 +78,18 @@ const featured = projects.slice(0, 3);
     gap: 8px;
     max-width: 759px;
   }
-  .projects__intro .title { color: var(--nb-ink-100); }
-  .projects__intro p { font-size: 20px; line-height: 1.4; color: #fff; }
-  .carousel-ctl { display: flex; gap: 24px; }
+  .projects__intro .title {
+    color: var(--nb-ink-100);
+  }
+  .projects__intro p {
+    font-size: 20px;
+    line-height: 1.4;
+    color: #fff;
+  }
+  .carousel-ctl {
+    display: flex;
+    gap: 24px;
+  }
   .carousel-ctl button {
     display: flex;
     align-items: center;
@@ -83,37 +103,74 @@ const featured = projects.slice(0, 3);
     cursor: pointer;
     text-transform: uppercase;
   }
-  .carousel-ctl button:hover { color: var(--nb-gold); }
-  .icon--flip { display: inline-flex; transform: scaleX(-1); }
+
+  .carousel-ctl button:hover {
+    color: var(--nb-gold);
+  }
+
+  .icon--flip {
+    display: inline-flex;
+    transform: scaleX(-1);
+  }
+
   .projects__track {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
   }
-  .dots { display: none; }
+
+  .dots {
+    display: none;
+  }
+
   @media (max-width: 1100px) {
-    .projects__head { flex-direction: column; align-items: stretch; }
+    .projects__head {
+      flex-direction: column;
+      align-items: stretch;
+    }
   }
   @media (max-width: 760px) {
-    .projects { padding: 48px 20px; gap: 28px; }
-    .projects__head { flex-direction: column; align-items: stretch; gap: 16px; }
-    .projects__intro p { font-size: 16px; }
-    .carousel-ctl { justify-content: space-between; }
-    .carousel-ctl button { padding: 12px 0; min-height: 44px; }
+    .projects {
+      padding: 48px 20px;
+      gap: 28px;
+    }
+    .projects__head {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 16px;
+    }
+    .projects__intro p {
+      font-size: 16px;
+    }
+    .carousel-ctl {
+      justify-content: space-between;
+    }
+    .carousel-ctl button {
+      padding: 12px 0;
+      min-height: 44px;
+    }
     .projects__track {
       display: flex;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
       scrollbar-width: none;
     }
-    .projects__track::-webkit-scrollbar { display: none; }
-    .dots { display: flex; justify-content: center; gap: 16px; }
+    .projects__track::-webkit-scrollbar {
+      display: none;
+    }
+    .dots {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+    }
     .dots span {
       width: 10px;
       height: 10px;
       border-radius: var(--radius-round);
       background: rgba(255, 255, 255, 0.4);
     }
-    .dots span:first-child { background: var(--nb-gold); }
-    .dots span.is-active { background: var(--nb-gold); }
+    
+    .dots span.is-active {
+      background: var(--nb-gold);
+    }
   }
 </style>
