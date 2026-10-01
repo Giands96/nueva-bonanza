@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap">
+<link rel="stylesheet" href="_ds/nueva-bonanza-mining-design-system-bdc65c32-ba2d-43ca-9b32-8cc235650e97/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/nueva-bonanza-mining-design-system-bdc65c32-ba2d-43ca-9b32-8cc235650e97/tokens/colors.css">
+<link rel="stylesheet" href="_ds/nueva-bonanza-mining-design-system-bdc65c32-ba2d-43ca-9b32-8cc235650e97/tokens/typography.css">
+<link rel="stylesheet" href="_ds/nueva-bonanza-mining-design-system-bdc65c32-ba2d-43ca-9b32-8cc235650e97/tokens/spacing.css">
+<style>
+body{margin:0;font-family:var(--font-body);color:var(--nb-ink-600);background:var(--nb-white)}
+a{color:inherit;text-decoration:none}
+a:hover{color:var(--nb-gold)}
+h1,h2,h3,p,ul{margin:0;padding:0}
+ul{list-style:none}
+.page{width:1440px;max-width:100%;margin:0 auto;box-sizing:border-box}
+.page *,.page *::before,.page *::after{box-sizing:border-box}
+.icon{display:inline-block;flex:none;background:currentColor;-webkit-mask:var(--i) center/contain no-repeat;mask:var(--i) center/contain no-repeat}
+.eyebrow{display:inline-flex;align-self:flex-start;padding:4px 8px;border-radius:25px;box-shadow:inset 0 0 0 1px var(--nb-gold);font:500 14px/1 var(--font-body);color:var(--nb-gold)}
+.eyebrow--filled{background:var(--nb-gold);box-shadow:none;padding:6px 12px;font-weight:700;color:#fff}
+.title{font:700 64px/1 var(--font-display)}
+.btn{display:inline-flex;align-items:center;padding:16px 28px;font:600 16px/1 var(--font-ui);letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--nb-gold);color:#fff;background:transparent;cursor:pointer;transition:background .2s ease,color .2s ease}
+.btn:hover{background:var(--nb-gold);color:#fff}
+.btn--solid{background:var(--nb-gold);color:var(--nb-ink-800)}
+.btn--solid:hover{color:#fff}
+/* header */
+.header{position:sticky;top:0;z-index:10;height:80px;padding:0 48px;background:var(--nb-cream);display:flex;align-items:center;justify-content:space-between}
+.logo{display:block;width:140px;height:62px;background:url(assets/logo-nueva-bonanza.png) 50% 50%/100% 225% no-repeat}
+.nav{display:flex;gap:34px}
+.nav a{font:500 20px/1 var(--font-display);color:var(--nb-ink-700);text-transform:uppercase}
+.nav a:hover,.nav a[aria-current]{color:var(--nb-gold)}
+/* hero interno */
+.phero{position:relative;height:500px;padding:0 48px;display:flex;align-items:center;background:url(assets/img/qs-hero-team.png) center/cover}
+.phero::before{content:"";position:absolute;inset:0;background:rgba(0,0,0,.5)}
+.phero__content{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:16px;max-width:640px;color:#fff}
+.phero h1{font:700 96px/1 var(--font-display)}
+.phero p{font-size:20px;line-height:1.4}
+/* empresa */
+.company{display:flex;height:750px;background:var(--nb-cream)}
+.company__text{flex:1;padding:48px;display:flex;flex-direction:column;justify-content:center;gap:24px}
+.company__kicker{font:700 24px/1 var(--font-display);color:var(--nb-gold)}
+.company h2{font:700 64px/1 var(--font-display);color:#000}
+.company p{max-width:620px;margin-top:24px;font-size:20px;line-height:1.5;color:#000}
+.company__photo{position:relative;flex:1;background:url(assets/img/empresa-surveyors.png) center/cover}
+.company__photo::before{content:"";position:absolute;inset:0;background:linear-gradient(270deg,rgba(0,0,0,0) 0%,rgba(233,231,223,.25) 74%,var(--nb-cream) 98%)}
+/* historia */
+.history{position:relative;isolation:isolate;padding:80px 46px;background:var(--nb-cream);display:flex;flex-direction:column;gap:56px;overflow:hidden}
+.history::before{content:"";position:absolute;inset:0;z-index:-2;background:url(assets/img/hitos-plant.png) center/cover no-repeat;filter:grayscale(1) sepia(.2)}
+.history::after{content:"";position:absolute;inset:0;z-index:-1;background:rgba(248,246,238,.85)}
+.history__head{display:flex;flex-direction:column;gap:2px}
+.history__head b{font:500 24px/1 var(--font-display);letter-spacing:.02em;color:var(--nb-gold)}
+.history__head h2{font:700 56px/1 var(--font-display);color:var(--nb-ink-800)}
+.timeline{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:24px;list-style:none;margin:0;padding:0}
+.timeline::before{content:"";position:absolute;top:8px;left:12.5%;right:12.5%;height:2px;background:var(--nb-gold)}
+.milestone{position:relative;display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center}
+.milestone i{width:18px;height:18px;border-radius:50%;background:var(--nb-gold)}
+.milestone b{font:700 40px/1 var(--font-display);color:var(--nb-ink-800)}
+.milestone p{max-width:240px;font:400 14px/1.4 'Montserrat',var(--font-body);color:var(--nb-ink-800)}
+.history__note{display:flex;flex-direction:column;align-items:flex-start;gap:16px}
+.rule{display:block;width:100px;height:2px;background:var(--nb-gold)}
+.history__note p{font:400 18px/1.5 'Montserrat',var(--font-body);color:var(--nb-ink-800)}
+/* principios */
+.principles{display:flex;gap:24px;background:var(--nb-ink-800)}
+.principles__photo{position:relative;flex:0 0 612px;background:url(assets/img/principios-worker.png) center/cover;filter:grayscale(.6)}
+.principles__photo::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(102,102,102,0) 0%,rgb(31,31,31) 97%,var(--nb-ink-800) 100%)}
+.principles__body{flex:1;padding:64px 48px 64px 24px;display:flex;flex-direction:column;gap:32px}
+.principles__head b{display:block;margin-bottom:16px;font:700 20px/1 var(--font-display);color:var(--nb-gold)}
+.principles__head h2{font:700 48px/1 var(--font-display);color:#fff}
+.mv{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.mv div{display:flex;flex-direction:column;gap:12px}
+.mv h3{font:700 32px/1 var(--font-display);color:#fff}
+.mv p{font-size:16px;line-height:1.5;color:#fff}
+.values{display:flex;flex-direction:column;gap:8px}
+.values li{display:flex;align-items:center;gap:8px;padding:10px 0;border-bottom:1px solid var(--nb-stone-2)}
+.values b{flex:none;width:56px;text-align:center;font:700 36px/1 var(--font-display);color:var(--nb-gold)}
+.values div{flex:1;padding:4px 22px;border-left:1px solid var(--nb-stone-2);display:flex;flex-direction:column;gap:4px}
+.values h3{font:700 32px/1 var(--font-display);color:var(--nb-stone-2)}
+.values p{font-size:15px;line-height:1.4;color:var(--nb-stone-2)}
+/* contacto */
+.contact{padding:72px 48px;background:var(--nb-ink-800);display:flex;flex-direction:column;gap:48px}
+.contact__head{display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+.contact__head h2{font:500 64px/1 var(--font-display);color:var(--nb-cream)}
+.contact__head p{font:400 20px/1.55 var(--font-ui);color:var(--nb-stone-2);margin-bottom:12px}
+.contact__body{display:flex;gap:48px;align-items:center}
+.contact__map{flex:0 0 48%;height:482px;background:url(assets/img/map-arequipa.png) 91.9% 48%/142.9% 205.6% no-repeat}
+.contact__list{display:flex;flex-direction:column;gap:40px}
+.contact__list li{display:flex;align-items:center;gap:14px;font:300 20px/1 var(--font-display);color:#fff}
+.contact__list b{display:block;margin-bottom:6px;font-weight:600}
+.medallion{width:58px;height:58px;border-radius:50%;box-shadow:inset 0 0 0 1px var(--nb-gold);display:flex;align-items:center;justify-content:center;color:var(--nb-gold)}
+.medallion .icon{width:26px;height:26px}
+/* footer */
+.footer{padding:48px;background:var(--nb-cream);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px 48px;color:#000}
+.footer h3{font:600 20px/1 var(--font-display);margin-bottom:18px}
+.footer ul{display:flex;flex-direction:column;gap:14px;font:500 16px/1 var(--font-body)}
+.footer li{display:flex;align-items:center;gap:10px}
+.footer li .icon{width:20px;height:20px;color:var(--nb-gold)}
+.footer__tag{margin-top:7px;font:300 12px/1.3 var(--font-body)}
+.social{display:flex;gap:8px}
+.social a{width:32px;height:32px;border-radius:50%;box-shadow:inset 0 0 0 1px #000;display:flex;align-items:center;justify-content:center;color:#000}
+.social a:hover{box-shadow:inset 0 0 0 1px var(--nb-gold)}
+.social .icon{width:17px;height:17px}
+.menu-toggle,.menu-btn,.dots{display:none}
+@media (max-width:1100px){
+.nav{gap:22px}.nav a{font-size:18px}
+.principles{flex-direction:column;gap:0}
+.principles__photo{flex:none;height:320px}
+.principles__photo::before{background:linear-gradient(180deg,rgba(102,102,102,0) 0%,var(--nb-ink-800) 100%)}
+.principles__body{padding:32px 48px 56px}
+.company{height:auto}.company__photo{min-height:420px}
+.contact__body{flex-direction:column;align-items:stretch}.contact__map{flex:none;width:100%;height:380px}
+.footer{grid-template-columns:repeat(2,minmax(0,1fr))}
+.about{flex-direction:column;align-items:stretch}.about__text{flex:none}.about__photo{flex:none;height:440px}
+.projects__head{flex-direction:column;align-items:stretch}
+.portfolio{flex-direction:column;height:auto}.tile{flex:none;min-height:420px}.portfolio__small{min-height:720px}
+.stat b{font-size:72px}.stat h2{font-size:28px}.stat p{font-size:16px}
+.phero h1{font-size:72px}.hero__title span{font-size:84px}
+}
+@media (max-width:760px){
+.phero{height:420px;padding:0 20px;align-items:flex-end;padding-bottom:40px}
+.phero h1{font-size:56px}
+.phero p{font-size:16px}
+
+.company{flex-direction:column;height:auto}
+.company__text{padding:48px 20px}
+.company h2{font-size:40px}
+.company p{font-size:16px;margin-top:8px}
+.company__photo{flex:none;height:320px}
+.company__photo::before{background:linear-gradient(0deg,rgba(0,0,0,0) 0%,rgba(233,231,223,.25) 74%,var(--nb-cream) 100%)}
+.history{padding:56px 20px;gap:36px}
+.history__head h2{font-size:40px}
+.history__head b{font-size:20px}
+.timeline{grid-template-columns:1fr;gap:28px;padding-left:40px}
+.timeline::before{left:8px;right:auto;top:8px;bottom:8px;width:2px;height:auto}
+.milestone{align-items:flex-start;text-align:left;gap:8px}
+.milestone i{position:absolute;left:-40px;top:11px}
+.milestone b{font-size:36px}
+.milestone p{max-width:none}
+.history__note p{font-size:16px}
+.br-desktop{display:none}
+.principles{flex-direction:column;gap:0}
+.principles__photo{flex:none;height:260px}
+.principles__photo::before{background:linear-gradient(180deg,rgba(102,102,102,0) 0%,var(--nb-ink-800) 100%)}
+.principles__body{padding:32px 20px 48px}
+.principles__head h2{font-size:34px}
+.mv{grid-template-columns:1fr}
+.values h3{font-size:24px}
+.values b{width:44px;font-size:28px}
+.header{height:72px;padding:0 20px}
+.menu-btn{display:flex;flex-direction:column;justify-content:center;gap:6px;width:44px;height:44px;padding:10px;cursor:pointer}
+.menu-btn span{display:block;height:2px;background:var(--nb-ink-700);transition:transform .2s ease,opacity .2s ease}
+.menu-toggle:checked~.menu-btn span:nth-child(1){transform:translateY(8px) rotate(45deg)}
+.menu-toggle:checked~.menu-btn span:nth-child(2){opacity:0}
+.menu-toggle:checked~.menu-btn span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+.nav{display:none;position:absolute;top:72px;left:0;right:0;flex-direction:column;gap:0;background:var(--nb-cream);padding:0 20px 12px;border-top:1px solid var(--nb-stone);box-shadow:var(--shadow-aside)}
+.menu-toggle:checked~.nav{display:flex}
+.nav a{padding:16px 0;border-bottom:1px solid var(--nb-sand);font-size:20px}
+.title{font-size:44px}
+.btn{padding:16px 20px;font-size:14px}
+.contact{padding:48px 20px;gap:32px}
+.contact__head h2{font-size:44px}
+.contact__head p{font-size:16px}
+.contact__body{flex-direction:column;align-items:stretch;gap:32px}
+.contact__map{flex:none;height:280px}
+.contact__list{gap:24px}
+.contact__list li{font-size:18px;line-height:1.2}
+.footer{grid-template-columns:1fr;padding:40px 20px;gap:32px}
+}
+@media (prefers-reduced-motion:reduce){.hero__content{animation:none}.btn,.policy__head,.policy__head .icon,.policy__body,.policy__body p,.project,.project__desc,.project__desc>span{transition:none}}
+</style>
+</helmet>
+<div class="page">
+<header class="header">
+  <a class="logo" href="#inicio" aria-label="Nueva Bonanza Mining"></a>
+  <input class="menu-toggle" type="checkbox" id="menu-toggle" aria-hidden="true">
+  <label class="menu-btn" for="menu-toggle" aria-label="Abrir menú"><span></span><span></span><span></span></label>
+  <nav class="nav" aria-label="Principal">
+    <a href="Inicio NBM.dc.html">Inicio</a>
+    <a href="Quienes Somos NBM.dc.html" aria-current="page">Quiénes somos</a>
+    <a href="Proyectos NBM.dc.html">Proyectos</a>
+    <a href="Noticias NBM.dc.html">Noticias</a>
+    <a href="Contacto NBM.dc.html">Contacto</a>
+  </nav>
+</header>
+<section class="phero" id="quienes-somos">
+  <div class="phero__content">
+    <span class="eyebrow eyebrow--filled">NUESTRA IDENTIDAD</span>
+    <h1>QUIÉNES SOMOS</h1>
+    <p>Somos una empresa minera peruana que extrae con responsabilidad. Cada proyecto está diseñado para generar valor sostenible para las comunidades y el medio ambiente.</p>
+  </div>
+</section>
+<section class="company" id="empresa">
+  <div class="company__text">
+    <span class="company__kicker">NUESTRA EMPRESA</span>
+    <h2>COMPROMETIDOS CON UN FUTURO SOSTENIBLE</h2>
+    <p>En Nueva Bonanza contribuimos al desarrollo del país con una operación responsable, eficiente y sostenible. Integramos experiencia, innovación y altos estándares de seguridad para generar valor compartido con nuestros colaboradores y con el Perú.</p>
+  </div>
+  <div class="company__photo" role="img" aria-label="Equipo de topografía en campo"></div>
+</section>
+<section class="history" id="historia">
+  <div class="history__head"><b>NUESTROS HITOS</b><h2>NUESTRA HISTORIA</h2></div>
+  <ol class="timeline">
+    <li class="milestone"><i></i><b>2010</b><p>Inicio de operaciones en el Perú</p></li>
+    <li class="milestone"><i></i><b>2015</b><p>Primer gran proyecto minero.</p></li>
+    <li class="milestone"><i></i><b>2020</b><p>Expansión a nuevas regiones del país</p></li>
+    <li class="milestone"><i></i><b>2026</b><p>Consolidación como aliado estratégico del sector minero</p></li>
+  </ol>
+  <div class="history__note"><span class="rule"></span><p>Más de una década construyendo una minería responsable,<br class="br-desktop"> basada en seguridad, innovación y compromiso con el desarrollo del Perú</p></div>
+</section>
+<section class="principles" id="principios">
+  <div class="principles__photo" role="img" aria-label="Trabajador con equipo de seguridad"></div>
+  <div class="principles__body">
+    <div class="principles__head"><b>NUESTROS PRINCIPIOS</b><h2>MISIÓN, VISIÓN Y VALORES</h2></div>
+    <div class="mv">
+      <div><span class="rule" style="width:76px"></span><h3>MISIÓN</h3><p>Desarrollar operaciones mineras eficientes y responsables, aplicando altos estándares de seguridad, calidad y gestión ambiental.</p></div>
+      <div><span class="rule" style="width:76px"></span><h3>VISIÓN</h3><p>Ser la empresa minera de referencia en el Perú por nuestra capacidad operativa, innovación y compromiso con una minería segura y responsable.</p></div>
+    </div>
+    <ul class="values">
+      <li><b>01</b><div><h3>SEGURIDAD</h3><p>Protegemos la vida y el bienestar en cada tarea.</p></div></li>
+      <li><b>02</b><div><h3>INTEGRIDAD</h3><p>Actuamos con ética, transparencia y responsabilidad.</p></div></li>
+      <li><b>03</b><div><h3>COMPROMISO</h3><p>Cumplimos con disciplina y enfoque en resultados.</p></div></li>
+      <li><b>04</b><div><h3>RESPETO</h3><p>Valoramos a las personas, las comunidades y el entorno.</p></div></li>
+      <li><b>05</b><div><h3>EXCELENCIA</h3><p>Mejoramos continuamente para operar mejor.</p></div></li>
+    </ul>
+  </div>
+</section>
+<section class="contact" id="contacto">
+  <div class="contact__head">
+    <h2>CONTÁCTANOS</h2>
+    <p>Conversemos sobre nuestros proyectos y el futuro de una minería responsable en el Perú.</p>
+    <a class="btn btn--solid" href="Contacto NBM.dc.html">Escríbenos</a>
+  </div>
+  <div class="contact__body">
+    <div class="contact__map" role="img" aria-label="Mapa de Arequipa"></div>
+    <ul class="contact__list">
+      <li><span class="medallion"><span class="icon" style="--i:url(assets/icons/location-lg.svg)"></span></span><span><b>DIRECCIÓN:</b>Av. Puente Grau 492, Arequipa, Perú</span></li>
+      <li><span class="medallion"><span class="icon" style="--i:url(assets/icons/call.svg)"></span></span><span><b>TELÉFONO:</b>+51 955 222 111</span></li>
+      <li><span class="medallion"><span class="icon" style="--i:url(assets/icons/calendar.svg)"></span></span><span><b>HORARIO DE ATENCIÓN:</b>Lun - Vie, 8:00 a.m. - 6:00 p.m.</span></li>
+      <li><span class="medallion"><span class="icon" style="--i:url(assets/icons/mail.svg)"></span></span><span><b>CORREO:</b>contacto@nbmining.pe</span></li>
+    </ul>
+  </div>
+</section>
+<footer class="footer">
+  <div>
+    <a class="logo" href="#inicio" aria-label="Nueva Bonanza Mining"></a>
+    <p class="footer__tag">Minería responsable con visión de futuro</p>
+  </div>
+  <nav aria-label="Pie">
+    <h3>NAVEGACIÓN</h3>
+    <ul>
+      <li><a href="#inicio">Inicio</a></li>
+      <li><a href="Quienes Somos NBM.dc.html">Quiénes somos</a></li>
+      <li><a href="#proyectos">Proyectos</a></li>
+      <li><a href="Noticias NBM.dc.html">Noticias</a></li>
+      <li><a href="Contacto NBM.dc.html">Contacto</a></li>
+    </ul>
+  </nav>
+  <div>
+    <h3>CONTACTO</h3>
+    <ul>
+      <li><span class="icon" style="--i:url(assets/icons/location.svg)"></span>Av. Puente Grau 492, Arequipa, Perú</li>
+      <li><span class="icon" style="--i:url(assets/icons/call.svg)"></span>+51 955 222 111</li>
+      <li><span class="icon" style="--i:url(assets/icons/mail.svg)"></span>contacto@nbmining.pe</li>
+      <li><span class="icon" style="--i:url(assets/icons/calendar.svg)"></span>Lun - Vie, 8:00 a.m. - 6:00 p.m.</li>
+    </ul>
+  </div>
+  <div>
+    <h3>REDES</h3>
+    <div class="social">
+      <a href="#instagram" aria-label="Instagram"><span class="icon" style="--i:url(assets/icons/instagram-outer.svg)"></span></a>
+      <a href="#facebook" aria-label="Facebook"><span class="icon" style="--i:url(assets/icons/facebook.svg)"></span></a>
+      <a href="#linkedin" aria-label="LinkedIn"><span class="icon" style="--i:url(assets/icons/linkedin.svg)"></span></a>
+    </div>
+  </div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {}
+</script>
+</body>
+</html>

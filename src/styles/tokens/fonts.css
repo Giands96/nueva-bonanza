@@ -1,0 +1,7 @@
+/* Fuentes auto-alojadas en public/fonts/. Sin Inter (eliminada del sistema). */
+@font-face{font-family:"Oswald";font-weight:300 700;font-style:normal;font-display:swap;src:url("/fonts/Oswald.woff2") format("woff2")}
+@font-face{font-family:"Clarity City";font-weight:300;font-style:normal;font-display:swap;src:url("/fonts/ClarityCity-Light.woff2") format("woff2")}
+@font-face{font-family:"Clarity City";font-weight:400;font-style:normal;font-display:swap;src:url("/fonts/ClarityCity-Regular.woff2") format("woff2")}
+@font-face{font-family:"Clarity City";font-weight:500;font-style:normal;font-display:swap;src:url("/fonts/ClarityCity-Medium.woff2") format("woff2")}
+@font-face{font-family:"Clarity City";font-weight:600;font-style:normal;font-display:swap;src:url("/fonts/ClarityCity-SemiBold.woff2") format("woff2")}
+@font-face{font-family:"Clarity City";font-weight:700;font-style:normal;font-display:swap;src:url("/fonts/ClarityCity-Bold.woff2") format("woff2")}

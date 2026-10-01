@@ -1,0 +1,51 @@
+:root{
+/* Brand */
+--nb-gold:rgb(217,166,64);
+--nb-bronze:rgb(63,46,35);
+/* Warm neutrals (paper) */
+--nb-white:rgb(255,255,255);
+--nb-cream:rgb(248,246,238);
+--nb-cream-2:rgb(247,244,236);
+--nb-sand:rgb(230,224,217);
+--nb-stone:rgb(217,213,201);
+--nb-stone-2:rgb(210,206,198);
+--nb-taupe:rgb(138,135,127);
+--nb-umber:rgb(92,85,78);
+--nb-umber-2:rgb(95,90,84);
+/* Ink neutrals */
+--nb-black:rgb(0,0,0);
+--nb-ink-900:rgb(20,20,20);
+--nb-ink-850:rgb(23,23,23);
+--nb-ink-800:rgb(26,26,26);
+--nb-ink-700:rgb(42,42,42);
+--nb-ink-600:rgb(71,71,71);
+--nb-ink-500:rgb(110,110,110);
+--nb-ink-300:rgb(184,184,184);
+--nb-ink-200:rgb(217,217,217);
+--nb-ink-100:rgb(228,228,228);
+/* Overlays */
+--nb-scrim-80:rgba(0,0,0,0.8);
+--nb-scrim-60:rgba(0,0,0,0.6);
+--nb-scrim-35:rgba(0,0,0,0.35);
+--nb-coal-85:rgba(17,16,14,0.851);
+--nb-coal-50:rgba(17,16,14,0.502);
+--nb-coal-20:rgba(17,16,14,0.2);
+
+/* Semantic */
+--surface-page:var(--nb-white);
+--surface-paper:var(--nb-cream);
+--surface-card:var(--nb-sand);
+--surface-dark:var(--nb-ink-800);
+--text-heading:var(--nb-ink-700);
+--text-body:var(--nb-ink-600);
+--text-strong:var(--nb-black);
+--text-muted:var(--nb-taupe);
+--text-on-dark:var(--nb-white);
+--text-on-dark-muted:var(--nb-stone-2);
+--text-accent:var(--nb-gold);
+--border-accent:var(--nb-gold);
+--border-strong:var(--nb-black);
+--border-subtle:var(--nb-stone);
+--action-primary:var(--nb-gold);
+--action-on-primary:var(--nb-ink-800);
+}

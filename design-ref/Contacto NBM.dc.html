@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400&display=swap">
+<link rel="stylesheet" href="_ds/nueva-bonanza-mining-design-system-bdc65c32-ba2d-43ca-9b32-8cc235650e97/tokens/fonts.css">
+<link rel="stylesheet" href="_ds/nueva-bonanza-mining-design-system-bdc65c32-ba2d-43ca-9b32-8cc235650e97/tokens/colors.css">
+<link rel="stylesheet" href="_ds/nueva-bonanza-mining-design-system-bdc65c32-ba2d-43ca-9b32-8cc235650e97/tokens/typography.css">
+<link rel="stylesheet" href="_ds/nueva-bonanza-mining-design-system-bdc65c32-ba2d-43ca-9b32-8cc235650e97/tokens/spacing.css">
+<style>
+body{margin:0;font-family:var(--font-body);color:var(--nb-ink-600);background:var(--nb-white)}
+a{color:inherit;text-decoration:none}
+a:hover{color:var(--nb-gold)}
+h1,h2,h3,p,ul{margin:0;padding:0}
+ul{list-style:none}
+.page{width:1440px;max-width:100%;margin:0 auto;box-sizing:border-box}
+.page *,.page *::before,.page *::after{box-sizing:border-box}
+.icon{display:inline-block;flex:none;background:currentColor;-webkit-mask:var(--i) center/contain no-repeat;mask:var(--i) center/contain no-repeat}
+.eyebrow{display:inline-flex;align-self:flex-start;padding:4px 8px;border-radius:25px;box-shadow:inset 0 0 0 1px var(--nb-gold);font:500 14px/1 var(--font-body);color:var(--nb-gold)}
+.eyebrow--filled{background:var(--nb-gold);box-shadow:none;padding:6px 12px;font-weight:700;color:#fff}
+.title{font:700 64px/1 var(--font-display)}
+.btn{display:inline-flex;align-items:center;padding:16px 28px;font:600 16px/1 var(--font-ui);letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--nb-gold);color:#fff;background:transparent;cursor:pointer;transition:background .2s ease,color .2s ease}
+.btn:hover{background:var(--nb-gold);color:#fff}
+.btn--solid{background:var(--nb-gold);color:var(--nb-ink-800)}
+.btn--solid:hover{color:#fff}
+/* header */
+.header{position:sticky;top:0;z-index:10;height:80px;padding:0 48px;background:var(--nb-cream);display:flex;align-items:center;justify-content:space-between}
+.logo{display:block;width:140px;height:62px;background:url(assets/logo-nueva-bonanza.png) 50% 50%/100% 225% no-repeat}
+.nav{display:flex;gap:34px}
+.nav a{font:500 20px/1 var(--font-display);color:var(--nb-ink-700);text-transform:uppercase}
+.nav a:hover,.nav a[aria-current]{color:var(--nb-gold)}
+/* hero interno */
+.phero{position:relative;height:500px;padding:0 48px;display:flex;align-items:center;background:url(assets/img/qs-hero-team.png) center/cover}
+.phero::before{content:"";position:absolute;inset:0;background:rgba(0,0,0,.5)}
+.phero__content{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:16px;max-width:640px;color:#fff}
+.phero h1{font:700 96px/1 var(--font-display)}
+.phero p{font-size:20px;line-height:1.4}
+.phero{position:relative;height:500px;padding:0 48px;display:flex;align-items:center}
+.phero::before{content:"";position:absolute;inset:0}
+.phero__content{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:16px;max-width:640px;color:#fff}
+.phero h1{font:700 96px/1 var(--font-display)}
+.phero p{font-size:20px;line-height:1.4}
+.phero{background:url(assets/img/hero-mine.png) center/cover}
+.phero::before{background:linear-gradient(90deg,rgba(21,18,15,.85) 0%,rgba(21,18,15,.45) 65%,rgba(21,18,15,.2) 100%)}
+.phero h1{font-size:64px}
+.phero p{font:400 18px/1.45 var(--font-ui);color:var(--nb-cream-2);max-width:610px}
+/* contacto */
+.cwrap{display:flex;gap:48px;padding:56px 48px 64px;background:#fff}
+.caside{flex:0 0 400px;align-self:flex-start;box-shadow:var(--shadow-aside)}
+.caside__img{position:relative;height:208px;background:url(assets/img/hero-mine.png) center/cover}
+.caside__img::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 42%,var(--nb-ink-800) 100%)}
+.caside__body{padding:32px;background:var(--nb-ink-800);display:flex;flex-direction:column;gap:26px}
+.caside__kicker{display:block;margin-bottom:8px;font:600 12px/1 var(--font-ui);letter-spacing:.08em;color:var(--nb-gold)}
+.caside__body>div>p{font:400 14px/1.45 var(--font-ui);color:var(--nb-stone-2)}
+.caside dl{margin:0;display:flex;flex-direction:column;gap:26px}
+.caside dl>div{display:flex;align-items:center;gap:12px}
+.caside dt{font:600 11px/1 var(--font-ui);letter-spacing:.08em;color:var(--nb-taupe);margin-bottom:4px}
+.caside dd{margin:0;font:500 16px/1.3 var(--font-ui);color:var(--nb-cream)}
+.caside .icon{width:18px;height:18px;color:var(--nb-gold)}
+.caside__urgent{padding:16px;box-shadow:inset 0 0 0 1px var(--nb-umber);display:flex;flex-direction:column;gap:6px}
+.caside__urgent b{font:600 14px/1 var(--font-display);color:var(--nb-gold)}
+.caside__urgent span{font:400 13px/1.4 var(--font-ui);color:var(--nb-stone-2)}
+.cform{flex:1;min-width:0;display:flex;flex-direction:column;gap:28px}
+.cform__intro{display:flex;flex-direction:column;gap:10px}
+.cform h2{font:700 40px/1 var(--font-display);color:var(--nb-ink-800)}
+.cform__intro p{font:400 16px/1.5 var(--font-ui);color:var(--nb-ink-600)}
+.cform__intro small{font:400 13px/1 var(--font-ui);color:var(--nb-taupe)}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.field{display:flex;flex-direction:column;gap:8px;min-width:0}
+.field--full{grid-column:1/-1}
+.field span{font:600 13px/1 var(--font-ui);color:var(--nb-ink-700)}
+.field input,.field select,.field textarea{width:100%;height:52px;padding:0 16px;border:0;border-radius:0;background:#fff;box-shadow:inset 0 0 0 1px var(--nb-stone);font:400 14px/1.4 var(--font-ui);color:var(--nb-ink-700);outline:none}
+.field textarea{height:120px;padding:16px;resize:none}
+.field input:focus,.field select:focus,.field textarea:focus{box-shadow:inset 0 0 0 2px var(--nb-gold)}
+.consent{display:flex;gap:10px;align-items:flex-start;font:400 13px/1.4 var(--font-ui);color:var(--nb-ink-700);cursor:pointer}
+.consent input{width:18px;height:18px;margin:0;accent-color:var(--nb-gold)}
+.cform__foot{display:flex;align-items:center;justify-content:space-between;gap:24px}
+.cform__foot small{font:400 12px/1.4 var(--font-ui);color:var(--nb-taupe)}
+.cform__foot .btn{border:0;white-space:nowrap}
+.cform__foot .btn .icon{width:16px;height:15px;margin-left:12px}
+.thanks{flex:1;display:flex;flex-direction:column;justify-content:center;gap:20px}
+.thanks__kicker{font:600 12px/1 var(--font-ui);letter-spacing:.08em;color:var(--nb-gold)}
+.thanks h2{font:700 48px/1 var(--font-display);color:var(--nb-ink-800)}
+.thanks p{max-width:640px;font:400 20px/1.45 var(--font-body);color:var(--nb-ink-700)}
+.thanks small{font:400 14px/1.4 var(--font-ui);color:var(--nb-ink-600)}
+.ticket{align-self:flex-start;padding:16px 20px;background:var(--nb-cream);display:flex;flex-direction:column;gap:6px}
+.ticket span{font:400 12px/1 var(--font-ui);color:var(--nb-taupe)}
+.ticket b{font:600 24px/1 var(--font-display);color:var(--nb-ink-800)}
+.thanks__cta{display:flex;flex-wrap:wrap;gap:16px}
+.btn--dark{color:var(--nb-ink-800)}
+.btn--dark:hover{color:#fff}
+/* contacto */
+.contact{padding:72px 48px;background:var(--nb-ink-800);display:flex;flex-direction:column;gap:48px}
+.contact__head{display:flex;flex-direction:column;align-items:flex-start;gap:12px}
+.contact__head h2{font:500 64px/1 var(--font-display);color:var(--nb-cream)}
+.contact__head p{font:400 20px/1.55 var(--font-ui);color:var(--nb-stone-2);margin-bottom:12px}
+.contact__body{display:flex;gap:48px;align-items:center}
+.contact__map{flex:0 0 48%;height:482px;background:url(assets/img/map-arequipa.png) 91.9% 48%/142.9% 205.6% no-repeat}
+.contact__list{display:flex;flex-direction:column;gap:40px}
+.contact__list li{display:flex;align-items:center;gap:14px;font:300 20px/1 var(--font-display);color:#fff}
+.contact__list b{display:block;margin-bottom:6px;font-weight:600}
+.medallion{width:58px;height:58px;border-radius:50%;box-shadow:inset 0 0 0 1px var(--nb-gold);display:flex;align-items:center;justify-content:center;color:var(--nb-gold)}
+.medallion .icon{width:26px;height:26px}
+/* footer */
+.footer{padding:48px;background:var(--nb-cream);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px 48px;color:#000}
+.footer h3{font:600 20px/1 var(--font-display);margin-bottom:18px}
+.footer ul{display:flex;flex-direction:column;gap:14px;font:500 16px/1 var(--font-body)}
+.footer li{display:flex;align-items:center;gap:10px}
+.footer li .icon{width:20px;height:20px;color:var(--nb-gold)}
+.footer__tag{margin-top:7px;font:300 12px/1.3 var(--font-body)}
+.social{display:flex;gap:8px}
+.social a{width:32px;height:32px;border-radius:50%;box-shadow:inset 0 0 0 1px #000;display:flex;align-items:center;justify-content:center;color:#000}
+.social a:hover{box-shadow:inset 0 0 0 1px var(--nb-gold)}
+.social .icon{width:17px;height:17px}
+.menu-toggle,.menu-btn,.dots{display:none}
+@media (max-width:1100px){
+.cwrap{flex-direction:column}.caside{flex:none;align-self:stretch}
+.nav{gap:22px}.nav a{font-size:18px}
+.contact__body{flex-direction:column;align-items:stretch}.contact__map{flex:none;width:100%;height:380px}
+.footer{grid-template-columns:repeat(2,minmax(0,1fr))}
+.phero h1{font-size:72px}.hero__title span{font-size:84px}
+}
+@media (max-width:760px){
+.phero{height:440px;padding:0 20px 40px;align-items:flex-end}.phero h1{font-size:40px}.phero p{font-size:16px}
+.cwrap{padding:40px 20px 48px;gap:36px}.caside__body{padding:24px 20px}
+.cform h2{font-size:32px}.fields{grid-template-columns:1fr}.cform__foot{flex-direction:column;align-items:stretch}.cform__foot .btn{justify-content:center}
+.thanks h2{font-size:36px}.thanks p{font-size:18px}
+.phero{height:420px;padding:0 20px;align-items:flex-end;padding-bottom:40px}
+.phero h1{font-size:56px}
+.phero p{font-size:16px}
+
+.header{height:72px;padding:0 20px}
+.menu-btn{display:flex;flex-direction:column;justify-content:center;gap:6px;width:44px;height:44px;padding:10px;cursor:pointer}
+.menu-btn span{display:block;height:2px;background:var(--nb-ink-700);transition:transform .2s ease,opacity .2s ease}
+.menu-toggle:checked~.menu-btn span:nth-child(1){transform:translateY(8px) rotate(45deg)}
+.menu-toggle:checked~.menu-btn span:nth-child(2){opacity:0}
+.menu-toggle:checked~.menu-btn span:nth-child(3){transform:translateY(-8px) rotate(-45deg)}
+.nav{display:none;position:absolute;top:72px;left:0;right:0;flex-direction:column;gap:0;background:var(--nb-cream);padding:0 20px 12px;border-top:1px solid var(--nb-stone);box-shadow:var(--shadow-aside)}
+.menu-toggle:checked~.nav{display:flex}
+.nav a{padding:16px 0;border-bottom:1px solid var(--nb-sand);font-size:20px}
+.title{font-size:44px}
+.btn{padding:16px 20px;font-size:14px}
+.contact{padding:48px 20px;gap:32px}
+.contact__head h2{font-size:44px}
+.contact__head p{font-size:16px}
+.contact__body{flex-direction:column;align-items:stretch;gap:32px}
+.contact__map{flex:none;height:280px}
+.contact__list{gap:24px}
+.contact__list li{font-size:18px;line-height:1.2}
+.footer{grid-template-columns:1fr;padding:40px 20px;gap:32px}
+}
+@media (prefers-reduced-motion:reduce){.hero__content{animation:none}.btn,.policy__head,.policy__head .icon,.policy__body,.policy__body p,.project,.project__desc,.project__desc>span{transition:none}}
+</style>
+</helmet>
+<div class="page">
+<header class="header">
+  <a class="logo" href="#inicio" aria-label="Nueva Bonanza Mining"></a>
+  <input class="menu-toggle" type="checkbox" id="menu-toggle" aria-hidden="true">
+  <label class="menu-btn" for="menu-toggle" aria-label="Abrir menú"><span></span><span></span><span></span></label>
+  <nav class="nav" aria-label="Principal">
+    <a href="Inicio NBM.dc.html">Inicio</a>
+    <a href="Quienes Somos NBM.dc.html">Quiénes somos</a>
+    <a href="Proyectos NBM.dc.html">Proyectos</a>
+    <a href="Noticias NBM.dc.html">Noticias</a>
+    <a href="Contacto NBM.dc.html" aria-current="page">Contacto</a>
+  </nav>
+</header>
+<section class="phero">
+  <div class="phero__content"><span class="eyebrow">CONTACTO</span><h1>HABLEMOS DE SU PROYECTO</h1><p>Conectamos oportunidades con experiencia minera, criterio técnico y una operación responsable.</p></div>
+</section>
+<section class="cwrap" id="contacto">
+  <aside class="caside">
+    <div class="caside__img"></div>
+    <div class="caside__body">
+      <div><b class="caside__kicker">CONTACTO DIRECTO</b><p>Nuestro equipo canalizará su consulta con el área correspondiente.</p></div>
+      <dl>
+        <div><span class="icon" style="--i:url(assets/icons/location-lg.svg)"></span><span><dt>DIRECCIÓN</dt><dd>Av. Puente Grau 492, Arequipa, Perú</dd></span></div>
+        <div><span class="icon" style="--i:url(assets/icons/call.svg)"></span><span><dt>TELÉFONO</dt><dd>+51 955 222 111</dd></span></div>
+        <div><span class="icon" style="--i:url(assets/icons/mail.svg)"></span><span><dt>CORREO</dt><dd>contacto@nbmining.pe</dd></span></div>
+        <div><span class="icon" style="--i:url(assets/icons/calendar.svg)"></span><span><dt>HORARIO DE ATENCIÓN</dt><dd>Lun - Vie, 8:00 a.m. - 6:00 p.m.</dd></span></div>
+      </dl>
+      <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}"><div class="caside__urgent"><b>¿SU CONSULTA ES URGENTE?</b><span>Comuníquese al +51 955 222 111 durante nuestro horario de atención.</span></div></sc-if>
+    </div>
+  </aside>
+  <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+  <form class="cform" onSubmit="{{ onSubmit }}">
+    <div class="cform__intro"><h2>ENVÍENOS SU CONSULTA</h2><p>Comparta los datos de su empresa y el motivo de contacto. Nuestro equipo evaluará su solicitud para derivarla al especialista correspondiente.</p><small>Los campos marcados con * son obligatorios.</small></div>
+    <div class="fields">
+      <label class="field"><span>Nombre y apellidos *</span><input name="Nombre y apellidos *" placeholder="Ej. María Salazar" required></label>
+      <label class="field"><span>Empresa / organización *</span><input name="Empresa / organización *" placeholder="Nombre de la empresa" required></label>
+      <label class="field"><span>Correo corporativo *</span><input type="email" name="correo" placeholder="nombre@empresa.com" required></label>
+      <label class="field"><span>Teléfono *</span><input type="tel" name="telefono" placeholder="+51 999 999 999" required></label>
+      <label class="field"><span>Cargo</span><input name="cargo" placeholder="Ej. Gerente de Operaciones"></label>
+      <label class="field"><span>Motivo de contacto *</span><select name="motivo" required><option value="">Seleccione una opción</option><option>Propuesta de proyecto</option><option>Consulta comercial</option><option>Empleo y prácticas</option><option>Prensa y comunicaciones</option><option>Otro</option></select></label>
+      <label class="field field--full"><span>Mensaje *</span><textarea name="mensaje" placeholder="Cuéntenos sobre su proyecto, requerimiento, ubicación y plazo estimado." required></textarea></label>
+    </div>
+    <label class="consent"><input type="checkbox" required><span>He leído y acepto la Política de Privacidad y autorizo el tratamiento de mis datos para atender esta consulta. *</span></label>
+    <div class="cform__foot"><small>Sus datos serán tratados de forma confidencial y únicamente para atender esta solicitud.</small><button class="btn btn--solid" type="submit">Enviar consulta<span class="icon" style="--i:url(assets/icons/arrow-right.svg)"></span></button></div>
+  </form>
+  </sc-if>
+  <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+  <div class="thanks">
+    <span class="thanks__kicker">GRACIAS POR CONTACTARNOS</span>
+    <h2>HEMOS RECIBIDO SU MENSAJE</h2>
+    <p>Un especialista de Nueva Bonanza Mining revisará la información y se comunicará con usted.</p>
+    <small>Tiempo estimado de respuesta: de 1 a 2 días hábiles.</small>
+    <div class="ticket"><span>Código de seguimiento</span><b>NBM-260930-0184</b></div>
+    <div class="thanks__cta"><a class="btn btn--solid" href="Inicio NBM.dc.html">Volver al inicio</a><a class="btn btn--dark" href="Proyectos NBM.dc.html">Ver proyectos</a></div>
+  </div>
+  </sc-if>
+</section>
+<footer class="footer">
+  <div>
+    <a class="logo" href="#inicio" aria-label="Nueva Bonanza Mining"></a>
+    <p class="footer__tag">Minería responsable con visión de futuro</p>
+  </div>
+  <nav aria-label="Pie">
+    <h3>NAVEGACIÓN</h3>
+    <ul>
+      <li><a href="#inicio">Inicio</a></li>
+      <li><a href="Quienes Somos NBM.dc.html">Quiénes somos</a></li>
+      <li><a href="#proyectos">Proyectos</a></li>
+      <li><a href="Noticias NBM.dc.html">Noticias</a></li>
+      <li><a href="Contacto NBM.dc.html">Contacto</a></li>
+    </ul>
+  </nav>
+  <div>
+    <h3>CONTACTO</h3>
+    <ul>
+      <li><span class="icon" style="--i:url(assets/icons/location.svg)"></span>Av. Puente Grau 492, Arequipa, Perú</li>
+      <li><span class="icon" style="--i:url(assets/icons/call.svg)"></span>+51 955 222 111</li>
+      <li><span class="icon" style="--i:url(assets/icons/mail.svg)"></span>contacto@nbmining.pe</li>
+      <li><span class="icon" style="--i:url(assets/icons/calendar.svg)"></span>Lun - Vie, 8:00 a.m. - 6:00 p.m.</li>
+    </ul>
+  </div>
+  <div>
+    <h3>REDES</h3>
+    <div class="social">
+      <a href="#instagram" aria-label="Instagram"><span class="icon" style="--i:url(assets/icons/instagram-outer.svg)"></span></a>
+      <a href="#facebook" aria-label="Facebook"><span class="icon" style="--i:url(assets/icons/facebook.svg)"></span></a>
+      <a href="#linkedin" aria-label="LinkedIn"><span class="icon" style="--i:url(assets/icons/linkedin.svg)"></span></a>
+    </div>
+  </div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { sent: typeof location !== 'undefined' && location.hash === '#gracias' };
+  renderVals() {
+    return {
+      sent: this.state.sent,
+      notSent: !this.state.sent,
+      onSubmit: e => { e.preventDefault(); this.setState({ sent: true }); },
+    };
+  }
+}
+</script>
+</body>
+</html>
