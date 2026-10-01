@@ -94,6 +94,9 @@ const { current = "" } = Astro.props;
       background: none;
       border: 0;
       cursor: pointer;
+      /* Por encima del overlay (hijo posterior del mismo header). */
+      position: relative;
+      z-index: 10;
     }
     .menu-btn span {
       display: block;
