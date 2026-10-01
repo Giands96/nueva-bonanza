@@ -1,0 +1,56 @@
+---
+import Icon, { type IconName } from "./Icon.astro";
+
+interface Props {
+  variant?: "outline" | "solid" | "outline-dark";
+  href?: string;
+  type?: "button" | "submit" | "reset";
+  icon?: IconName;
+  class?: string;
+}
+
+const {
+  variant = "outline",
+  href,
+  type = "button",
+  icon,
+  class: cls,
+} = Astro.props;
+---
+{
+  href ? (
+    <a href={href} class:list={["btn", `btn--${variant}`, cls]}>
+      <slot />
+      {icon && <Icon name={icon} size={16} />}
+    </a>
+  ) : (
+    <button type={type} class:list={["btn", `btn--${variant}`, cls]}>
+      <slot />
+      {icon && <Icon name={icon} size={16} />}
+    </button>
+  )
+}
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 16px 28px;
+    font: 600 16px / 1 var(--font-body);
+    letter-spacing: var(--ls-button);
+    text-transform: uppercase;
+    border: 1px solid var(--nb-gold);
+    color: #fff;
+    background: transparent;
+    cursor: pointer;
+    transition: background 200ms ease, color 200ms ease;
+  }
+  .btn:hover { background: var(--nb-gold); }
+  .btn--solid { background: var(--nb-gold); color: var(--nb-ink-800); }
+  .btn--solid:hover { color: #fff; }
+  .btn--outline-dark { color: var(--nb-ink-800); }
+  .btn--outline-dark:hover { background: var(--nb-gold); color: #fff; }
+  @media (max-width: 760px) {
+    .btn { padding: 16px 20px; font-size: 14px; }
+  }
+</style>

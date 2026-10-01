@@ -1,0 +1,37 @@
+---
+export type IconName =
+  | "arrow-right"
+  | "arrow-back"
+  | "arrow-forward"
+  | "location"
+  | "location-lg"
+  | "call"
+  | "mail"
+  | "calendar"
+  | "instagram-outer"
+  | "instagram-inner"
+  | "facebook"
+  | "linkedin";
+
+interface Props {
+  name: IconName;
+  size?: number;
+  class?: string;
+}
+
+const { name, size = 16, class: cls } = Astro.props;
+
+// Glob estático en vez del import dinámico de §4: mismo resultado,
+// pero resuelto en build sin patrones variables.
+const icons = import.meta.glob<string>("../assets/icons/*.svg", {
+  query: "?url",
+  import: "default",
+  eager: true,
+});
+const url = icons[`../assets/icons/${name}.svg`];
+---
+<span
+  class:list={["icon", cls]}
+  style={`--i:url(${url});width:${size}px;height:${size}px`}
+  aria-hidden="true"
+></span>

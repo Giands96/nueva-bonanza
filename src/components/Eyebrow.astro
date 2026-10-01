@@ -1,0 +1,29 @@
+---
+interface Props {
+  filled?: boolean;
+  class?: string;
+}
+
+const { filled = false, class: cls } = Astro.props;
+---
+<span class:list={["eyebrow", { "eyebrow--filled": filled }, cls]}>
+  <slot />
+</span>
+<style>
+  .eyebrow {
+    display: inline-flex;
+    align-self: flex-start;
+    padding: 4px 8px;
+    border-radius: var(--radius-pill);
+    box-shadow: inset 0 0 0 1px var(--nb-gold);
+    font: 500 14px / 1 var(--font-body);
+    color: var(--nb-gold);
+  }
+  .eyebrow--filled {
+    background: var(--nb-gold);
+    box-shadow: none;
+    padding: 6px 12px;
+    font-weight: 700;
+    color: #fff;
+  }
+</style>

@@ -1,0 +1,21 @@
+---
+interface Props {
+  /** Ancho en px (diseño: 76–100). */
+  width?: number;
+  class?: string;
+}
+
+const { width = 100, class: cls } = Astro.props;
+---
+<span
+  class:list={["rule", cls]}
+  style={`width:${width}px`}
+  aria-hidden="true"
+></span>
+<style>
+  .rule {
+    display: block;
+    height: 2px;
+    background: var(--nb-gold);
+  }
+</style>
