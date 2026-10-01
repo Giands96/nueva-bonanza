@@ -11,15 +11,12 @@ export interface Project {
   slug: string;
   region: string;
   name: string;
-  /** Descripción del mosaico de Proyectos. */
   description: string;
-  /** Descripción corta del carrusel de Inicio. */
   shortDescription: string;
   cardImage: ImageMetadata;
   tileImage: ImageMetadata;
 }
 
-// Textos copiados literalmente de Proyectos NBM.dc.html e Inicio NBM.dc.html.
 export const projects: Project[] = [
   {
     slug: "antamina",

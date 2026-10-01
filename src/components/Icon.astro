@@ -15,7 +15,6 @@ export type IconName =
 interface Props {
   name: IconName;
   size?: number;
-  /** Color CSS del icono. Por defecto hereda (currentColor). */
   color?: string;
   class?: string;
 }
@@ -34,3 +33,4 @@ const url = icons[`../assets/icons/${name}.svg`];
   style={`--i:url(${url});width:${size}px;height:${size}px${color ? `;color:${color}` : ""}`}
   aria-hidden="true"
 ></span>
+
