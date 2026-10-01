@@ -117,6 +117,16 @@ const [featured, ...rest] = projects;
     transform: none;
     padding-top: 4px;
   }
+  @media (hover: none) {
+    .tile__desc {
+      grid-template-rows: 1fr;
+    }
+    .tile__desc p {
+      opacity: 1;
+      transform: none;
+      padding-top: 4px;
+    }
+  }
   .portfolio > .tile {
     box-shadow: var(--shadow-card);
   }
