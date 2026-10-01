@@ -36,7 +36,7 @@ export interface Milestone {
 
 export const milestones: Milestone[] = [
   { year: "2010", text: "Inicio de operaciones en el Perú" },
-  { year: "2015", text: "Primer gran proyecto minero." },
+  { year: "2015", text: "Primer gran proyecto minero" },
   { year: "2020", text: "Expansión a nuevas regiones del país" },
   { year: "2026", text: "Consolidación como aliado estratégico del sector minero" },
 ];
