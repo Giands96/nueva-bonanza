@@ -7,15 +7,14 @@ interface Props {
 
 const { project } = Astro.props;
 ---
-<a
+<div
   class="project"
-  href={`/proyectos#${project.slug}`}
   style={`background-image:url(${project.cardImage.src})`}
 >
   <span class="project__region">{project.region}</span>
   <span class="project__name">{project.name}</span>
   <span class="project__desc"><span>{project.shortDescription}</span></span>
-</a>
+</div>
 <style>
   .project {
     position: relative;
