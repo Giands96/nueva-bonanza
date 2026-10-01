@@ -26,7 +26,7 @@ const socialSizes = {
       href="/"
       aria-label="Nueva Bonanza Mining"
       style={`background-image:url(${logoUrl})`}></a>
-    <p class="footer__tag">{tagline}</p>
+    <p class="footerTag">{tagline}</p>
   </div>
   <nav aria-label="Pie">
     <h3>NAVEGACIÓN</h3>
@@ -97,12 +97,14 @@ const socialSizes = {
     align-items: center;
     gap: 10px;
   }
-  .footer li .icon {
+  /* :global porque el span.icon lo renderiza Icon.astro (otro
+     componente) y el scope de Astro no lo alcanza de otra forma. */
+  .footer li :global(.icon) {
     color: var(--nb-gold);
   }
-  .footer__tag {
+  .footerTag {
     margin-top: 7px;
-    font: 300 12px / 1.3 var(--font-body);
+    font: 500 16px / 1.3 var(--font-body);
   }
   
   .social {
@@ -117,7 +119,7 @@ const socialSizes = {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #2a2a2a;
+    color: var(--nb-gold);
     transition: color 0.2s, box-shadow 0.2s, background-color 0.2s;
   }
   .social a:hover {
