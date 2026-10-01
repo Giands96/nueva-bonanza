@@ -1,5 +1,5 @@
 ---
-import { milestones } from "../../data/about";
+import { milestones, historyNote } from "../../data/about";
 import Rule from "../Rule.astro";
 import historyBg from "../../assets/img/hitos-plant.png";
 ---
@@ -19,17 +19,14 @@ import historyBg from "../../assets/img/hitos-plant.png";
   </ol>
   <div class="history__note">
     <Rule />
-    <p>
-      Más de una década construyendo una minería responsable,<br class="br-desktop" />{" "}
-      basada en seguridad, innovación y compromiso con el desarrollo del Perú
-    </p>
+    <p>{historyNote}</p>
   </div>
 </section>
 <style>
   .history {
     position: relative;
     isolation: isolate;
-    padding: 80px 46px;
+    padding: 80px 48px;
     background: var(--nb-cream);
     display: flex;
     flex-direction: column;
@@ -114,6 +111,7 @@ import historyBg from "../../assets/img/hitos-plant.png";
     gap: 16px;
   }
   .history__note p {
+    max-width: 60ch;
     font: 400 18px / 1.5 var(--font-body);
     color: var(--nb-ink-800);
   }
@@ -159,9 +157,6 @@ import historyBg from "../../assets/img/hitos-plant.png";
     }
     .history__note p {
       font-size: 16px;
-    }
-    .br-desktop {
-      display: none;
     }
   }
 </style>

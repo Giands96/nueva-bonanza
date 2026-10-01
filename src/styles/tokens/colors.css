@@ -2,6 +2,8 @@
 /* Brand */
 --nb-gold:rgb(217,166,64);
 --nb-bronze:rgb(63,46,35);
+/* Dorado oscurecido para texto sobre fondos claros (contraste AA ≥ 4.5:1 sobre blanco y crema). */
+--nb-gold-ink:rgb(140,100,30);
 /* Warm neutrals (paper) */
 --nb-white:rgb(255,255,255);
 --nb-cream:rgb(248,246,238);
