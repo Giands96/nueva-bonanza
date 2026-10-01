@@ -1,0 +1,130 @@
+---
+import Icon from "../Icon.astro";
+import asideImg from "../../assets/img/hero-mine.png";
+import { contact } from "../../data/site";
+---
+<aside class="caside">
+  <div
+    class="caside__img"
+    role="img"
+    aria-label="Operación minera Nueva Bonanza"
+    style={`background-image:url(${asideImg.src})`}
+  ></div>
+  <div class="caside__body">
+    <div>
+      <b class="caside__kicker">CONTACTO DIRECTO</b>
+      <p>Nuestro equipo canalizará su consulta con el área correspondiente.</p>
+    </div>
+    <dl>
+      <div>
+        <Icon name="location-lg" size={18} color="var(--nb-gold)" />
+        <span><dt>DIRECCIÓN</dt><dd>{contact.address}</dd></span>
+      </div>
+      <div>
+        <Icon name="call" size={18} color="var(--nb-gold)" />
+        <span><dt>TELÉFONO</dt><dd>{contact.phone}</dd></span>
+      </div>
+      <div>
+        <Icon name="mail" size={18} color="var(--nb-gold)" />
+        <span><dt>CORREO</dt><dd>{contact.email}</dd></span>
+      </div>
+      <div>
+        <Icon name="calendar" size={18} color="var(--nb-gold)" />
+        <span><dt>HORARIO DE ATENCIÓN</dt><dd>{contact.hours}</dd></span>
+      </div>
+    </dl>
+    <div class="caside__urgent" id="contact-urgent" hidden>
+      <b>¿SU CONSULTA ES URGENTE?</b>
+      <span>Comuníquese al {contact.phone} durante nuestro horario de atención.</span>
+    </div>
+  </div>
+</aside>
+<style>
+  .caside {
+    flex: 0 0 400px;
+    align-self: flex-start;
+    box-shadow: var(--shadow-aside);
+  }
+  .caside__img {
+    position: relative;
+    height: 208px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+  .caside__img::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 42%, var(--nb-ink-800) 100%);
+  }
+  .caside__body {
+    padding: 32px;
+    background: var(--nb-ink-800);
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+  }
+  .caside__kicker {
+    display: block;
+    margin-bottom: 8px;
+    font: 600 12px / 1 var(--font-body);
+    letter-spacing: 0.08em;
+    color: var(--nb-gold);
+  }
+  .caside__body > div > p {
+    font: 400 14px / 1.45 var(--font-body);
+    color: var(--nb-stone-2);
+  }
+  .caside dl {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+  }
+  .caside dl > div {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .caside dt {
+    font: 600 11px / 1 var(--font-body);
+    letter-spacing: 0.08em;
+    color: var(--nb-taupe);
+    margin-bottom: 4px;
+  }
+  .caside dd {
+    margin: 0;
+    font: 500 16px / 1.3 var(--font-body);
+    color: var(--nb-cream);
+  }
+  .caside__urgent {
+    padding: 16px;
+    box-shadow: inset 0 0 0 1px var(--nb-umber);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .caside__urgent[hidden] {
+    display: none;
+  }
+  .caside__urgent b {
+    font: 600 14px / 1 var(--font-display);
+    color: var(--nb-gold);
+  }
+  .caside__urgent span {
+    font: 400 13px / 1.4 var(--font-body);
+    color: var(--nb-stone-2);
+  }
+  @media (max-width: 1100px) {
+    .caside {
+      flex: none;
+      align-self: stretch;
+    }
+  }
+  @media (max-width: 760px) {
+    .caside__body {
+      padding: 24px 20px;
+    }
+  }
+</style>

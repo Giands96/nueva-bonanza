@@ -7,13 +7,15 @@ interface Props {
   title: string;
   text: string;
   image: ImageMetadata;
+  filled?: boolean;
+  compact?: boolean;
 }
 
-const { eyebrow, title, text, image } = Astro.props;
+const { eyebrow, title, text, image, filled = true, compact = false } = Astro.props;
 ---
-<section class="phero" style={`background-image:url(${image.src})`}>
+<section class:list={["phero", compact && "phero--compact"]} style={`background-image:url(${image.src})`}>
   <div class="phero__content">
-    <Eyebrow filled>{eyebrow}</Eyebrow>
+    <Eyebrow filled={filled}>{eyebrow}</Eyebrow>
     <h1>{title}</h1>
     <p>{text}</p>
   </div>
@@ -51,6 +53,17 @@ const { eyebrow, title, text, image } = Astro.props;
     font-size: 20px;
     line-height: 1.4;
   }
+  .phero--compact::before {
+    background: linear-gradient(90deg, rgba(21, 18, 15, 0.85) 0%, rgba(21, 18, 15, 0.45) 65%, rgba(21, 18, 15, 0.2) 100%);
+  }
+  .phero--compact h1 {
+    font-size: 64px;
+  }
+  .phero--compact p {
+    font: 400 18px / 1.45 var(--font-body);
+    color: var(--nb-cream-2);
+    max-width: 610px;
+  }
   @media (max-width: 1100px) {
     .phero h1 {
       font-size: 72px;
@@ -61,6 +74,12 @@ const { eyebrow, title, text, image } = Astro.props;
       height: 420px;
       padding: 0 20px 40px;
       align-items: flex-end;
+    }
+    .phero--compact {
+      height: 440px;
+    }
+    .phero--compact h1 {
+      font-size: 40px;
     }
     .phero h1 {
       font-size: 56px;

@@ -1,0 +1,245 @@
+---
+import Button from "../Button.astro";
+---
+<form class="cform" id="contact-form">
+  <div class="cform__intro">
+    <h2>ENVÍENOS SU CONSULTA</h2>
+    <p>Comparta los datos de su empresa y el motivo de contacto. Nuestro equipo evaluará su solicitud para derivarla al especialista correspondiente.</p>
+    <small>Los campos marcados con * son obligatorios.</small>
+  </div>
+  <div class="fields">
+    <label class="field">
+      <span>Nombre y apellidos *</span>
+      <input name="nombre" placeholder="Ej. María Salazar" required autocomplete="name" />
+    </label>
+    <label class="field">
+      <span>Empresa / organización *</span>
+      <input name="empresa" placeholder="Nombre de la empresa" required autocomplete="organization" />
+    </label>
+    <label class="field">
+      <span>Correo corporativo *</span>
+      <input type="email" name="correo" placeholder="nombre@empresa.com" required autocomplete="email" />
+    </label>
+    <label class="field">
+      <span>Teléfono *</span>
+      <input type="tel" name="telefono" placeholder="+51 999 999 999" required autocomplete="tel" />
+    </label>
+    <label class="field">
+      <span>Cargo</span>
+      <input name="cargo" placeholder="Ej. Gerente de Operaciones" autocomplete="organization-title" />
+    </label>
+    <label class="field">
+      <span>Motivo de contacto *</span>
+      <select name="motivo" required>
+        <option value="">Seleccione una opción</option>
+        <option>Propuesta de proyecto</option>
+        <option>Consulta comercial</option>
+        <option>Empleo y prácticas</option>
+        <option>Prensa y comunicaciones</option>
+        <option>Otro</option>
+      </select>
+    </label>
+    <label class="field field--full">
+      <span>Mensaje *</span>
+      <textarea name="mensaje" placeholder="Cuéntenos sobre su proyecto, requerimiento, ubicación y plazo estimado." required></textarea>
+    </label>
+  </div>
+  <label class="consent">
+    <input type="checkbox" required />
+    <span>He leído y acepto la Política de Privacidad y autorizo el tratamiento de mis datos para atender esta consulta. *</span>
+  </label>
+  <div class="cform__foot">
+    <small>Sus datos serán tratados de forma confidencial y únicamente para atender esta solicitud.</small>
+    <Button variant="solid" type="submit" icon="arrow-right">Enviar consulta</Button>
+  </div>
+</form>
+<div class="thanks" id="contact-thanks" hidden>
+  <span class="thanks__kicker">GRACIAS POR CONTACTARNOS</span>
+  <h2>HEMOS RECIBIDO SU MENSAJE</h2>
+  <p>Un especialista de Nueva Bonanza Mining revisará la información y se comunicará con usted.</p>
+  <small>Tiempo estimado de respuesta: de 1 a 2 días hábiles.</small>
+  <div class="ticket">
+    <span>Código de seguimiento</span>
+    <b id="ticket-code">NBM-000000-0000</b>
+  </div>
+  <div class="thanks__cta">
+    <Button variant="solid" href="/">Volver al inicio</Button>
+    <Button variant="outline-dark" href="/proyectos">Ver proyectos</Button>
+  </div>
+</div>
+<script>
+  const form = document.querySelector("#contact-form");
+  form?.addEventListener("submit", (e) => {
+    const f = e.target;
+    if (!(f instanceof HTMLFormElement) || !f.checkValidity()) return;
+    e.preventDefault();
+    const now = new Date();
+    const stamp = `${String(now.getFullYear()).slice(2)}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}`;
+    const rand = String(Math.floor(1000 + Math.random() * 9000));
+    const code = document.querySelector("#ticket-code");
+    if (code) code.textContent = `NBM-${stamp}-${rand}`;
+    form.hidden = true;
+    document.querySelector("#contact-thanks")?.removeAttribute("hidden");
+    document.querySelector("#contact-urgent")?.removeAttribute("hidden");
+  });
+</script>
+<style>
+  .cform {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+  .cform__intro {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .cform h2 {
+    font: 700 40px / 1 var(--font-display);
+    color: var(--nb-ink-800);
+  }
+  .cform__intro p {
+    font: 400 16px / 1.5 var(--font-body);
+    color: var(--nb-ink-600);
+  }
+  .cform__intro small {
+    font: 400 13px / 1 var(--font-body);
+    color: var(--nb-taupe);
+  }
+  .fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+  }
+  .field--full {
+    grid-column: 1 / -1;
+  }
+  .field span {
+    font: 600 13px / 1 var(--font-body);
+    color: var(--nb-ink-700);
+  }
+  .field input,
+  .field select,
+  .field textarea {
+    width: 100%;
+    height: 52px;
+    padding: 0 16px;
+    border: 0;
+    border-radius: 0;
+    background: #fff;
+    box-shadow: inset 0 0 0 1px var(--nb-stone);
+    font: 400 14px / 1.4 var(--font-body);
+    color: var(--nb-ink-700);
+    outline: none;
+  }
+  .field textarea {
+    height: 120px;
+    padding: 16px;
+    resize: none;
+  }
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    box-shadow: inset 0 0 0 2px var(--nb-gold);
+  }
+  .consent {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font: 400 13px / 1.4 var(--font-body);
+    color: var(--nb-ink-700);
+    cursor: pointer;
+  }
+  .consent input {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    accent-color: var(--nb-gold);
+  }
+  .cform__foot {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .cform__foot small {
+    font: 400 12px / 1.4 var(--font-body);
+    color: var(--nb-taupe);
+  }
+  .thanks {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+  }
+  .thanks[hidden],
+  .cform[hidden] {
+    display: none;
+  }
+  .thanks__kicker {
+    font: 600 12px / 1 var(--font-body);
+    letter-spacing: 0.08em;
+    color: var(--nb-gold);
+  }
+  .thanks h2 {
+    font: 700 48px / 1 var(--font-display);
+    color: var(--nb-ink-800);
+  }
+  .thanks p {
+    max-width: 640px;
+    font: 400 20px / 1.45 var(--font-body);
+    color: var(--nb-ink-700);
+  }
+  .thanks small {
+    font: 400 14px / 1.4 var(--font-body);
+    color: var(--nb-ink-600);
+  }
+  .ticket {
+    align-self: flex-start;
+    padding: 16px 20px;
+    background: var(--nb-cream);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .ticket span {
+    font: 400 12px / 1 var(--font-body);
+    color: var(--nb-taupe);
+  }
+  .ticket b {
+    font: 600 24px / 1 var(--font-display);
+    color: var(--nb-ink-800);
+  }
+  .thanks__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  @media (max-width: 760px) {
+    .cform h2 {
+      font-size: 32px;
+    }
+    .fields {
+      grid-template-columns: 1fr;
+    }
+    .cform__foot {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .thanks h2 {
+      font-size: 36px;
+    }
+    .thanks p {
+      font-size: 18px;
+    }
+  }
+</style>

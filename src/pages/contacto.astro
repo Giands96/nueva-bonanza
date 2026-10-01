@@ -1,0 +1,42 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import ContactInfo from "../components/contact/ContactInfo.astro";
+import ContactForm from "../components/contact/ContactForm.astro";
+import heroImage from "../assets/img/hero-mine.png";
+---
+<BaseLayout title="Contacto" current="contacto">
+  <main>
+    <PageHero
+      eyebrow="CONTACTO"
+      title="HABLEMOS DE SU PROYECTO"
+      text="Conectamos oportunidades con experiencia minera, criterio técnico y una operación responsable."
+      image={heroImage}
+      filled={false}
+      compact
+    />
+    <section class="cwrap" aria-label="Formulario de contacto">
+      <ContactInfo />
+      <ContactForm />
+    </section>
+  </main>
+</BaseLayout>
+<style>
+  .cwrap {
+    display: flex;
+    gap: 48px;
+    padding: 56px var(--pad-inline) 64px;
+    background: #fff;
+  }
+  @media (max-width: 1100px) {
+    .cwrap {
+      flex-direction: column;
+    }
+  }
+  @media (max-width: 760px) {
+    .cwrap {
+      padding: 40px 20px 48px;
+      gap: 36px;
+    }
+  }
+</style>
