@@ -1,0 +1,93 @@
+---
+import Button from "./Button.astro";
+import Medallion from "./Medallion.astro";
+import { contact } from "../data/site";
+import mapUrl from "../assets/img/map-arequipa.png?url";
+---
+<section class="contact" aria-label="Contáctanos">
+  <div class="contact__head">
+    <h2>CONTÁCTANOS</h2>
+    <p>
+      Conversemos sobre nuestros proyectos y el futuro de una minería
+      responsable en el Perú.
+    </p>
+    <Button variant="solid" href="/contacto">Escríbenos</Button>
+  </div>
+  <div class="contact__body">
+    <div
+      class="contact__map"
+      role="img"
+      aria-label="Mapa de Arequipa"
+      style={`background-image:url(${mapUrl})`}
+    ></div>
+    <ul class="contact__list">
+      <li>
+        <Medallion name="location-lg" />
+        <span><b>DIRECCIÓN:</b>{contact.address}</span>
+      </li>
+      <li>
+        <Medallion name="call" />
+        <span><b>TELÉFONO:</b>{contact.phone}</span>
+      </li>
+      <li>
+        <Medallion name="calendar" />
+        <span><b>HORARIO DE ATENCIÓN:</b>{contact.hours}</span>
+      </li>
+      <li>
+        <Medallion name="mail" />
+        <span><b>CORREO:</b>{contact.email}</span>
+      </li>
+    </ul>
+  </div>
+</section>
+<style>
+  .contact {
+    padding: 72px 48px;
+    background: var(--nb-ink-800);
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+  .contact__head {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .contact__head h2 { font: 500 64px / 1 var(--font-display); color: var(--nb-cream); }
+  .contact__head p {
+    font: 400 20px / 1.55 var(--font-body);
+    color: var(--nb-stone-2);
+    margin-bottom: 12px;
+  }
+  .contact__body { display: flex; gap: 48px; align-items: center; }
+  .contact__map {
+    flex: 0 0 48%;
+    height: 482px;
+    background-position: 91.9% 48%;
+    background-size: 142.9% 205.6%;
+    background-repeat: no-repeat;
+  }
+  .contact__list { display: flex; flex-direction: column; gap: 40px; }
+  .contact__list li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font: 300 20px / 1 var(--font-display);
+    color: #fff;
+  }
+  .contact__list b { display: block; margin-bottom: 6px; font-weight: 600; }
+  @media (max-width: 1100px) {
+    .contact__body { flex-direction: column; align-items: stretch; }
+    .contact__map { flex: none; width: 100%; height: 380px; }
+  }
+  @media (max-width: 760px) {
+    .contact { padding: 48px 20px; gap: 32px; }
+    .contact__head h2 { font-size: 44px; }
+    .contact__head p { font-size: 16px; }
+    .contact__body { flex-direction: column; align-items: stretch; gap: 32px; }
+    .contact__map { flex: none; height: 280px; }
+    .contact__list { gap: 24px; }
+    .contact__list li { font-size: 18px; line-height: 1.2; }
+  }
+</style>

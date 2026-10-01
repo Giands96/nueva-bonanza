@@ -1,9 +1,130 @@
 ---
+import { navigation } from "../data/site";
+import logoUrl from "../assets/logo-nueva-bonanza.png?url";
 
+interface Props {
+  current?: string;
+}
+
+const { current = "" } = Astro.props;
 ---
-
-<header>
-    <nav>
-        
-    </nav>
+<header class="header">
+  <a
+    class="logo"
+    href="/"
+    aria-label="Nueva Bonanza Mining"
+    style={`background-image:url(${logoUrl})`}
+  ></a>
+  <button
+    class="menu-btn"
+    type="button"
+    aria-expanded="false"
+    aria-controls="main-nav"
+    aria-label="Abrir menú"
+  >
+    <span></span><span></span><span></span>
+  </button>
+  <nav id="main-nav" class="nav" aria-label="Principal">
+    {
+      navigation.map((item) => (
+        <a
+          href={item.href}
+          aria-current={current === item.key ? "page" : undefined}
+        >
+          {item.label}
+        </a>
+      ))
+    }
+  </nav>
 </header>
+<script>
+  const btn = document.querySelector(".menu-btn");
+  const nav = document.getElementById("main-nav");
+  btn?.addEventListener("click", () => {
+    const open = btn.getAttribute("aria-expanded") === "true";
+    btn.setAttribute("aria-expanded", String(!open));
+    btn.setAttribute("aria-label", !open ? "Cerrar menú" : "Abrir menú");
+    nav?.classList.toggle("is-open", !open);
+  });
+</script>
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    height: 80px;
+    padding: 0 48px;
+    background: var(--nb-cream);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo {
+    display: block;
+    width: 140px;
+    height: 62px;
+    background-position: 50% 50%;
+    background-size: 100% 225%;
+    background-repeat: no-repeat;
+  }
+  .nav { display: flex; gap: 34px; }
+  .nav a {
+    font: 500 20px / 1 var(--font-display);
+    color: var(--nb-ink-700);
+    text-transform: uppercase;
+  }
+  .nav a:hover,
+  .nav a[aria-current="page"] { color: var(--nb-gold); }
+  .menu-btn { display: none; }
+  @media (max-width: 1100px) {
+    .nav { gap: 22px; }
+    .nav a { font-size: 18px; }
+  }
+  @media (max-width: 760px) {
+    .header { height: 72px; padding: 0 20px; }
+    .menu-btn {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 6px;
+      width: 44px;
+      height: 44px;
+      padding: 10px;
+      background: none;
+      border: 0;
+      cursor: pointer;
+    }
+    .menu-btn span {
+      display: block;
+      height: 2px;
+      background: var(--nb-ink-700);
+      transition: transform 200ms ease, opacity 200ms ease;
+    }
+    .menu-btn[aria-expanded="true"] span:nth-child(1) {
+      transform: translateY(8px) rotate(45deg);
+    }
+    .menu-btn[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+    .menu-btn[aria-expanded="true"] span:nth-child(3) {
+      transform: translateY(-8px) rotate(-45deg);
+    }
+    .nav {
+      display: none;
+      position: absolute;
+      top: 72px;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      gap: 0;
+      background: var(--nb-cream);
+      padding: 0 20px 12px;
+      border-top: 1px solid var(--nb-stone);
+      box-shadow: var(--shadow-aside);
+    }
+    .nav.is-open { display: flex; }
+    .nav a {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--nb-sand);
+      font-size: 20px;
+    }
+  }
+</style>
