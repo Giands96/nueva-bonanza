@@ -9,13 +9,14 @@ interface Props {
   image: ImageMetadata;
   filled?: boolean;
   compact?: boolean;
+  eyebrowColor?: string;
 }
 
-const { eyebrow, title, text, image, filled = true, compact = false } = Astro.props;
+const { eyebrow, title, text, image, filled = true, compact = false, eyebrowColor } = Astro.props;
 ---
 <section class:list={["phero", compact && "phero--compact"]} style={`background-image:url(${image.src})`}>
   <div class="phero__content">
-    <Eyebrow filled={filled}>{eyebrow}</Eyebrow>
+    <Eyebrow filled={filled} color={eyebrowColor}>{eyebrow}</Eyebrow>
     <h1>{title}</h1>
     <p>{text}</p>
   </div>

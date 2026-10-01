@@ -2,11 +2,13 @@
 interface Props {
   filled?: boolean;
   class?: string;
+  /** Color del texto (por defecto el del sistema). */
+  color?: string;
 }
 
-const { filled = false, class: cls } = Astro.props;
+const { filled = false, class: cls, color } = Astro.props;
 ---
-<span class:list={["eyebrow", { "eyebrow--filled": filled }, cls]}>
+<span class:list={["eyebrow", { "eyebrow--filled": filled }, cls]} style={color ? `color:${color}` : undefined}>
   <slot />
 </span>
 <style>
