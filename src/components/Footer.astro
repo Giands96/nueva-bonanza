@@ -43,10 +43,10 @@ const socialSizes = {
   <div>
     <h3>CONTACTO</h3>
     <ul id="contacto-footer">
-      <li><Icon name="location" size={20} />{contact.address}</li>
-      <li><Icon name="call" size={20} />{contact.phone}</li>
-      <li><Icon name="mail" size={20} />{contact.email}</li>
-      <li><Icon name="calendar" size={20} />{contact.hours}</li>
+      <li><Icon name="location" size={20} color="var(--nb-gold)" />{contact.address}</li>
+      <li><Icon name="call" size={20} color="var(--nb-gold)" />{contact.phone}</li>
+      <li><Icon name="mail" size={20} color="var(--nb-gold)" />{contact.email}</li>
+      <li><Icon name="calendar" size={20} color="var(--nb-gold)" />{contact.hours}</li>
     </ul>
   </div>
   <div>
@@ -97,11 +97,6 @@ const socialSizes = {
     align-items: center;
     gap: 10px;
   }
-  /* :global porque el span.icon lo renderiza Icon.astro (otro
-     componente) y el scope de Astro no lo alcanza de otra forma. */
-  .footer li :global(.icon) {
-    color: var(--nb-gold);
-  }
   .footerTag {
     margin-top: 7px;
     font: 500 16px / 1.3 var(--font-body);
@@ -119,7 +114,7 @@ const socialSizes = {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--nb-gold);
+    color: #2a2a2a;
     transition: color 0.2s, box-shadow 0.2s, background-color 0.2s;
   }
   .social a:hover {

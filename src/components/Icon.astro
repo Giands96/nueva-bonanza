@@ -15,10 +15,12 @@ export type IconName =
 interface Props {
   name: IconName;
   size?: number;
+  /** Color CSS del icono. Por defecto hereda (currentColor). */
+  color?: string;
   class?: string;
 }
 
-const { name, size = 24, class: cls } = Astro.props;
+const { name, size = 24, color, class: cls } = Astro.props;
 
 const icons = import.meta.glob<string>("../assets/icons/*.svg", {
   query: "?url",
@@ -29,6 +31,6 @@ const url = icons[`../assets/icons/${name}.svg`];
 ---
 <span
   class:list={["icon", cls]}
-  style={`--i:url(${url});width:${size}px;height:${size}px`}
+  style={`--i:url(${url});width:${size}px;height:${size}px${color ? `;color:${color}` : ""}`}
   aria-hidden="true"
 ></span>
