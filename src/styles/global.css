@@ -19,7 +19,7 @@ img { display: block; max-width: 100%; }
 
 :focus-visible { outline: 2px solid var(--nb-gold); outline-offset: 2px; }
 
-/* Icono por máscara CSS (§4): <span class="icon" style="--i:url(...)"> */
+/* Icono por máscara CSS: <span class="icon" style="--i:url(...)"> */
 .icon {
   display: inline-block;
   flex: none;
@@ -28,7 +28,7 @@ img { display: block; max-width: 100%; }
   mask: var(--i) center / contain no-repeat;
 }
 
-/* Título de sección (§5.2) */
+/* Título de sección*/
 .title { font: 700 64px / 1 var(--font-display); }
 
 @media (max-width: 760px) {
