@@ -1,0 +1,154 @@
+---
+import { projects } from "../../data/projects";
+
+const [featured, ...rest] = projects;
+---
+<section class="portfolio" aria-label="Proyectos">
+  <a class="tile" href={`#${featured.slug}`} style={`background-image:url(${featured.tileImage.src})`}>
+    <div class="tile__info">
+      <span class="tile__region">{featured.region}</span>
+      <h2 class="tile__name">{featured.name}</h2>
+      <div class="tile__desc"><p>{featured.description}</p></div>
+    </div>
+  </a>
+  <div class="portfolio__small">
+    {rest.map((p) => (
+      <a class="tile" href={`#${p.slug}`} style={`background-image:url(${p.tileImage.src})`}>
+        <div class="tile__info">
+          <span class="tile__region">{p.region}</span>
+          <h2 class="tile__name">{p.name}</h2>
+          <div class="tile__desc"><p>{p.description}</p></div>
+        </div>
+      </a>
+    ))}
+  </div>
+</section>
+<style>
+  .portfolio {
+    padding: 80px 48px;
+    background: #fff;
+    display: flex;
+    gap: 20px;
+    height: 860px;
+  }
+  .portfolio__small {
+    flex: 1 1 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 297fr 377fr;
+    gap: 20px;
+  }
+  .tile {
+    position: relative;
+    flex: 1 1 0;
+    display: flex;
+    align-items: flex-end;
+    padding: 24px;
+    background-position: center;
+    background-size: cover;
+    color: #fff;
+    box-shadow: var(--shadow-card-sm);
+    overflow: hidden;
+  }
+  .tile:hover {
+    color: #fff;
+  }
+  .tile::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0) 45%, rgba(0, 0, 0, 0.6) 100%);
+  }
+  .tile__info {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .tile__region {
+    padding: 4px 12px;
+    border-radius: 50px;
+    background: var(--nb-gold);
+    font: 600 14px / 1.05 var(--font-display);
+    color: #000;
+  }
+  .tile__name {
+    font: 700 36px / 1.05 var(--font-display);
+  }
+  .tile::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 10, 10, 0.78);
+    opacity: 0;
+    transition: opacity 0.45s ease;
+  }
+  .tile:hover::after,
+  .tile:focus-visible::after {
+    opacity: 1;
+  }
+  .tile__info {
+    z-index: 1;
+  }
+  .tile__desc {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .tile__desc p {
+    min-height: 0;
+    overflow: hidden;
+    font: 400 16px / 1.5 var(--font-body);
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.5s ease,
+      transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1),
+      padding-top 0.5s ease;
+  }
+  .tile:hover .tile__desc,
+  .tile:focus-visible .tile__desc {
+    grid-template-rows: 1fr;
+  }
+  .tile:hover .tile__desc p,
+  .tile:focus-visible .tile__desc p {
+    opacity: 1;
+    transform: none;
+    padding-top: 4px;
+  }
+  .portfolio > .tile {
+    box-shadow: var(--shadow-card);
+  }
+  @media (max-width: 1100px) {
+    .portfolio {
+      flex-direction: column;
+      height: auto;
+    }
+    .tile {
+      flex: none;
+      min-height: 420px;
+    }
+    .portfolio__small {
+      min-height: 720px;
+    }
+  }
+  @media (max-width: 760px) {
+    .portfolio {
+      flex-direction: column;
+      height: auto;
+      padding: 48px 20px;
+    }
+    .tile {
+      flex: none;
+      min-height: 380px;
+      padding: 20px;
+    }
+    .portfolio__small {
+      display: flex;
+      flex-direction: column;
+      flex: none;
+      min-height: 0;
+    }
+  }
+</style>

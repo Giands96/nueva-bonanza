@@ -1,0 +1,21 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import Portfolio from "../components/projects/Portfolio.astro";
+import Stats from "../components/projects/Stats.astro";
+import ContactBand from "../components/ContactBand.astro";
+import heroImage from "../assets/img/proyectos-hero.png";
+---
+<BaseLayout title="Proyectos" current="proyectos">
+  <PageHero
+    eyebrow="NUESTRA OPERACIÓN"
+    title="PROYECTOS"
+    text="Cada proyecto refleja nuestro compromiso con una minería moderna y responsable, basada en altos estándares de calidad, seguridad y respeto por el entorno."
+    image={heroImage}
+  />
+  <main>
+    <Portfolio />
+    <Stats />
+    <ContactBand />
+  </main>
+</BaseLayout>
