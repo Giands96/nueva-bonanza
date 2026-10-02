@@ -23,7 +23,22 @@ export const contact = {
   hours: "Lun - Vie, 8:00 a.m. - 6:00 p.m.",
 } as const;
 
-export const tagline = "Minería responsable con visión de futuro";
+/**
+ * Motivos del formulario de Contacto y a quién se envía cada uno (FormSubmit).
+ * `to` admite el correo o, mejor, el alias aleatorio que FormSubmit entrega al
+ * activar cada correo (p. ej. "a1b2c3d4e5..."): así la dirección no queda
+ * expuesta en el HTML. Cada correo nuevo debe activarse una vez desde el
+ * mensaje de confirmación que FormSubmit le envía con el primer envío.
+ */
+export const contactReasons = [
+  { label: "Propuesta de proyecto", to: contact.email },
+  { label: "Consulta comercial", to: contact.email },
+  { label: "Empleo y prácticas", to: contact.email },
+  { label: "Prensa y comunicaciones", to: contact.email },
+  { label: "Otro", to: contact.email },
+] as const;
+
+export const tagline ="Minería responsable con visión de futuro";
 
 // URLs pendientes (Decisión pendiente §10): placeholders centralizados.
 export const socials = [

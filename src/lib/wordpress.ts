@@ -1,8 +1,9 @@
 /**
  * Cliente de WordPress headless vía WPGraphQL (plugin https://www.wpgraphql.com).
- * Normaliza los posts al modelo `NewsItem` que consumen las páginas de Noticias.
+ * Lee el tipo de contenido `noticia` (taxonomía `categoriasNoticia`, campos ACF
+ * `datosNoticia`) y lo normaliza al modelo `NewsItem` de las páginas de Noticias.
  *
- * Config: WP_GRAPHQL_URL en `.env` (p. ej. https://cms.ejemplo.com/graphql).
+ * Config: WP_GRAPHQL_URL en `.env` (https://nbonanzamining.com/cms/graphql).
  * Sin URL se devuelven listas vacías (el listado muestra su estado vacío).
  * Con URL, un fallo de red o de GraphQL lanza error: en un build estático es
  * preferible que el deploy falle a publicar la sección de noticias vacía.
@@ -17,10 +18,12 @@ export interface NewsItem {
   dateLabel: string;
   image: NewsImage | null;
   category: string | null;
-  /** Texto plano, sin etiquetas. */
+  /** Resumen en texto plano: lead del detalle y meta description. */
   excerpt: string;
-  /** HTML del editor; solo en el detalle. */
+  /** HTML del cuerpo; solo en el detalle. */
   content?: string;
+  /** Frase destacada de cierre (texto plano); solo en el detalle. */
+  quote?: string;
 }
 
 export interface NewsImage {
@@ -31,12 +34,10 @@ export interface NewsImage {
   height?: number;
 }
 
-interface WPPost {
+interface WPNoticia {
   slug: string;
   title: string | null;
   date: string;
-  excerpt: string | null;
-  content?: string | null;
   featuredImage: {
     node: {
       sourceUrl: string;
@@ -45,7 +46,12 @@ interface WPPost {
       mediaDetails: { width: number | null; height: number | null } | null;
     };
   } | null;
-  categories: { nodes: { name: string }[] } | null;
+  categoriasNoticia: { nodes: { name: string }[] } | null;
+  datosNoticia: {
+    resumen: string | null;
+    cuerpo?: string | null;
+    fraseDestacada?: string | null;
+  } | null;
 }
 
 const ENDPOINT = import.meta.env.WP_GRAPHQL_URL as string | undefined;
@@ -54,33 +60,47 @@ const ENDPOINT = import.meta.env.WP_GRAPHQL_URL as string | undefined;
 const PAGE_SIZE = 100;
 
 const POST_FIELDS = /* GraphQL */ `
-  fragment NewsFields on Post {
+  fragment NewsFields on Noticia {
     slug
     title
     date
-    excerpt
     featuredImage {
       node {
         sourceUrl
         altText
         srcSet
-        mediaDetails { width height }
+        mediaDetails {
+          width
+          height
+        }
       }
     }
-    categories(first: 1) { nodes { name } }
+    categoriasNoticia(first: 1) {
+      nodes {
+        name
+      }
+    }
   }
 `;
 
 const LIST_QUERY = /* GraphQL */ `
   ${POST_FIELDS}
   query NewsList($first: Int!, $after: String) {
-    posts(
+    noticias(
       first: $first
       after: $after
       where: { status: PUBLISH, orderby: { field: DATE, order: DESC } }
     ) {
-      pageInfo { hasNextPage endCursor }
-      nodes { ...NewsFields }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+      nodes {
+        ...NewsFields
+        datosNoticia {
+          resumen
+        }
+      }
     }
   }
 `;
@@ -88,26 +108,40 @@ const LIST_QUERY = /* GraphQL */ `
 const DETAIL_QUERY = /* GraphQL */ `
   ${POST_FIELDS}
   query NewsDetail($slug: ID!) {
-    post(id: $slug, idType: SLUG) {
+    noticia(id: $slug, idType: SLUG) {
       ...NewsFields
       status
-      content
+      datosNoticia {
+        resumen
+        cuerpo
+        fraseDestacada
+      }
     }
   }
 `;
 
-async function query<T>(source: string, variables: Record<string, unknown> = {}): Promise<T> {
+async function query<T>(
+  source: string,
+  variables: Record<string, unknown> = {},
+): Promise<T> {
   const res = await fetch(ENDPOINT!, {
     method: "POST",
     headers: { "Content-Type": "application/json", Accept: "application/json" },
     body: JSON.stringify({ query: source, variables }),
   });
   if (!res.ok) {
-    throw new Error(`WordPress GraphQL respondió ${res.status} ${res.statusText}`);
+    throw new Error(
+      `WordPress GraphQL respondió ${res.status} ${res.statusText}`,
+    );
   }
-  const json = (await res.json()) as { data?: T; errors?: { message: string }[] };
+  const json = (await res.json()) as {
+    data?: T;
+    errors?: { message: string }[];
+  };
   if (json.errors?.length) {
-    throw new Error(`WordPress GraphQL: ${json.errors.map((e) => e.message).join("; ")}`);
+    throw new Error(
+      `WordPress GraphQL: ${json.errors.map((e) => e.message).join("; ")}`,
+    );
   }
   return json.data as T;
 }
@@ -115,7 +149,9 @@ async function query<T>(source: string, variables: Record<string, unknown> = {})
 let warned = false;
 function isConfigured(): boolean {
   if (!ENDPOINT && !warned) {
-    console.warn("[wordpress] WP_GRAPHQL_URL no está definida: Noticias se mostrará vacía.");
+    console.warn(
+      "[wordpress] WP_GRAPHQL_URL no está definida: Noticias se mostrará vacía.",
+    );
     warned = true;
   }
   return Boolean(ENDPOINT);
@@ -128,10 +164,15 @@ export async function getAllPosts(): Promise<NewsItem[]> {
   let after: string | null = null;
   do {
     const data: {
-      posts: { pageInfo: { hasNextPage: boolean; endCursor: string | null }; nodes: WPPost[] };
+      noticias: {
+        pageInfo: { hasNextPage: boolean; endCursor: string | null };
+        nodes: WPNoticia[];
+      };
     } = await query(LIST_QUERY, { first: PAGE_SIZE, after });
-    posts.push(...data.posts.nodes.map(normalize));
-    after = data.posts.pageInfo.hasNextPage ? data.posts.pageInfo.endCursor : null;
+    posts.push(...data.noticias.nodes.map(normalize));
+    after = data.noticias.pageInfo.hasNextPage
+      ? data.noticias.pageInfo.endCursor
+      : null;
   } while (after);
   return posts;
 }
@@ -139,12 +180,19 @@ export async function getAllPosts(): Promise<NewsItem[]> {
 /** Noticia completa (con `content`) o `null` si no existe o no está publicada. */
 export async function getPostBySlug(slug: string): Promise<NewsItem | null> {
   if (!isConfigured()) return null;
-  const data = await query<{ post: (WPPost & { status: string }) | null }>(DETAIL_QUERY, { slug });
-  if (!data.post || data.post.status !== "publish") return null;
-  return { ...normalize(data.post), content: data.post.content ?? "" };
+  const data = await query<{
+    noticia: (WPNoticia & { status: string }) | null;
+  }>(DETAIL_QUERY, { slug });
+  const post = data.noticia;
+  if (!post || post.status !== "publish") return null;
+  return {
+    ...normalize(post),
+    content: post.datosNoticia?.cuerpo ?? "",
+    quote: toPlainText(post.datosNoticia?.fraseDestacada ?? ""),
+  };
 }
 
-function normalize(post: WPPost): NewsItem {
+function normalize(post: WPNoticia): NewsItem {
   const media = post.featuredImage?.node;
   const iso = post.date.slice(0, 10);
   const [y, m, d] = iso.split("-");
@@ -164,25 +212,41 @@ function normalize(post: WPPost): NewsItem {
           height: media.mediaDetails?.height ?? undefined,
         }
       : null,
-    category: post.categories?.nodes[0]?.name ?? null,
-    excerpt: toPlainText(post.excerpt ?? ""),
+    category: post.categoriasNoticia?.nodes[0]?.name ?? null,
+    excerpt: toPlainText(post.datosNoticia?.resumen ?? ""),
   };
 }
 
-/** Quita etiquetas HTML y decodifica entidades (excerpt, metadatos). */
+/** Quita etiquetas HTML y decodifica entidades (resumen, metadatos). */
 export function toPlainText(html: string): string {
-  return decodeEntities(html.replace(/<[^>]*>/g, "")).replace(/\s+/g, " ").trim();
+  return decodeEntities(html.replace(/<[^>]*>/g, ""))
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 const NAMED_ENTITIES: Record<string, string> = {
-  amp: "&", lt: "<", gt: ">", quot: '"', apos: "'", nbsp: " ",
-  hellip: "…", ndash: "–", mdash: "—", lsquo: "‘", rsquo: "’", ldquo: "“", rdquo: "”",
+  amp: "&",
+  lt: "<",
+  gt: ">",
+  quot: '"',
+  apos: "'",
+  nbsp: " ",
+  hellip: "…",
+  ndash: "–",
+  mdash: "—",
+  lsquo: "‘",
+  rsquo: "’",
+  ldquo: "“",
+  rdquo: "”",
 };
 
 function decodeEntities(text: string): string {
   return text.replace(/&(#x[\da-f]+|#\d+|[a-z]+);/gi, (match, code: string) => {
     if (code[0] === "#") {
-      const n = code[1].toLowerCase() === "x" ? parseInt(code.slice(2), 16) : parseInt(code.slice(1), 10);
+      const n =
+        code[1].toLowerCase() === "x"
+          ? parseInt(code.slice(2), 16)
+          : parseInt(code.slice(1), 10);
       return Number.isNaN(n) ? match : String.fromCodePoint(n);
     }
     return NAMED_ENTITIES[code.toLowerCase()] ?? match;
