@@ -4,7 +4,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import Eyebrow from "../../components/Eyebrow.astro";
 import Icon from "../../components/Icon.astro";
 import placeholder from "../../assets/img/news-1.png";
-import { getAllPosts, getPostBySlug, toPlainText } from "../../lib/wordpress";
+import { getAllPosts, getPostBySlug } from "../../lib/wordpress";
 
 export const getStaticPaths = (async () => {
   const posts = await getAllPosts();
@@ -16,11 +16,6 @@ const post = await getPostBySlug(slug);
 if (!post) return new Response(null, { status: 404 });
 
 const image = post.image ?? { src: placeholder.src, alt: "", width: placeholder.width, height: placeholder.height };
-
-// El lead sale del extracto. Si WordPress lo generó a partir del contenido
-// (sin extracto manual), el lead repetiría el primer párrafo: se omite.
-const leadText = post.excerpt.replace(/\s*(\[…\]|…)$/, "");
-const showLead = leadText !== "" && !toPlainText(post.content ?? "").startsWith(leadText);
 
 const ogImage = post.image ? new URL(post.image.src, Astro.url).href : undefined;
 ---
@@ -56,9 +51,10 @@ const ogImage = post.image ? new URL(post.image.src, Astro.url).href : undefined
           decoding="async"
         />
         <div class="post__body">
-          {showLead && <p class="post__lead">{post.excerpt}</p>}
-          {/* HTML del editor de WordPress: el CMS debe ser de confianza (Design.md §9.5). */}
+          {post.excerpt && <p class="post__lead">{post.excerpt}</p>}
+          {/* HTML del campo "cuerpo" de WordPress: el CMS debe ser de confianza (Design.md §9.5). */}
           <Fragment set:html={post.content} />
+          {post.quote && <blockquote>{post.quote}</blockquote>}
         </div>
       </div>
     </article>
