@@ -1,0 +1,343 @@
+---
+import Icon from "../Icon.astro";
+import { sedes, comoLlegarUrl } from "../../data/sedes";
+import { departamentos, PERU_VIEWBOX, proyectar } from "../../data/peru-map";
+
+const sedePorDepartamento = new Map(sedes.map((s) => [s.departamento, s.id]));
+const pines = sedes.map((s) => ({ ...s, ...proyectar(s.coords[0], s.coords[1]) }));
+const etiquetaMapa = `Mapa del Perú con las sedes de Nueva Bonanza Mining en ${sedes
+  .map((s) => s.direccion.at(-1))
+  .join(" y ")}`;
+---
+<div class="sedes" data-sedes>
+  <div class="sedes__mapa">
+    <svg
+      class="mapa"
+      viewBox={`0 0 ${PERU_VIEWBOX.width} ${PERU_VIEWBOX.height}`}
+      focusable="false"
+    >
+      <g role="img" aria-label={etiquetaMapa}>
+        {departamentos.map((dep) => (
+          <path
+            d={dep.d}
+            data-departamento={dep.id}
+            data-sede={sedePorDepartamento.get(dep.id)}
+            class:list={["mapa__dep", { "mapa__dep--sede": sedePorDepartamento.has(dep.id) }]}
+          />
+        ))}
+      </g>
+      {pines.map((p) => (
+        <g
+          class="pin"
+          data-sede={p.id}
+          transform={`translate(${p.x.toFixed(1)} ${p.y.toFixed(1)})`}
+          tabindex="0"
+          role="button"
+          aria-pressed="false"
+          aria-label={`${p.nombre}: ${p.direccion.join(", ")}`}
+        >
+          <circle class="pin__pulso" r="9" />
+          <circle class="pin__punto" r="6" />
+        </g>
+      ))}
+    </svg>
+  </div>
+
+  <div class="sedes__info">
+    <ul class="sedes__lista">
+      {sedes.map((s, i) => (
+        <li class="sede" data-sede={s.id} style={`--i:${i + 1}`}>
+          <h3 class="sede__nombre">{s.nombre}</h3>
+          <p class="sede__linea">
+            <Icon name="location" size={18} color="var(--color-acento)" />
+            <span>
+              {s.direccion.map((linea) => (
+                <span class="sede__dir">{linea}</span>
+              ))}
+            </span>
+          </p>
+          {s.telefonos.map((tel) => (
+            <p class="sede__linea">
+              <Icon name="call" size={18} color="var(--color-acento)" />
+              <a href={`tel:${tel.replace(/\s/g, "")}`}>{tel}</a>
+            </p>
+          ))}
+          <a class="sede__llegar" href={comoLlegarUrl(s)} target="_blank" rel="noopener">
+            Cómo llegar<span class="visually-hidden"> a {s.nombre} (abre Google Maps en una pestaña nueva)</span>
+            <Icon name="arrow-right" size={14} />
+          </a>
+        </li>
+      ))}
+    </ul>
+    <slot />
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>("[data-sedes]").forEach((root) => {
+    const items = [...root.querySelectorAll<Element>("[data-sede]")];
+    const pins = [...root.querySelectorAll<SVGGElement>(".pin")];
+    let fijada: string | null = null;
+
+    const activar = (id: string | null) => {
+      root.classList.toggle("has-activa", id !== null);
+      items.forEach((el) => el.classList.toggle("is-activa", el.getAttribute("data-sede") === id));
+    };
+    const alternar = (id: string) => {
+      fijada = fijada === id ? null : id;
+      pins.forEach((p) => p.setAttribute("aria-pressed", String(p.dataset.sede === fijada)));
+      activar(fijada);
+    };
+
+    items.forEach((el) => {
+      const id = el.getAttribute("data-sede");
+      if (!id) return;
+      el.addEventListener("pointerenter", (e) => {
+        if ((e as PointerEvent).pointerType === "mouse") activar(id);
+      });
+      el.addEventListener("pointerleave", (e) => {
+        if ((e as PointerEvent).pointerType === "mouse") activar(fijada);
+      });
+      el.addEventListener("focusin", () => activar(id));
+      el.addEventListener("focusout", () => activar(fijada));
+      el.addEventListener("click", (e) => {
+        if ((e.target as Element).closest("a")) return;
+        alternar(id);
+      });
+    });
+
+    pins.forEach((pin) =>
+      pin.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          alternar(pin.dataset.sede ?? "");
+        }
+      }),
+    );
+
+    // Aparición al entrar en pantalla (el CSS la anula con movimiento reducido).
+    root.classList.add("is-animado");
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          root.classList.add("is-visible");
+          io.disconnect();
+        }
+      },
+      { threshold: 0.2 },
+    );
+    io.observe(root);
+  });
+</script>
+
+<style>
+  .sedes {
+    --color-acento: var(--nb-gold);
+    --color-mapa-base: var(--nb-ink-700);
+    --color-mapa-borde: var(--nb-ink-800);
+    --color-texto: var(--nb-cream);
+    --color-texto-suave: var(--nb-stone-2);
+    --color-linea: rgba(210, 206, 198, 0.25);
+    --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+
+    display: grid;
+    grid-template-columns: minmax(260px, 380px) 1fr;
+    gap: 0 64px;
+    align-items: center;
+  }
+
+  /* Mapa */
+  .mapa {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .mapa__dep {
+    fill: var(--color-mapa-base);
+    stroke: var(--color-mapa-borde);
+    stroke-width: 1;
+    stroke-linejoin: round;
+    transition: fill 250ms ease, opacity 250ms ease;
+  }
+  .mapa__dep--sede {
+    fill: var(--color-acento);
+    cursor: pointer;
+  }
+  .has-activa .mapa__dep--sede:not(.is-activa) {
+    opacity: 0.55;
+  }
+
+  .pin {
+    cursor: pointer;
+    outline: none;
+  }
+  .pin__punto {
+    fill: var(--nb-ink-800);
+    stroke: var(--color-texto);
+    stroke-width: 2.5;
+    transition: transform 250ms var(--ease-out), fill 200ms ease;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .pin__pulso {
+    fill: none;
+    stroke: var(--color-texto);
+    stroke-width: 1.5;
+    opacity: 0;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .pin.is-activa .pin__punto,
+  .pin:focus-visible .pin__punto {
+    fill: var(--color-texto);
+    transform: scale(1.35);
+  }
+  .pin:focus-visible .pin__pulso {
+    opacity: 1;
+    stroke: var(--color-acento);
+  }
+
+  /* Lista de sedes */
+  .sedes__info {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding-left: 64px;
+    border-left: 1px solid var(--color-linea);
+  }
+  .sedes__lista {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .sede {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding-left: 20px;
+    cursor: pointer;
+  }
+  .sede::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 2px;
+    bottom: 2px;
+    width: 2px;
+    background: var(--color-acento);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 300ms var(--ease-out);
+  }
+  .sede.is-activa::before {
+    transform: none;
+  }
+  .sede__nombre {
+    font: 500 28px / 1.1 var(--font-display);
+    text-transform: uppercase;
+    color: var(--color-texto);
+  }
+  .sede__linea {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font: 400 16px / 1.5 var(--font-body);
+    color: var(--color-texto-suave);
+  }
+  .sede__linea :global(.icon) {
+    margin-top: 3px;
+  }
+  .sede__dir {
+    display: block;
+  }
+  .sede__linea a {
+    color: var(--color-texto);
+  }
+  .sede__linea a:hover {
+    color: var(--color-acento);
+  }
+  .sede__llegar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+    padding: 6px 0;
+    font: 600 14px / 1 var(--font-body);
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    color: var(--color-acento);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 4px;
+    transition: text-decoration-color 200ms ease;
+  }
+  .sede__llegar:hover {
+    text-decoration-color: currentColor;
+  }
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  /* Aparición */
+  @media (prefers-reduced-motion: no-preference) {
+    .pin__pulso {
+      animation: pulso 2.4s ease-out infinite;
+    }
+    .pin + .pin .pin__pulso {
+      animation-delay: 1.2s;
+    }
+    .is-animado .sedes__mapa,
+    .is-animado .sede {
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 600ms ease, transform 700ms var(--ease-out);
+    }
+    .is-animado .sede {
+      transition-delay: calc(var(--i) * 120ms);
+    }
+    .is-animado.is-visible .sedes__mapa,
+    .is-animado.is-visible .sede {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes pulso {
+    from { opacity: 0.9; transform: scale(1); }
+    to { opacity: 0; transform: scale(2.6); }
+  }
+
+  @media (max-width: 1100px) {
+    .sedes {
+      gap: 0 40px;
+    }
+    .sedes__info {
+      padding-left: 40px;
+    }
+  }
+  @media (max-width: 760px) {
+    .sedes {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+    .sedes__mapa {
+      width: min(100%, 300px);
+      justify-self: center;
+    }
+    .sedes__info {
+      padding: 32px 0 0;
+      border-left: 0;
+      border-top: 1px solid var(--color-linea);
+    }
+    .sede__nombre {
+      font-size: 24px;
+    }
+  }
+</style>

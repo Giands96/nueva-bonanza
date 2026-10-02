@@ -1,0 +1,27 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import ProductList from "../components/products/ProductList.astro";
+import ProcessSteps from "../components/products/ProcessSteps.astro";
+import Measures from "../components/products/Measures.astro";
+import ContactBand from "../components/ContactBand.astro";
+import heroImage from "../assets/img/proyectos-hero.png";
+---
+<BaseLayout
+  title="Productos"
+  description="Oro, barras de oro y plata extraídos por Nueva Bonanza Mining en la mina Bonanza, Arequipa. Una operación de extracción que entrega su producción a refinerías autorizadas."
+  current="productos"
+>
+  <main>
+    <PageHero
+      eyebrow="NUESTRA PRODUCCIÓN"
+      title="PRODUCTOS"
+      text="Extraemos mineral aurífero en la mina Bonanza, en Arequipa. Conozca lo que producimos y cómo lo hacemos."
+      image={heroImage}
+    />
+    <ProductList />
+    <ProcessSteps />
+    <Measures />
+    <ContactBand />
+  </main>
+</BaseLayout>

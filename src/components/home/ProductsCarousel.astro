@@ -1,20 +1,20 @@
 ---
 import Eyebrow from "../Eyebrow.astro";
 import Icon from "../Icon.astro";
-import ProjectCard from "./ProjectCard.astro";
-import { projects } from "../../data/projects";
+import ProductCard from "./ProductCard.astro";
+import { products } from "../../data/products";
 
-const featured = projects.slice(0, 3);
+const featured = products.slice(0, 3);
 ---
 
-<section class="projects" aria-label="Proyectos">
-  <div class="projects__head">
-    <div class="projects__intro">
-      <Eyebrow filled>NUESTRA OPERACIÓN</Eyebrow>
-      <h2 class="title">PROYECTOS</h2>
+<section class="products" aria-labelledby="products-title">
+  <div class="products__head">
+    <div class="products__intro" data-reveal-stagger>
+      <Eyebrow filled>NUESTRA PRODUCCIÓN</Eyebrow>
+      <h2 id="products-title" class="title">PRODUCTOS</h2>
       <p>
-        Operaciones en las principales regiones mineras del país, con estándares
-        técnicos y ambientales de primer nivel.
+        Oro, barras de oro y plata extraídos en la mina Bonanza, en Arequipa, con
+        altos estándares de seguridad y gestión ambiental.
       </p>
     </div>
     <div class="carousel-ctl">
@@ -27,17 +27,17 @@ const featured = projects.slice(0, 3);
       </button>
     </div>
   </div>
-  <div class="projects__track">
-    {featured.map((p) => <ProjectCard project={p} />)}
+  <div class="products__track" data-reveal-stagger>
+    {featured.map((p) => <ProductCard product={p} />)}
   </div>
   <div class="dots" aria-hidden="true">
     <span class="is-active"></span><span></span><span></span>
   </div>
 </section>
 <script>
-  const track = document.querySelector(".projects__track");
+  const track = document.querySelector(".products__track");
   const dots = [...document.querySelectorAll(".dots span")];
-  const step = () => track?.querySelector(".project")?.clientWidth ?? 0;
+  const step = () => track?.querySelector(".product")?.clientWidth ?? 0;
   document.querySelectorAll(".carousel-ctl button").forEach((btn) => {
     btn.addEventListener("click", () => {
       track?.scrollBy({
@@ -59,29 +59,29 @@ const featured = projects.slice(0, 3);
   );
 </script>
 <style>
-  .projects {
+  .products {
     padding: 72px var(--pad-inline) 80px;
     background: var(--nb-ink-800);
     display: flex;
     flex-direction: column;
     gap: 48px;
   }
-  .projects__head {
+  .products__head {
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
     gap: 48px;
   }
-  .projects__intro {
+  .products__intro {
     display: flex;
     flex-direction: column;
     gap: 8px;
     max-width: 759px;
   }
-  .projects__intro .title {
+  .products__intro .title {
     color: var(--nb-ink-100);
   }
-  .projects__intro p {
+  .products__intro p {
     font-size: 20px;
     line-height: 1.4;
     color: #fff;
@@ -113,7 +113,7 @@ const featured = projects.slice(0, 3);
     transform: scaleX(-1);
   }
 
-  .projects__track {
+  .products__track {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
   }
@@ -123,22 +123,22 @@ const featured = projects.slice(0, 3);
   }
 
   @media (max-width: 1100px) {
-    .projects__head {
+    .products__head {
       flex-direction: column;
       align-items: stretch;
     }
   }
   @media (max-width: 760px) {
-    .projects {
+    .products {
       padding: 48px 20px;
       gap: 28px;
     }
-    .projects__head {
+    .products__head {
       flex-direction: column;
       align-items: stretch;
       gap: 16px;
     }
-    .projects__intro p {
+    .products__intro p {
       font-size: 16px;
     }
     .carousel-ctl {
@@ -148,13 +148,13 @@ const featured = projects.slice(0, 3);
       padding: 12px 0;
       min-height: 44px;
     }
-    .projects__track {
+    .products__track {
       display: flex;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
       scrollbar-width: none;
     }
-    .projects__track::-webkit-scrollbar {
+    .products__track::-webkit-scrollbar {
       display: none;
     }
     .dots {

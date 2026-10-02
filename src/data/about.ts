@@ -6,6 +6,10 @@ export interface Policy {
   text: string;
 }
 
+// DATOS POR CONFIRMAR CON EL CLIENTE
+// Todo lo utilizado es unicamente texto relleno, no es información oficial de la empresa.
+// Se debe confirmar con el cliente antes de publicar.
+
 export const policies: Policy[] = [
   {
     id: "gestion",
@@ -42,7 +46,7 @@ export const milestones: Milestone[] = [
 ];
 
 export const historyNote =
-  "Más de una década construyendo una minería responsable, basada en seguridad, innovación y compromiso con el desarrollo del Perú";
+  "Más de una década construyendo una minería responsable, basada en seguridad, innovación y compromiso con el desarrollo del Perú.";
 
 export const mission =
   "Desarrollar operaciones mineras eficientes y responsables, aplicando altos estándares de seguridad, calidad y gestión ambiental.";
@@ -92,4 +96,4 @@ export const stats: Stat[] = [
 export const companyHeading = "COMPROMETIDOS CON UN FUTURO SOSTENIBLE";
 
 export const companyText =
-  "En Nueva Bonanza contribuimos al desarrollo del país con una operación responsable, eficiente y sostenible. Integramos experiencia, innovación y altos estándares de seguridad para generar valor compartido con nuestros colaboradores y con el Perú.";
+  "En la mina Bonanza, en Arequipa, desarrollamos una operación aurífera planificada y supervisada en cada etapa. Integramos experiencia técnica, innovación y altos estándares de seguridad para generar valor compartido con nuestros colaboradores, las comunidades y el Perú.";

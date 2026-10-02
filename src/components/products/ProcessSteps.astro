@@ -1,0 +1,107 @@
+---
+import { processSteps } from "../../data/products";
+---
+<section class="process" aria-labelledby="process-title">
+  <h2 id="process-title" class="title" data-reveal>DEL YACIMIENTO A LA REFINERÍA</h2>
+  <ol class="steps" data-reveal-stagger>
+    {processSteps.map((s) => (
+      <li class="step">
+        <i aria-hidden="true"></i>
+        <h3>{s.title}</h3>
+        <p>{s.text}</p>
+      </li>
+    ))}
+  </ol>
+</section>
+<style>
+  .process {
+    padding: 80px var(--pad-inline);
+    background: var(--nb-cream);
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+  }
+  .process h2 {
+    color: var(--nb-ink-800);
+  }
+  .steps {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 24px;
+  }
+  /* Línea entre el primer y el último punto (centro de la primera y última columna). */
+  .steps::before {
+    content: "";
+    position: absolute;
+    top: 8px;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: var(--nb-gold);
+  }
+  .step {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    text-align: center;
+  }
+  .step i {
+    width: 18px;
+    height: 18px;
+    border-radius: var(--radius-round);
+    background: var(--nb-gold);
+  }
+  .step h3 {
+    font: 700 28px / 1 var(--font-display);
+    text-transform: uppercase;
+    color: var(--nb-ink-800);
+  }
+  .step p {
+    max-width: 220px;
+    font: 400 16px / 1.5 var(--font-body);
+    color: var(--nb-ink-700);
+  }
+  @media (max-width: 1100px) {
+    .step h3 {
+      font-size: 22px;
+    }
+  }
+  @media (max-width: 760px) {
+    .process {
+      padding: 48px 20px;
+      gap: 32px;
+    }
+    .steps {
+      grid-template-columns: 1fr;
+      gap: 28px;
+      padding-left: 40px;
+    }
+    .steps::before {
+      left: 8px;
+      right: auto;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      height: auto;
+    }
+    .step {
+      align-items: flex-start;
+      text-align: left;
+      gap: 8px;
+    }
+    .step i {
+      position: absolute;
+      left: -40px;
+      top: 4px;
+    }
+    .step h3 {
+      font-size: 24px;
+    }
+    .step p {
+      max-width: none;
+    }
+  }
+</style>

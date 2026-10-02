@@ -1,44 +1,30 @@
 ---
 import Button from "./Button.astro";
-import Medallion from "./Medallion.astro";
+import Icon from "./Icon.astro";
+import SedesMap from "./contact/SedesMap.astro";
 import { contact } from "../data/site";
-import mapUrl from "../assets/img/map-arequipa.png?url";
 ---
-<section class="contact" aria-label="Contáctanos">
-  <div class="contact__head">
-    <h2>CONTÁCTANOS</h2>
+<section class="contact" aria-labelledby="contact-title">
+  <div class="contact__head" data-reveal-stagger>
+    <h2 id="contact-title">CONTÁCTANOS</h2>
     <p>
-      Conversemos sobre nuestros proyectos y el futuro de una minería
+      Conversemos sobre nuestra operación y el futuro de una minería
       responsable en el Perú.
     </p>
     <Button variant="solid" href="/contacto">Escríbenos</Button>
   </div>
-  <div class="contact__body">
-    <div
-      class="contact__map"
-      role="img"
-      aria-label="Mapa de Arequipa"
-      style={`background-image:url(${mapUrl})`}
-    ></div>
-    <ul class="contact__list">
-      <li>
-        <Medallion name="location-lg" />
-        <span><b>DIRECCIÓN:</b>{contact.address}</span>
-      </li>
-      <li>
-        <Medallion name="call" />
-        <span><b>TELÉFONO:</b>{contact.phone}</span>
-      </li>
-      <li>
-        <Medallion name="calendar" />
-        <span><b>HORARIO DE ATENCIÓN:</b>{contact.hours}</span>
-      </li>
-      <li>
-        <Medallion name="mail" />
-        <span><b>CORREO:</b>{contact.email}</span>
-      </li>
-    </ul>
-  </div>
+  <SedesMap>
+    <dl class="contact__extra">
+      <div>
+        <dt><Icon name="mail" size={18} color="var(--nb-gold)" />Correo</dt>
+        <dd><a href={`mailto:${contact.email}`}>{contact.email}</a></dd>
+      </div>
+      <div>
+        <dt><Icon name="calendar" size={18} color="var(--nb-gold)" />Horario de atención</dt>
+        <dd>{contact.hours}</dd>
+      </div>
+    </dl>
+  </SedesMap>
 </section>
 <style>
   .contact {
@@ -60,34 +46,34 @@ import mapUrl from "../assets/img/map-arequipa.png?url";
     color: var(--nb-stone-2);
     margin-bottom: 12px;
   }
-  .contact__body { display: flex; gap: 48px; align-items: center; }
-  .contact__map {
-    flex: 0 0 48%;
-    height: 482px;
-    background-position: 91.9% 48%;
-    background-size: 142.9% 205.6%;
-    background-repeat: no-repeat;
+  .contact__extra {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px 48px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(210, 206, 198, 0.25);
   }
-  .contact__list { display: flex; flex-direction: column; gap: 40px; }
-  .contact__list li {
+  .contact__extra dt {
     display: flex;
     align-items: center;
-    gap: 14px;
-    font: 300 20px / 1.4 var(--font-display);
-    color: #fff;
+    gap: 8px;
+    margin-bottom: 6px;
+    font: 600 14px / 1 var(--font-body);
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    color: var(--nb-stone-2);
   }
-  .contact__list b { display: block; margin-bottom: 6px; font-weight: 600; }
-  @media (max-width: 1100px) {
-    .contact__body { flex-direction: column; align-items: stretch; }
-    .contact__map { flex: none; width: 100%; height: 380px; }
+  .contact__extra dd {
+    margin: 0;
+    font: 400 16px / 1.5 var(--font-body);
+    color: var(--nb-cream);
+  }
+  .contact__extra a:hover {
+    color: var(--nb-gold);
   }
   @media (max-width: 760px) {
     .contact { padding: 48px 20px; gap: 32px; }
     .contact__head h2 { font-size: 44px; }
     .contact__head p { font-size: 16px; }
-    .contact__body { flex-direction: column; align-items: stretch; gap: 32px; }
-    .contact__map { flex: none; height: 280px; }
-    .contact__list { gap: 24px; }
-    .contact__list li { font-size: 18px; line-height: 1.2; }
   }
 </style>

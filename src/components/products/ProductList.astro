@@ -1,0 +1,135 @@
+---
+import { Image } from "astro:assets";
+import { products } from "../../data/products";
+---
+<section class="plist" aria-labelledby="plist-title">
+  <div class="plist__head" data-reveal-stagger>
+    <h2 id="plist-title" class="title">LO QUE PRODUCIMOS</h2>
+    <p>
+      Somos una operación de extracción: no refinamos ni vendemos al público.
+      Nuestra producción se entrega a refinerías autorizadas.
+    </p>
+  </div>
+  <div class="plist__items">
+    {products.map((p, i) => (
+      <article id={p.id} class:list={["product", { "product--reverse": i % 2 === 1 }]}>
+        <Image
+          class="product__img"
+          data-reveal="image"
+          src={p.image}
+          alt={p.imageAlt}
+          sizes="(max-width: 760px) 100vw, 50vw"
+        />
+        <div class="product__text" data-reveal-stagger>
+          <span class="product__label">{p.label}</span>
+          <h3>{p.name}</h3>
+          <p class="product__summary">{p.summary}</p>
+          <p>{p.description}</p>
+        </div>
+      </article>
+    ))}
+  </div>
+</section>
+<style>
+  .plist {
+    padding: 80px var(--pad-inline);
+    background: var(--nb-white);
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+  }
+  .plist__head {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 760px;
+  }
+  .plist__head h2 {
+    color: var(--nb-ink-800);
+  }
+  .plist__head p {
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--nb-ink-700);
+  }
+  .plist__items {
+    display: flex;
+    flex-direction: column;
+    gap: 80px;
+  }
+  .product {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: center;
+    scroll-margin-top: var(--nav-height);
+  }
+  .product--reverse .product__img {
+    order: 2;
+  }
+  .product__img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    height: auto;
+    object-fit: cover;
+  }
+  .product__text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    max-width: 560px;
+  }
+  .product__label {
+    font: 600 14px / 1 var(--font-body);
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    color: var(--nb-gold-ink);
+  }
+  .product h3 {
+    font: 700 48px / 1 var(--font-display);
+    color: var(--nb-ink-800);
+  }
+  .product__summary {
+    font: 500 20px / 1.5 var(--font-body);
+    color: var(--nb-ink-700);
+  }
+  .product p:not(.product__summary) {
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--nb-ink-600);
+  }
+  @media (max-width: 1100px) {
+    .product {
+      gap: 40px;
+    }
+    .product h3 {
+      font-size: 40px;
+    }
+  }
+  @media (max-width: 760px) {
+    .plist {
+      padding: 48px 20px;
+      gap: 40px;
+    }
+    .plist__head p {
+      font-size: 16px;
+    }
+    .plist__items {
+      gap: 56px;
+    }
+    .product {
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .product--reverse .product__img {
+      order: 0;
+    }
+    .product h3 {
+      font-size: 36px;
+    }
+    .product__summary {
+      font-size: 18px;
+    }
+  }
+</style>

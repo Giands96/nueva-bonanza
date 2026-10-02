@@ -3,19 +3,20 @@ import { mission, vision, values } from "../../data/about";
 import Rule from "../Rule.astro";
 import principlesPhoto from "../../assets/img/principios-worker.png";
 ---
-<section class="principles" aria-label="Misión, visión y valores">
+<section class="principles" aria-labelledby="principles-title">
   <div
     class="principles__photo"
+    data-reveal="image"
     role="img"
     aria-label="Trabajador con equipo de seguridad"
     style={`background-image:url(${principlesPhoto.src})`}
   ></div>
   <div class="principles__body">
-    <div class="principles__head">
+    <div class="principles__head" data-reveal-stagger>
       <b>NUESTROS PRINCIPIOS</b>
-      <h2>MISIÓN, VISIÓN Y VALORES</h2>
+      <h2 id="principles-title">MISIÓN, VISIÓN Y VALORES</h2>
     </div>
-    <div class="mv">
+    <div class="mv" data-reveal-stagger>
       <div>
         <Rule width={76} />
         <h3>MISIÓN</h3>
@@ -27,7 +28,7 @@ import principlesPhoto from "../../assets/img/principios-worker.png";
         <p>{vision}</p>
       </div>
     </div>
-    <ul class="values">
+    <ul class="values" data-reveal-stagger>
       {values.map((v) => (
         <li>
           <b>{v.number}</b>

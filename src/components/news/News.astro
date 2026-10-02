@@ -1,0 +1,123 @@
+---
+import type { Page } from "astro";
+import Icon from "../Icon.astro";
+import NewsCard from "./NewsCard.astro";
+import type { NewsItem } from "../../lib/wordpress";
+
+interface Props {
+  page: Page<NewsItem>;
+}
+
+const { page } = Astro.props;
+---
+<section class="news" aria-labelledby="news-title">
+  <h2 id="news-title">ÚLTIMAS NOTICIAS</h2>
+  {
+    page.data.length > 0 ? (
+      <ul class="news__grid" data-reveal-stagger>
+        {page.data.map((item) => (
+          <li>
+            <NewsCard item={item} />
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="news__empty">No hay noticias publicadas por ahora.</p>
+    )
+  }
+  {
+    page.lastPage > 1 && (
+      <nav class="pager" aria-label="Paginación de noticias">
+        {page.url.prev ? (
+          <a href={page.url.prev} rel="prev">
+            <span class="icon--flip"><Icon name="arrow-back" size={16} /></span>Atrás
+          </a>
+        ) : <span />}
+        <span class="pager__count">{page.currentPage} / {page.lastPage}</span>
+        {page.url.next ? (
+          <a href={page.url.next} rel="next">
+            Siguiente<Icon name="arrow-forward" size={16} />
+          </a>
+        ) : <span />}
+      </nav>
+    )
+  }
+</section>
+<style>
+  .news {
+    padding: 72px var(--pad-inline);
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .news h2 {
+    font: 700 48px / 1 var(--font-display);
+    color: #000;
+  }
+  .news__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 48px 24px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .news__empty {
+    font: 400 18px / 1.55 var(--font-body);
+    color: var(--nb-ink-600);
+  }
+  /* Mismo estilo que los controles ATRÁS / SIGUIENTE del carrusel de Inicio. */
+  .pager {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .pager a {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    min-height: 44px;
+    font: 600 14px / 1 var(--font-body);
+    letter-spacing: var(--ls-caps);
+    text-transform: uppercase;
+    color: var(--nb-ink-800);
+    transition: color 0.2s ease;
+  }
+  .pager a:hover {
+    color: var(--nb-gold);
+  }
+  .pager :global(.icon) {
+    color: var(--nb-gold);
+  }
+  .pager__count {
+    font: 500 14px / 1 var(--font-body);
+    color: var(--nb-taupe);
+  }
+  .icon--flip {
+    display: inline-flex;
+    transform: scaleX(-1);
+  }
+  @media (max-width: 1100px) {
+    .news__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 760px) {
+    .news {
+      padding: 48px 20px;
+    }
+    .news h2 {
+      font-size: 36px;
+    }
+    .news__grid {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+    .pager a {
+      padding: 12px 0;
+    }
+  }
+</style>

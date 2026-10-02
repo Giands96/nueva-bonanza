@@ -6,7 +6,7 @@ import { policies } from "../../data/about";
 import operatorCabin from "../../assets/img/operator-cabin.png";
 ---
 <section class="about" aria-label="Quiénes somos">
-  <div class="about__text">
+  <div class="about__text" data-reveal-stagger>
     <span class="about__eyebrow"><Eyebrow>NUESTRA IDENTIDAD</Eyebrow></span>
     <h2 class="title about__title">QUIÉNES SOMOS</h2>
     <p class="about__lead">
@@ -19,6 +19,7 @@ import operatorCabin from "../../assets/img/operator-cabin.png";
   </div>
   <Image
     class="about__photo"
+    data-reveal="image"
     src={operatorCabin}
     alt="Operador con casco frente a pantallas de control"
   />

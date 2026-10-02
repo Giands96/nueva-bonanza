@@ -7,12 +7,17 @@ import Principles from "../components/about/Principles.astro";
 import ContactBand from "../components/ContactBand.astro";
 import heroImage from "../assets/img/qs-hero-team.png";
 ---
-<BaseLayout title="Quiénes somos" current="quienes-somos">
+<BaseLayout
+  title="Quiénes somos"
+  description="Nueva Bonanza Mining es una empresa minera arequipeña que opera la mina de oro Bonanza con altos estándares de seguridad y gestión ambiental."
+  current="quienes-somos"
+>
   <main>
     <PageHero
       eyebrow="NUESTRA IDENTIDAD"
+      eyebrowColor="var(--nb-ink-800)"
       title="QUIÉNES SOMOS"
-      text="Somos una empresa minera peruana que extrae con responsabilidad. Cada proyecto está diseñado para generar valor sostenible para las comunidades y el medio ambiente."
+      text="Somos una empresa minera arequipeña. Desde la mina Bonanza trabajamos con altos estándares de seguridad y gestión ambiental, junto a las comunidades de nuestro entorno."
       image={heroImage}
     />
     <Company />

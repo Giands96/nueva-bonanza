@@ -1,7 +1,7 @@
 ---
 import Icon from "./Icon.astro";
 import { navigation, contact, socials, tagline } from "../data/site";
-import logoUrl from "../assets/logo-nueva-bonanza.png?url";
+import logoUrl from "../assets/img/logo-dorado.webp";
 
 const socialIcons = {
   Instagram: "instagram-icon",
@@ -25,7 +25,7 @@ const socialSizes = {
       class="logo"
       href="/"
       aria-label="Nueva Bonanza Mining"
-      style={`background-image:url(${logoUrl})`}></a>
+      style={`background-image:url(${logoUrl.src})`}></a>
     <p class="footerTag">{tagline}</p>
   </div>
   <nav aria-label="Pie">
@@ -44,8 +44,8 @@ const socialSizes = {
     <h3>CONTACTO</h3>
     <ul id="contacto-footer">
       <li><Icon name="location" size={20} color="var(--nb-gold)" />{contact.address}</li>
-      <li><Icon name="call" size={20} color="var(--nb-gold)" />{contact.phone}</li>
-      <li><Icon name="mail" size={20} color="var(--nb-gold)" />{contact.email}</li>
+      <li><Icon name="call" size={20} color="var(--nb-gold)" /><a href={`tel:${contact.phone.replace(/\s/g, "")}`}>{contact.phone}</a></li>
+      <li><Icon name="mail" size={20} color="var(--nb-gold)" /><a href={`mailto:${contact.email}`}>{contact.email}</a></li>
       <li><Icon name="calendar" size={20} color="var(--nb-gold)" />{contact.hours}</li>
     </ul>
   </div>
@@ -68,11 +68,11 @@ const socialSizes = {
 <style>
   .footer {
     padding: 48px var(--pad-inline);
-    background: var(--nb-cream);
+    background: var(--nb-ink-800);
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 24px 48px;
-    color: #2a2a2a;
+    color: var(--nb-cream);
   }
   .footer > :last-child {
     justify-self: end;
@@ -82,12 +82,13 @@ const socialSizes = {
     width: 140px;
     height: 62px;
     background-position: 50% 50%;
-    background-size: 100% 225%;
+    background-size: contain;
     background-repeat: no-repeat;
   }
   .footer h3 {
     font: 600 20px / 1 var(--font-display);
     margin-bottom: 18px;
+    color: var(--nb-gold);
   }
   .footer ul {
     display: flex;
@@ -100,9 +101,17 @@ const socialSizes = {
     align-items: center;
     gap: 10px;
   }
+  .footer nav a {
+    color: #fff;
+    transition: color 0.2s;
+  }
+  .footer nav a:hover {
+    color: var(--nb-gold);
+  }
   .footerTag {
     margin-top: 7px;
     font: 500 16px / 1.3 var(--font-body);
+    color: var(--nb-stone-2);
   }
   
   .social {
@@ -113,11 +122,11 @@ const socialSizes = {
     width: 48px;
     height: 48px;
     border-radius: var(--radius-round);
-    box-shadow: inset 0 0 0 1px #2a2a2a;
+    box-shadow: inset 0 0 0 1px var(--nb-umber);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #2a2a2a;
+    color: var(--nb-cream);
     transition: color 0.2s, box-shadow 0.2s, background-color 0.2s;
   }
   .social a:hover {

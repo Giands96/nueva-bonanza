@@ -28,6 +28,7 @@ const { eyebrow, title, text, image, filled = true, compact = false, eyebrowColo
     padding: 0 var(--pad-inline);
     display: flex;
     align-items: center;
+    background-color: var(--nb-ink-800);
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
@@ -46,6 +47,12 @@ const { eyebrow, title, text, image, filled = true, compact = false, eyebrowColo
     gap: 16px;
     max-width: 640px;
     color: #fff;
+    /* Misma entrada que el hero de Inicio (HeroHome). */
+    animation: phero-in 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+  @keyframes phero-in {
+    from { opacity: 0; transform: translateY(28px); }
+    to { opacity: 1; transform: none; }
   }
   .phero h1 {
     font: 700 96px / 1 var(--font-display);

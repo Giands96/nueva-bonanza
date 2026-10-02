@@ -3,14 +3,15 @@ import { companyHeading, companyText } from "../../data/about";
 import companyPhoto from "../../assets/img/empresa-surveyors.png";
 ---
 
-<section class="company" aria-label="Nuestra empresa">
-  <div class="company__text">
+<section class="company" aria-labelledby="company-title">
+  <div class="company__text" data-reveal-stagger>
     <span class="company__kicker">NUESTRA EMPRESA</span>
-    <h2>{companyHeading}</h2>
+    <h2 id="company-title">{companyHeading}</h2>
     <p>{companyText}</p>
   </div>
   <div
     class="company__photo"
+    data-reveal="image"
     role="img"
     aria-label="Equipo de topografía en campo"
     style={`background-image:url(${companyPhoto.src})`}
@@ -21,7 +22,7 @@ import companyPhoto from "../../assets/img/empresa-surveyors.png";
   .company {
     display: flex;
     height: 750px;
-    background: var(--nb-cream);
+    background: #fff;
   }
   .company__text {
     flex: 1;
@@ -33,7 +34,7 @@ import companyPhoto from "../../assets/img/empresa-surveyors.png";
   }
   .company__kicker {
     font: 700 24px / 1 var(--font-display);
-    color: var(--nb-gold);
+    color: var(--nb-gold-ink);
   }
   .company h2 {
     font: 700 64px / 1 var(--font-display);
@@ -41,7 +42,6 @@ import companyPhoto from "../../assets/img/empresa-surveyors.png";
   }
   .company p {
     max-width: 620px;
-    margin-top: 24px;
     font-size: 20px;
     line-height: 1.5;
     color: #000;
@@ -66,30 +66,12 @@ import companyPhoto from "../../assets/img/empresa-surveyors.png";
   }
   @media (max-width: 1100px) {
     .company {
-      height: auto;
-    }
-    .company__photo {
-      min-height: 420px;
-    }
-  }
-  @media (max-width: 760px) {
-    .company {
       flex-direction: column;
       height: auto;
     }
-    .company__text {
-      padding: 48px 20px;
-    }
-    .company h2 {
-      font-size: 40px;
-    }
-    .company p {
-      font-size: 16px;
-      margin-top: 8px;
-    }
     .company__photo {
       flex: none;
-      height: 320px;
+      height: 420px;
     }
     .company__photo::before {
       background: linear-gradient(
@@ -98,6 +80,20 @@ import companyPhoto from "../../assets/img/empresa-surveyors.png";
         rgba(233, 231, 223, 0.25) 74%,
         var(--nb-cream) 100%
       );
+    }
+  }
+  @media (max-width: 760px) {
+    .company__text {
+      padding: 48px 20px;
+    }
+    .company h2 {
+      font-size: 40px;
+    }
+    .company p {
+      font-size: 16px;
+    }
+    .company__photo {
+      height: 320px;
     }
   }
 </style>

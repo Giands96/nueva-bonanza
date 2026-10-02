@@ -3,12 +3,12 @@ import { milestones, historyNote } from "../../data/about";
 import Rule from "../Rule.astro";
 import historyBg from "../../assets/img/hitos-plant.png";
 ---
-<section class="history" aria-label="Nuestra historia" style={`--history-bg:url(${historyBg.src})`}>
-  <div class="history__head">
+<section class="history" aria-labelledby="history-title" style={`--history-bg:url(${historyBg.src})`}>
+  <div class="history__head" data-reveal-stagger>
     <b>NUESTROS HITOS</b>
-    <h2>NUESTRA HISTORIA</h2>
+    <h2 id="history-title">NUESTRA HISTORIA</h2>
   </div>
-  <ol class="timeline">
+  <ol class="timeline" data-reveal-stagger>
     {milestones.map((m) => (
       <li class="milestone">
         <i aria-hidden="true"></i>
@@ -17,7 +17,7 @@ import historyBg from "../../assets/img/hitos-plant.png";
       </li>
     ))}
   </ol>
-  <div class="history__note">
+  <div class="history__note" data-reveal>
     <Rule />
     <p>{historyNote}</p>
   </div>
@@ -56,7 +56,7 @@ import historyBg from "../../assets/img/hitos-plant.png";
   .history__head b {
     font: 500 24px / 1 var(--font-display);
     letter-spacing: 0.02em;
-    color: var(--nb-gold);
+    color: var(--nb-gold-ink);
   }
   .history__head h2 {
     font: 700 56px / 1 var(--font-display);
@@ -100,8 +100,7 @@ import historyBg from "../../assets/img/hitos-plant.png";
   }
   .milestone p {
     max-width: 240px;
-    font: 700 16px / 1.4 var(--font-body);
-    text-transform: uppercase;
+    font: 500 16px / 1.4 var(--font-body);
     color: var(--nb-ink-800);
   }
   .history__note {

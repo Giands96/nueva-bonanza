@@ -35,6 +35,47 @@ img { display: block; max-width: 100%; }
   .title { font-size: 44px; }
 }
 
+/*
+ * Aparición al desplazar (script en BaseLayout).
+ * - [data-reveal]: el elemento entra con fade y desplazamiento corto.
+ * - [data-reveal="image"]: imágenes, con fade y una cortina vertical (sin escalar: no desborda).
+ * - [data-reveal-stagger]: los hijos directos entran en cascada.
+ * Solo se ocultan con JS activo (html.js) y sin movimiento reducido. "html.js" sube la
+ * especificidad por encima de las transiciones propias de cada componente; el script quita
+ * los atributos al terminar para que esas transiciones vuelvan a aplicarse.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  html.js [data-reveal],
+  html.js [data-reveal-stagger] > * {
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 700ms cubic-bezier(0.2, 0.7, 0.2, 1),
+      transform 800ms cubic-bezier(0.2, 0.7, 0.2, 1),
+      clip-path 1000ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  html.js [data-reveal="image"] {
+    transform: none;
+    clip-path: inset(8% 0 0 0);
+  }
+  html.js [data-reveal-stagger] > :nth-child(2) { transition-delay: 90ms; }
+  html.js [data-reveal-stagger] > :nth-child(3) { transition-delay: 180ms; }
+  html.js [data-reveal-stagger] > :nth-child(4) { transition-delay: 270ms; }
+  html.js [data-reveal-stagger] > :nth-child(5) { transition-delay: 360ms; }
+  html.js [data-reveal-stagger] > :nth-child(n + 6) { transition-delay: 450ms; }
+  html.js [data-reveal].is-revealed,
+  html.js [data-reveal-stagger].is-revealed > * {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@media print {
+  html.js [data-reveal],
+  html.js [data-reveal-stagger] > * { opacity: 1 !important; transform: none !important; clip-path: none !important; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }

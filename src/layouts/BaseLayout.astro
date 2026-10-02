@@ -6,13 +6,18 @@ import Footer from "../components/Footer.astro";
 interface Props {
   title: string;
   description?: string;
-  current?: "inicio" | "quienes-somos" | "proyectos" | "noticias" | "contacto" | "";
+  current?: "inicio" | "quienes-somos" | "productos" | "noticias" | "contacto" | "";
+  /** URL absoluta de la imagen para Open Graph. */
+  image?: string;
+  ogType?: "website" | "article";
 }
 
 const {
   title,
   description = "Empresa minera en Arequipa, Perú. Conectamos oportunidades con experiencia minera, criterio técnico y una operación responsable.",
   current = "",
+  image,
+  ogType = "website",
 } = Astro.props;
 ---
 <!doctype html>
@@ -24,7 +29,10 @@ const {
     <meta name="description" content={description} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={ogType} />
+    {image && <meta property="og:image" content={image} />}
+    <!-- Marca JS activo antes del primer pintado: las animaciones de aparición solo ocultan contenido con JS. -->
+    <script is:inline>document.documentElement.classList.add("js");</script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link
       rel="preload"
@@ -45,5 +53,34 @@ const {
     <Header current={current} />
     <slot />
     <Footer />
+    <script>
+      // Aparición al desplazar: ver [data-reveal] en global.css.
+      const targets = document.querySelectorAll("[data-reveal], [data-reveal-stagger]");
+      const reveal = (el: Element) => {
+        el.classList.add("is-revealed");
+        // Al terminar, se quitan los atributos para que el componente recupere sus transiciones.
+        setTimeout(() => {
+          el.removeAttribute("data-reveal");
+          el.removeAttribute("data-reveal-stagger");
+          el.classList.remove("is-revealed");
+        }, 1600);
+      };
+      if ("IntersectionObserver" in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                reveal(entry.target);
+                io.unobserve(entry.target);
+              }
+            }
+          },
+          { rootMargin: "0px 0px -8% 0px" },
+        );
+        targets.forEach((el) => io.observe(el));
+      } else {
+        targets.forEach(reveal);
+      }
+    </script>
   </body>
 </html>

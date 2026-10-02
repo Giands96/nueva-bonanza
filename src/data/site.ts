@@ -1,20 +1,24 @@
 export interface NavItem {
   label: string;
   href: string;
-  key: "inicio" | "quienes-somos" | "proyectos" | "noticias" | "contacto";
+  key: "inicio" | "quienes-somos" | "productos" | "noticias" | "contacto";
 }
 
 export const navigation: NavItem[] = [
   { label: "Inicio", href: "/", key: "inicio" },
   { label: "Quiénes somos", href: "/quienes-somos", key: "quienes-somos" },
-  { label: "Proyectos", href: "/proyectos", key: "proyectos" },
+  { label: "Productos", href: "/productos", key: "productos" },
   { label: "Noticias", href: "/noticias", key: "noticias" },
   { label: "Contacto", href: "/contacto", key: "contacto" },
 ];
 
 export const contact = {
-  address: "Av. Puente Grau 492, Arequipa, Perú",
-  phone: "+51 955 222 111",
+  address: "Av. Manuel Olguin 325 - Santiago de Surco",
+  office: "Oficina 802",
+  reference: "Referencia: Al frente del Jockey Plaza, hay un tambo en el primer piso.",
+  district: "Santiago de Surco",
+  city :"Lima",
+  phone: "+51 913 338 729",
   email: "contacto@nbmining.pe",
   hours: "Lun - Vie, 8:00 a.m. - 6:00 p.m.",
 } as const;
