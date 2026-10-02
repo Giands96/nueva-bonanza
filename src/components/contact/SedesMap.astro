@@ -19,7 +19,7 @@ const etiquetaMapa = `Mapa del Perú con las sedes de Nueva Bonanza Mining en ${
       <g role="img" aria-label={etiquetaMapa}>
         {departamentos.map((dep) => (
           <path
-            d={dep.d}
+            d={dep.pathData}
             data-departamento={dep.id}
             data-sede={sedePorDepartamento.get(dep.id)}
             class:list={["mapa__dep", { "mapa__dep--sede": sedePorDepartamento.has(dep.id) }]}
