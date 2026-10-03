@@ -29,6 +29,7 @@ const { policies, defaultOpen = "gestion" } = Astro.props;
 </ul>
 <script>
   const root = document.querySelector(".policies");
+  const header = document.querySelector(".header");
   const items = [...(root?.querySelectorAll(".policy") ?? [])];
   const setOpen = (active: Element | null) => {
     items.forEach((item) => {
@@ -37,21 +38,9 @@ const { policies, defaultOpen = "gestion" } = Astro.props;
       item
         .querySelector(".policy__head")
         ?.setAttribute("aria-expanded", String(open));
+       
     });
   };
-  // Desktop: primer item abierto; móvil: todos cerrados.
-  const initial = window.matchMedia("(max-width: 760px)").matches
-    ? null
-    : (items.find(
-        (i) =>
-          i.getAttribute("data-id") === root?.getAttribute("data-default-open"),
-      ) ?? null);
-  if (initial) {
-    initial.setAttribute("data-open", "true");
-    initial
-      .querySelector(".policy__head")
-      ?.setAttribute("aria-expanded", "true");
-  }
   root?.querySelectorAll(".policy__head").forEach((btn) => {
     btn.addEventListener("click", () => setOpen(btn.closest(".policy")));
   });
