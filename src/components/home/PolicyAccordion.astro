@@ -9,12 +9,16 @@ interface Props {
 
 const { policies, defaultOpen = "gestion" } = Astro.props;
 ---
+
 <ul class="policies" data-default-open={defaultOpen}>
   {
     policies.map((p) => (
       <li class="policy" data-id={p.id} data-open="false">
         <button type="button" class="policy__head" aria-expanded="false">
-          {p.title}<span class="policy__arrow"><Icon name="arrow-right" size={18} color="var(--nb-gold)" /></span>
+          {p.title}
+          <span class="policy__arrow">
+            <Icon name="arrow-right" size={18} color="var(--nb-gold)" />
+          </span>
         </button>
         <div class="policy__body">
           <p>{p.text}</p>
@@ -30,24 +34,37 @@ const { policies, defaultOpen = "gestion" } = Astro.props;
     items.forEach((item) => {
       const open = item === active && item.getAttribute("data-open") !== "true";
       item.setAttribute("data-open", String(open));
-      item.querySelector(".policy__head")?.setAttribute("aria-expanded", String(open));
+      item
+        .querySelector(".policy__head")
+        ?.setAttribute("aria-expanded", String(open));
     });
   };
   // Desktop: primer item abierto; móvil: todos cerrados.
   const initial = window.matchMedia("(max-width: 760px)").matches
     ? null
-    : items.find((i) => i.getAttribute("data-id") === root?.getAttribute("data-default-open")) ?? null;
+    : (items.find(
+        (i) =>
+          i.getAttribute("data-id") === root?.getAttribute("data-default-open"),
+      ) ?? null);
   if (initial) {
     initial.setAttribute("data-open", "true");
-    initial.querySelector(".policy__head")?.setAttribute("aria-expanded", "true");
+    initial
+      .querySelector(".policy__head")
+      ?.setAttribute("aria-expanded", "true");
   }
   root?.querySelectorAll(".policy__head").forEach((btn) => {
     btn.addEventListener("click", () => setOpen(btn.closest(".policy")));
   });
 </script>
 <style>
-  .policies { display: flex; flex-direction: column; gap: 12px; }
-  .policy { background: var(--nb-sand); }
+  .policies {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .policy {
+    background: var(--nb-sand);
+  }
   .policy__head {
     width: 100%;
     border: 0;
@@ -63,12 +80,16 @@ const { policies, defaultOpen = "gestion" } = Astro.props;
     cursor: pointer;
     transition: background 200ms ease;
   }
-  .policy__head:hover { background: var(--nb-stone); }
+  .policy__head:hover {
+    background: var(--nb-stone);
+  }
   .policy__arrow {
     display: inline-flex;
     transition: transform 350ms cubic-bezier(0.2, 0.7, 0.2, 1);
   }
-  .policy[data-open="true"] .policy__arrow { transform: rotate(90deg); }
+  .policy[data-open="true"] .policy__arrow {
+    transform: rotate(90deg);
+  }
   .policy__body {
     display: grid;
     grid-template-rows: 0fr;
@@ -82,13 +103,30 @@ const { policies, defaultOpen = "gestion" } = Astro.props;
     line-height: 1.55;
     opacity: 0;
     transform: translateY(8px);
-    transition: opacity 350ms ease, transform 400ms cubic-bezier(0.2, 0.7, 0.2, 1), padding 400ms ease;
+    transition:
+      opacity 350ms ease,
+      transform 400ms cubic-bezier(0.2, 0.7, 0.2, 1),
+      padding 400ms ease;
   }
-  .policy[data-open="true"] .policy__body { grid-template-rows: 1fr; }
-  .policy[data-open="true"] .policy__body p { opacity: 1; transform: none; padding: 0 24px 22px; }
+  .policy[data-open="true"] .policy__body {
+    grid-template-rows: 1fr;
+  }
+  .policy[data-open="true"] .policy__body p {
+    opacity: 1;
+    transform: none;
+    padding: 0 24px 22px;
+  }
   @media (max-width: 760px) {
-    .policy__head { padding: 18px 20px; font-size: 18px; }
-    .policy__body p { padding-left: 20px; padding-right: 20px; }
-    .policy[data-open="true"] .policy__body p { padding: 0 20px 20px; }
+    .policy__head {
+      padding: 18px 20px;
+      font-size: 18px;
+    }
+    .policy__body p {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
+    .policy[data-open="true"] .policy__body p {
+      padding: 0 20px 20px;
+    }
   }
 </style>
