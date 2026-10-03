@@ -2,63 +2,121 @@
 import Button from "../Button.astro";
 import { contactReasons } from "../../data/site";
 ---
+
 <form class="cform" id="contact-form" data-reveal novalidate>
   <div class="cform__intro">
     <h2>ENVÍENOS SU CONSULTA</h2>
-    <p>Comparta los datos de su empresa y el motivo de contacto. Nuestro equipo evaluará su solicitud para derivarla al especialista correspondiente.</p>
+    <p>
+      Comparta los datos de su empresa y el motivo de contacto. Nuestro equipo
+      evaluará su solicitud para derivarla al especialista correspondiente.
+    </p>
     <small>Los campos marcados con * son obligatorios.</small>
   </div>
   <div class="fields">
     <label class="field">
       <span>Nombre y apellidos *</span>
-      <input name="nombre" placeholder="Ej. María Salazar" required autocomplete="name" />
+      <input
+        name="nombre"
+        placeholder="Ej. María Salazar"
+        required
+        autocomplete="name"
+      />
     </label>
     <label class="field">
       <span>Empresa / organización *</span>
-      <input name="empresa" placeholder="Nombre de la empresa" required autocomplete="organization" />
+      <input
+        name="empresa"
+        placeholder="Nombre de la empresa"
+        required
+        autocomplete="organization"
+      />
     </label>
     <label class="field">
       <span>Correo corporativo *</span>
-      <input type="email" name="correo" placeholder="nombre@empresa.com" required autocomplete="email" />
+      <input
+        type="email"
+        name="correo"
+        placeholder="nombre@empresa.com"
+        required
+        autocomplete="email"
+      />
     </label>
     <label class="field">
       <span>Teléfono *</span>
-      <input type="tel" name="telefono" placeholder="+51 999 999 999" required autocomplete="tel" />
+      <input
+        type="tel"
+        name="telefono"
+        placeholder="+51 999 999 999"
+        required
+        autocomplete="tel"
+      />
     </label>
     <label class="field">
       <span>Cargo</span>
-      <input name="cargo" placeholder="Ej. Gerente de Operaciones" autocomplete="organization-title" />
+      <input
+        name="cargo"
+        placeholder="Ej. Gerente de Operaciones"
+        autocomplete="organization-title"
+      />
     </label>
     <label class="field">
       <span>Motivo de contacto *</span>
       <select name="motivo" required>
         <option value="">Seleccione una opción</option>
-        {contactReasons.map((r) => <option value={r.label} data-to={r.to}>{r.label}</option>)}
+        {
+          contactReasons.map((r) => (
+            <option value={r.label} data-to={r.to}>
+              {r.label}
+            </option>
+          ))
+        }
       </select>
     </label>
     <label class="field field--full">
       <span>Mensaje *</span>
-      <textarea name="mensaje" placeholder="Cuéntenos sobre su proyecto, requerimiento, ubicación y plazo estimado." required></textarea>
+      <textarea
+        name="mensaje"
+        placeholder="Cuéntenos sobre su proyecto, requerimiento, ubicación y plazo estimado."
+        required></textarea>
     </label>
   </div>
   <label class="consent">
     <input type="checkbox" name="consentimiento" value="Sí" required />
-    <span>He leído y acepto la Política de Privacidad y autorizo el tratamiento de mis datos para atender esta consulta. *</span>
+    <span
+      >He leído y acepto la Política de Privacidad y autorizo el tratamiento de
+      mis datos para atender esta consulta. *</span
+    >
   </label>
   <!-- Trampa anti-spam de FormSubmit: los humanos no la ven ni la rellenan. -->
-  <input class="honey" type="text" name="_honey" tabindex="-1" autocomplete="off" aria-hidden="true" />
+  <input
+    class="honey"
+    type="text"
+    name="_honey"
+    tabindex="-1"
+    autocomplete="off"
+    aria-hidden="true"
+  />
   <div class="cform__foot">
-    <small>Sus datos serán tratados de forma confidencial y únicamente para atender esta solicitud.</small>
-    <Button variant="solid" type="submit" icon="arrow-right">Enviar consulta</Button>
+    <small
+      >Sus datos serán tratados de forma confidencial y únicamente para atender
+      esta solicitud.</small
+    >
+    <Button variant="solid" type="submit" icon="arrow-right"
+      >Enviar consulta</Button
+    >
   </div>
   <p class="cform__error" id="contact-error" role="alert" hidden>
-    No pudimos enviar su consulta. Inténtelo nuevamente en unos minutos o escríbanos directamente a nuestro correo.
+    No pudimos enviar su consulta. Inténtelo nuevamente en unos minutos o
+    escríbanos directamente a nuestro correo.
   </p>
 </form>
 <div class="thanks" id="contact-thanks" hidden>
   <span class="thanks__kicker">GRACIAS POR CONTACTARNOS</span>
   <h2>HEMOS RECIBIDO SU MENSAJE</h2>
-  <p>Un especialista de Nueva Bonanza Mining revisará la información y se comunicará con usted.</p>
+  <p>
+    Un especialista de Nueva Bonanza Mining revisará la información y se
+    comunicará con usted.
+  </p>
   <small>Tiempo estimado de respuesta: de 1 a 2 días hábiles.</small>
   <div class="ticket">
     <span>Código de seguimiento</span>
@@ -90,7 +148,10 @@ import { contactReasons } from "../../data/site";
     const submit = form.querySelector<HTMLButtonElement>("[type=submit]");
     if (!to || !submit) return;
 
-    const data = Object.fromEntries(new FormData(form)) as Record<string, string>;
+    const data = Object.fromEntries(new FormData(form)) as Record<
+      string,
+      string
+    >;
     // Un bot rellenó la trampa: se simula el éxito sin enviar nada.
     const isBot = Boolean(data._honey);
     delete data._honey;
@@ -117,13 +178,20 @@ import { contactReasons } from "../../data/site";
     form.setAttribute("aria-busy", "true");
     try {
       if (!isBot) {
-        const res = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(to)}`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json", Accept: "application/json" },
-          body: JSON.stringify(payload),
-        });
+        const res = await fetch(
+          `https://formsubmit.co/ajax/${encodeURIComponent(to)}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify(payload),
+          },
+        );
         const json = await res.json().catch(() => ({}));
-        if (!res.ok || String(json.success) !== "true") throw new Error(json.message ?? res.statusText);
+        if (!res.ok || String(json.success) !== "true")
+          throw new Error(json.message ?? res.statusText);
       }
       const ticket = document.querySelector("#ticket-code");
       if (ticket) ticket.textContent = code;
