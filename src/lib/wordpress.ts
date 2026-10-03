@@ -3,7 +3,9 @@
  * Lee el tipo de contenido `noticia` (taxonomía `categoriasNoticia`, campos ACF
  * `datosNoticia`) y lo normaliza al modelo `NewsItem` de las páginas de Noticias.
  *
- * Config: WP_GRAPHQL_URL en `.env` (https://nbonanzamining.com/cms/graphql).
+ * Se usa en el build (listado) y en el navegador (detalle, /noticias/noticia?slug=…),
+ * por eso la URL es pública: PUBLIC_WP_GRAPHQL_URL en `.env`
+ * (https://nbonanzamining.com/cms/graphql).
  * Sin URL se devuelven listas vacías (el listado muestra su estado vacío).
  * Con URL, un fallo de red o de GraphQL lanza error: en un build estático es
  * preferible que el deploy falle a publicar la sección de noticias vacía.
@@ -20,7 +22,7 @@ export interface NewsItem {
   category: string | null;
   /** Resumen en texto plano: lead del detalle y meta description. */
   excerpt: string;
-  /** HTML del cuerpo; solo en el detalle. */
+  /** HTML del cuerpo, sin sanitizar; solo en el detalle. */
   content?: string;
   /** Frase destacada de cierre (texto plano); solo en el detalle. */
   quote?: string;
@@ -54,7 +56,7 @@ interface WPNoticia {
   } | null;
 }
 
-const ENDPOINT = import.meta.env.WP_GRAPHQL_URL as string | undefined;
+const ENDPOINT = import.meta.env.PUBLIC_WP_GRAPHQL_URL as string | undefined;
 
 /** Máximo por petición que admite WPGraphQL por defecto. */
 const PAGE_SIZE = 100;
@@ -150,7 +152,7 @@ let warned = false;
 function isConfigured(): boolean {
   if (!ENDPOINT && !warned) {
     console.warn(
-      "[wordpress] WP_GRAPHQL_URL no está definida: Noticias se mostrará vacía.",
+      "[wordpress] PUBLIC_WP_GRAPHQL_URL no está definida: Noticias se mostrará vacía.",
     );
     warned = true;
   }
@@ -175,6 +177,11 @@ export async function getAllPosts(): Promise<NewsItem[]> {
       : null;
   } while (after);
   return posts;
+}
+
+/** URL de la ficha de una noticia. */
+export function newsUrl(slug: string): string {
+  return `/noticias/noticia?slug=${encodeURIComponent(slug)}`;
 }
 
 /** Noticia completa (con `content`) o `null` si no existe o no está publicada. */
