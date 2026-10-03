@@ -1,0 +1,325 @@
+---
+/**
+ * Ficha de noticia: /noticias/noticia?slug={slug}
+ * Página estática única; los datos se piden a WordPress (WPGraphQL) desde el
+ * navegador, así que una noticia nueva se ve sin rebuild.
+ */
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import Eyebrow from "../../components/Eyebrow.astro";
+import Icon from "../../components/Icon.astro";
+import placeholder from "../../assets/img/news-1.png";
+---
+<BaseLayout title="Noticia" current="noticias" ogType="article">
+  <main>
+    <article class="post" id="post" data-state="loading" data-placeholder={placeholder.src} aria-busy="true">
+      <div class="post__inner">
+        <div class="post__top">
+          <h1 class="post__title" id="post-title"></h1>
+          <a class="back" href="/noticias">
+            <span class="icon--flip"><Icon name="arrow-right" size={14} /></span>Noticias
+          </a>
+        </div>
+        <p class="post__status" id="post-status" role="status">Cargando noticia…</p>
+        <div class="post__meta post__loaded">
+          <Eyebrow class="post__category">&nbsp;</Eyebrow>
+          <time id="post-date"></time>
+        </div>
+        <img
+          class="post__img post__loaded"
+          id="post-img"
+          alt=""
+          sizes="(max-width: 960px) 100vw, 920px"
+          fetchpriority="high"
+          decoding="async"
+        />
+        <div class="post__body post__loaded">
+          <p class="post__lead" id="post-lead"></p>
+          <div class="post__content" id="post-content"></div>
+          <blockquote id="post-quote"></blockquote>
+        </div>
+      </div>
+    </article>
+  </main>
+</BaseLayout>
+<script>
+  import DOMPurify from "dompurify";
+  import { getPostBySlug } from "../../lib/wordpress";
+
+  const article = document.querySelector<HTMLElement>("#post")!;
+  const $ = <T extends HTMLElement>(sel: string) => article.querySelector<T>(sel)!;
+  const title = $("#post-title");
+  const status = $("#post-status");
+
+  const setState = (state: "ready" | "missing" | "error", message = "") => {
+    article.dataset.state = state;
+    article.removeAttribute("aria-busy");
+    status.textContent = message;
+  };
+
+  const setText = (el: HTMLElement, text: string | null | undefined) => {
+    el.textContent = text ?? "";
+    el.hidden = !text;
+  };
+
+  async function load() {
+    const slug = new URLSearchParams(location.search).get("slug")?.trim();
+    if (!slug) {
+      title.textContent = "NOTICIA NO ENCONTRADA";
+      setState("missing", "El enlace no indica qué noticia mostrar. Vuelva al listado de noticias.");
+      return;
+    }
+
+    let post;
+    try {
+      post = await getPostBySlug(slug);
+    } catch (err) {
+      console.error("[noticia]", err);
+      title.textContent = "NO PUDIMOS CARGAR LA NOTICIA";
+      setState("error", "Inténtelo nuevamente en unos minutos.");
+      return;
+    }
+    if (!post) {
+      title.textContent = "NOTICIA NO ENCONTRADA";
+      setState("missing", "La noticia que busca no existe o ya no está publicada.");
+      return;
+    }
+
+    title.textContent = post.title;
+    document.title = `${post.title} | Nueva Bonanza Mining`;
+    document.querySelector('meta[name="description"]')?.setAttribute("content", post.excerpt);
+    document.querySelector('meta[property="og:title"]')?.setAttribute("content", post.title);
+    document.querySelector('meta[property="og:description"]')?.setAttribute("content", post.excerpt);
+
+    setText($(".post__category"), post.category);
+    const date = $<HTMLTimeElement>("#post-date");
+    date.dateTime = post.date;
+    date.textContent = post.dateLabel;
+
+    const img = $<HTMLImageElement>("#post-img");
+    if (post.image) {
+      if (post.image.srcSet) img.srcset = post.image.srcSet;
+      if (post.image.width) img.width = post.image.width;
+      if (post.image.height) img.height = post.image.height;
+      img.src = post.image.src;
+      img.alt = post.image.alt;
+    } else {
+      img.src = article.dataset.placeholder ?? "";
+    }
+
+    setText($("#post-lead"), post.excerpt);
+    setText($("#post-quote"), post.quote);
+    // El HTML del CMS se sanitiza antes de insertarlo (sin scripts, iframes ni eventos).
+    $("#post-content").innerHTML = DOMPurify.sanitize(post.content ?? "", {
+      FORBID_TAGS: ["style", "form", "input", "button"],
+      FORBID_ATTR: ["style"],
+    });
+
+    setState("ready");
+  }
+
+  load();
+</script>
+<style>
+  .post {
+    padding: 64px var(--pad-inline) 80px;
+    background: #fff;
+    min-height: 100vh;
+  }
+  .post__inner {
+    max-width: 920px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .post__top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .post__title {
+    font: 700 52px / 1.05 var(--font-display);
+    color: var(--nb-ink-800);
+    text-transform: uppercase;
+  }
+  .back {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    padding: 10px 16px;
+    border: 1px solid var(--nb-gold);
+    font: 600 12px / 1 var(--font-body);
+    letter-spacing: var(--ls-button);
+    color: var(--nb-ink-800);
+    text-transform: uppercase;
+    transition: background 0.2s ease, color 0.2s ease;
+  }
+  .back:hover {
+    background: var(--nb-gold);
+    color: #fff;
+  }
+  .icon--flip {
+    display: inline-flex;
+    transform: scaleX(-1);
+  }
+
+  /* Estados: hasta tener datos solo se ve el aviso; con datos, solo el contenido. */
+  .post__status {
+    font: 400 18px / 1.55 var(--font-body);
+    color: var(--nb-ink-600);
+  }
+  .post[data-state="ready"] .post__status,
+  .post:not([data-state="ready"]) .post__loaded {
+    display: none;
+  }
+  .post[data-state="loading"] .post__title {
+    min-height: 1.05em;
+    width: min(70%, 600px);
+    background: var(--nb-cream);
+  }
+  .post :global([hidden]) {
+    display: none;
+  }
+
+  .post__meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font: 500 14px / 1 var(--font-body);
+  }
+  .post__meta :global(.eyebrow) {
+    text-transform: uppercase;
+  }
+  .post__meta time {
+    color: var(--nb-taupe);
+  }
+  .post__img {
+    width: 100%;
+    height: 460px;
+    object-fit: cover;
+    background: var(--nb-sand);
+  }
+
+  /* Cuerpo: el HTML del editor hereda el diseño mediante selectores descendientes. */
+  .post__body,
+  .post__content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    font: 400 18px / 1.65 var(--font-body);
+    color: var(--nb-ink-600);
+  }
+  .post__lead {
+    font-size: 22px;
+    line-height: 1.5;
+    color: var(--nb-ink-800);
+  }
+  .post__body blockquote,
+  .post__content :global(blockquote) {
+    margin: 12px 0;
+    padding-top: 20px;
+    border-top: 2px solid var(--nb-gold);
+    font: 500 28px / 1.3 var(--font-display);
+    color: var(--nb-ink-800);
+  }
+  .post__content :global(blockquote p) {
+    margin: 0;
+  }
+  .post__content :global(blockquote cite) {
+    display: block;
+    margin-top: 12px;
+    font: 500 14px / 1.4 var(--font-body);
+    font-style: normal;
+    color: var(--nb-taupe);
+  }
+  .post__content :global(h2) {
+    font: 700 32px / 1.1 var(--font-display);
+    color: var(--nb-ink-800);
+    margin-top: 12px;
+  }
+  .post__content :global(h3) {
+    font: 700 24px / 1.15 var(--font-display);
+    color: var(--nb-ink-800);
+    margin-top: 8px;
+  }
+  .post__content :global(ul),
+  .post__content :global(ol) {
+    padding-left: 1.25em;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .post__content :global(ul) {
+    list-style: disc;
+  }
+  .post__content :global(ol) {
+    list-style: decimal;
+  }
+  .post__content :global(li::marker) {
+    color: var(--nb-gold);
+  }
+  .post__content :global(a) {
+    color: var(--nb-gold-ink);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .post__content :global(a:hover) {
+    color: var(--nb-gold);
+  }
+  .post__content :global(figure) {
+    margin: 12px 0;
+  }
+  .post__content :global(img) {
+    display: block;
+    max-width: 100%;
+    height: auto;
+  }
+  .post__content :global(figcaption) {
+    margin-top: 8px;
+    font: 500 14px / 1.4 var(--font-body);
+    color: var(--nb-taupe);
+  }
+
+  @media (max-width: 760px) {
+    .post {
+      padding: 40px 20px 56px;
+    }
+    .post__inner {
+      gap: 24px;
+    }
+    .post__top {
+      flex-direction: column-reverse;
+      gap: 16px;
+    }
+    .post__title {
+      font-size: 34px;
+    }
+    .back {
+      margin-top: 0;
+      min-height: 44px;
+    }
+    .post__img {
+      height: 240px;
+    }
+    .post__body,
+    .post__content {
+      font-size: 16px;
+    }
+    .post__lead {
+      font-size: 18px;
+    }
+    .post__body blockquote,
+    .post__content :global(blockquote) {
+      font-size: 22px;
+    }
+    .post__content :global(h2) {
+      font-size: 26px;
+    }
+    .post__content :global(h3) {
+      font-size: 20px;
+    }
+  }
+</style>
