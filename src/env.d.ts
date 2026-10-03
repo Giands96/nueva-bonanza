@@ -1,6 +1,5 @@
 interface ImportMetaEnv {
-  /** Endpoint de WPGraphQL, p. ej. https://cms.ejemplo.com/graphql */
-  readonly WP_GRAPHQL_URL?: string;
+  readonly PUBLIC_WP_GRAPHQL_URL?: string;
 }
 
 interface ImportMeta {

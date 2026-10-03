@@ -12,7 +12,8 @@
     "astro": "astro"
   },
   "dependencies": {
-    "astro": "^7.3.5"
+    "astro": "^7.3.5",
+    "dompurify": "^3.4.16"
   },
   "allowScripts": {
     "esbuild": true
