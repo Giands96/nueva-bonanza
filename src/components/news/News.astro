@@ -3,6 +3,8 @@ import type { Page } from "astro";
 import Icon from "../Icon.astro";
 import NewsCard from "./NewsCard.astro";
 import type { NewsItem } from "../../lib/wordpress";
+import placeholder from "../../assets/img/news-1.png";
+import arrowRightUrl from "../../assets/icons/arrow-right.svg?url";
 
 interface Props {
   page: Page<NewsItem>;
@@ -10,13 +12,20 @@ interface Props {
 
 const { page } = Astro.props;
 ---
-<section class="news" aria-labelledby="news-title">
+<section
+  class="news"
+  aria-labelledby="news-title"
+  data-news-list
+  data-page={page.currentPage}
+  data-placeholder={placeholder.src}
+  data-icon-arrow={arrowRightUrl}
+>
   <h2 id="news-title">ÚLTIMAS NOTICIAS</h2>
   {
     page.data.length > 0 ? (
       <ul class="news__grid" data-reveal-stagger>
         {page.data.map((item) => (
-          <li>
+          <li data-slug={item.slug}>
             <NewsCard item={item} />
           </li>
         ))}

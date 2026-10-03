@@ -31,3 +31,8 @@ const title = page.currentPage > 1 ? `Noticias - Página ${page.currentPage}` : 
         <News page={page} />
     </main>
 </BaseLayout>
+<script>
+  import { hydrateNewsList } from "../../lib/news-hydrate";
+
+  hydrateNewsList();
+</script>
