@@ -1,7 +1,7 @@
 ---
 import Icon from "../Icon.astro";
 import placeholder from "../../assets/img/news-1.png";
-import type { NewsItem } from "../../lib/wordpress";
+import { newsUrl, type NewsItem } from "../../lib/wordpress";
 
 interface Props {
   item: NewsItem;
@@ -10,7 +10,7 @@ interface Props {
 const { item } = Astro.props;
 const image = item.image ?? { src: placeholder.src, alt: "", width: placeholder.width, height: placeholder.height };
 ---
-<a class="article" href={`/noticias/${item.slug}`}>
+<a class="article" href={newsUrl(item.slug)}>
   <img
     class="article__img"
     src={image.src}
