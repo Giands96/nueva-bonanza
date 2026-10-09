@@ -83,8 +83,7 @@ import { contactReasons } from "../../data/site";
   <label class="consent">
     <input type="checkbox" name="consentimiento" value="Sí" required />
     <span
-      >He leído y acepto la Política de Privacidad y autorizo el tratamiento de
-      mis datos para atender esta consulta. *</span
+      >Autorizo el tratamiento de mis datos para atender esta consulta. *</span
     >
   </label>
   <!-- Trampa anti-spam de FormSubmit: los humanos no la ven ni la rellenan. -->
@@ -111,20 +110,44 @@ import { contactReasons } from "../../data/site";
   </p>
 </form>
 <div class="thanks" id="contact-thanks" hidden>
-  <span class="thanks__kicker">GRACIAS POR CONTACTARNOS</span>
-  <h2>HEMOS RECIBIDO SU MENSAJE</h2>
+  <span class="thanks__badge" aria-hidden="true">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M5 12.5l4.5 4.5L19 7.5"
+        stroke="currentColor"
+        stroke-width="2.4"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        class="thanks__check"
+      />
+    </svg>
+  </span>
+  <span class="thanks__kicker">Consulta registrada</span>
+  <h2>Gracias por contactarnos</h2>
   <p>
-    Un especialista de Nueva Bonanza Mining revisará la información y se
-    comunicará con usted.
+    Hemos recibido su mensaje correctamente. Un especialista de Nueva Bonanza
+    Mining revisará la información y se comunicará con usted.
   </p>
-  <small>Tiempo estimado de respuesta: de 1 a 2 días hábiles.</small>
-  <div class="ticket">
-    <span>Código de seguimiento</span>
-    <b id="ticket-code">NBM-000000-0000</b>
-  </div>
+  <p class="thanks__eta">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8" />
+      <path
+        d="M12 7.5V12l3 2"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      />
+    </svg>
+    <span
+      ><strong>Tiempo estimado de respuesta:</strong> dentro de 1 a 2 días hábiles.</span
+    >
+  </p>
   <div class="thanks__cta">
-    <Button variant="solid" href="/">Volver al inicio</Button>
-    <Button variant="outline-dark" href="/productos">Ver productos</Button>
+    <Button variant="solid" href="/" icon="arrow-right">Volver al inicio</Button>
+    <Button variant="outline-dark" href="/productos" icon="arrow-right"
+      >Ver productos</Button
+    >
   </div>
 </div>
 <script>
@@ -132,12 +155,6 @@ import { contactReasons } from "../../data/site";
   // motivo elegido: cada <option> lleva su correo o alias en data-to (site.ts).
   const form = document.querySelector<HTMLFormElement>("#contact-form");
   const error = document.querySelector<HTMLElement>("#contact-error");
-
-  const trackingCode = () => {
-    const now = new Date();
-    const stamp = `${String(now.getFullYear()).slice(2)}${String(now.getMonth() + 1).padStart(2, "0")}${String(now.getDate()).padStart(2, "0")}`;
-    return `NBM-${stamp}-${Math.floor(1000 + Math.random() * 9000)}`;
-  };
 
   form?.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -156,9 +173,7 @@ import { contactReasons } from "../../data/site";
     const isBot = Boolean(data._honey);
     delete data._honey;
 
-    const code = trackingCode();
     const payload = {
-      "Código de seguimiento": code,
       Motivo: data.motivo,
       Nombre: data.nombre,
       Empresa: data.empresa,
@@ -167,7 +182,7 @@ import { contactReasons } from "../../data/site";
       Cargo: data.cargo || "-",
       Mensaje: data.mensaje,
       Consentimiento: data.consentimiento,
-      _subject: `[${code}] ${data.motivo} - ${data.empresa}`,
+      _subject: `${data.motivo} - ${data.empresa}`,
       _replyto: data.correo,
       _template: "table",
       _captcha: "false",
@@ -193,8 +208,6 @@ import { contactReasons } from "../../data/site";
         if (!res.ok || String(json.success) !== "true")
           throw new Error(json.message ?? res.statusText);
       }
-      const ticket = document.querySelector("#ticket-code");
-      if (ticket) ticket.textContent = code;
       form.hidden = true;
       document.querySelector("#contact-thanks")?.removeAttribute("hidden");
       document.querySelector("#contact-urgent")?.removeAttribute("hidden");
@@ -319,54 +332,165 @@ import { contactReasons } from "../../data/site";
     display: none;
   }
   .thanks {
+    --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
     flex: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
+    align-items: center;
     justify-content: center;
-    gap: 20px;
+    text-align: center;
+    gap: 16px;
+    padding: 48px 40px;
+    background: var(--nb-cream);
   }
   .thanks[hidden],
   .cform[hidden] {
     display: none;
   }
+  .thanks:not([hidden]) {
+    animation: thanks-in 350ms var(--ease-out) both;
+  }
+  .thanks:not([hidden]) .thanks__badge {
+    animation: badge-pop 300ms var(--ease-out) 60ms both;
+  }
+  .thanks:not([hidden]) .thanks__check {
+    stroke-dasharray: 24;
+    stroke-dashoffset: 24;
+    animation: check-draw 450ms var(--ease-out) 180ms forwards;
+  }
+  .thanks:not([hidden]) .thanks__kicker,
+  .thanks:not([hidden]) h2,
+  .thanks:not([hidden]) p,
+  .thanks:not([hidden]) .thanks__cta {
+    animation: thanks-rise 350ms var(--ease-out) both;
+  }
+  .thanks:not([hidden]) h2 {
+    animation-delay: 90ms;
+  }
+  .thanks:not([hidden]) p {
+    animation-delay: 140ms;
+  }
+  .thanks:not([hidden]) .thanks__eta {
+    animation-delay: 190ms;
+  }
+  .thanks:not([hidden]) .thanks__cta {
+    animation-delay: 230ms;
+  }
+  @keyframes thanks-in {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes thanks-rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  @keyframes badge-pop {
+    from {
+      opacity: 0;
+      transform: scale(0.92);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  @keyframes check-draw {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+  .thanks__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: var(--nb-gold);
+    color: var(--nb-ink-800);
+  }
+  .thanks__badge svg {
+    width: 28px;
+    height: 28px;
+  }
   .thanks__kicker {
     font: 600 12px / 1 var(--font-body);
-    letter-spacing: 0.08em;
-    color: var(--nb-gold);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--nb-gold-ink);
   }
   .thanks h2 {
-    font: 700 48px / 1 var(--font-display);
+    font: 700 44px / 1.05 var(--font-display);
+    text-transform: uppercase;
+    text-wrap: balance;
     color: var(--nb-ink-800);
   }
   .thanks p {
-    max-width: 640px;
-    font: 400 20px / 1.45 var(--font-body);
+    max-width: 560px;
+    font: 400 16px / 1.55 var(--font-body);
     color: var(--nb-ink-700);
   }
-  .thanks small {
-    font: 400 14px / 1.4 var(--font-body);
-    color: var(--nb-ink-600);
-  }
-  .ticket {
-    align-self: flex-start;
-    padding: 16px 20px;
-    background: var(--nb-cream);
+  .thanks__eta {
     display: flex;
-    flex-direction: column;
-    gap: 6px;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 560px;
+    padding: 14px 18px;
+    background: rgba(217, 166, 64, 0.16);
+    font-size: 14px;
   }
-  .ticket span {
-    font: 400 12px / 1 var(--font-body);
-    color: var(--nb-taupe);
+  .thanks__eta svg {
+    flex: none;
+    width: 20px;
+    height: 20px;
+    color: var(--nb-gold-ink);
   }
-  .ticket b {
-    font: 600 24px / 1 var(--font-display);
-    color: var(--nb-ink-800);
+  .thanks__eta strong {
+    font-weight: 700;
   }
   .thanks__cta {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 16px;
+    margin-top: 8px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .thanks:not([hidden]),
+    .thanks:not([hidden]) .thanks__badge,
+    .thanks:not([hidden]) .thanks__kicker,
+    .thanks:not([hidden]) h2,
+    .thanks:not([hidden]) p,
+    .thanks:not([hidden]) .thanks__cta {
+      animation: thanks-fade 200ms ease both;
+    }
+    .thanks:not([hidden]) .thanks__check {
+      stroke-dashoffset: 0;
+      animation: none;
+    }
+  }
+  @keyframes thanks-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
   }
   @media (max-width: 760px) {
     .cform h2 {
@@ -379,11 +503,26 @@ import { contactReasons } from "../../data/site";
       flex-direction: column;
       align-items: stretch;
     }
+    .thanks {
+      padding: 40px 20px;
+    }
+    .thanks__badge {
+      width: 56px;
+      height: 56px;
+    }
     .thanks h2 {
-      font-size: 36px;
+      font-size: 34px;
     }
     .thanks p {
-      font-size: 18px;
+      font-size: 15px;
+    }
+    .thanks__eta {
+      text-align: left;
+    }
+    .thanks__cta {
+      flex-direction: column;
+      align-items: stretch;
+      width: 100%;
     }
   }
 </style>
