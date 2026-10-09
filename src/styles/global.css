@@ -31,6 +31,55 @@ img { display: block; max-width: 100%; }
 /* Título de sección*/
 .title { font: 700 64px / 1 var(--font-display); }
 
+/* Tarjetas de noticias: las dibuja `news-hydrate.ts` en el navegador, por eso
+ * viven en CSS global y no en un componente (Astro elimina el CSS de los
+ * componentes que no se renderizan en el build). */
+.article {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  color: var(--nb-ink-700);
+}
+.article__img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  background: var(--nb-sand);
+}
+.article time {
+  font: 500 14px / 1 var(--font-body);
+  color: var(--nb-taupe);
+}
+.article h3 {
+  font: 600 24px / 1.15 var(--font-display);
+  color: var(--nb-ink-800);
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+}
+.article:hover h3 {
+  color: var(--nb-gold);
+}
+.article__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font: 600 14px / 1 var(--font-body);
+  letter-spacing: var(--ls-button);
+  color: var(--nb-ink-800);
+}
+.article__more .icon {
+  color: var(--nb-gold);
+  transition: transform 0.2s ease;
+}
+.article:hover .article__more .icon {
+  transform: translateX(4px);
+}
+@media (max-width: 760px) {
+  .article__img {
+    height: 220px;
+  }
+}
+
 @media (max-width: 760px) {
   .title { font-size: 44px; }
 }

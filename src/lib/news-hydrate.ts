@@ -1,6 +1,6 @@
 import { getAllPosts, newsUrl, type NewsItem } from "./wordpress";
 
-/** Tiempo máximo esperando a WordPress antes de conservar el HTML del build. */
+/** Tiempo máximo esperando a WordPress antes de mostrar el error. */
 const TIMEOUT_MS = 8000;
 
 /** Debe coincidir con `pageSize: 9` de `getStaticPaths` en `[...page].astro`. */
@@ -59,49 +59,69 @@ function renderItem(
   return li;
 }
 
+function pageHref(page: number): string {
+  return page <= 1 ? "/noticias" : `/noticias/${page}`;
+}
+
 /**
- * Sincroniza el listado de página 1 con WordPress: reordena según la API viva,
- * inserta nuevas y elimina borradas. No hace nada fuera de página 1 o si WP falla.
+ * Dibuja el listado contra WordPress en cada visita: el build no guarda
+ * noticias, solo el cascarón con el loader. Ante un fallo muestra el error
+ * y ante una página fuera de rango, el estado vacío.
  */
 export async function hydrateNewsList(): Promise<void> {
   const section = document.querySelector<HTMLElement>("[data-news-list]");
-  if (!section || section.dataset.page !== "1") return;
+  if (!section) return;
+  const page = Number(section.dataset.page ?? "1") || 1;
+  // Última página que existe como archivo: más allá solo hay 404 hasta el rebuild.
+  const builtLast = Number(section.dataset.lastPage ?? "1") || 1;
   const placeholder = section.dataset.placeholder ?? "";
   const iconArrow = section.dataset.iconArrow ?? "";
+
+  const loading = section.querySelector<HTMLElement>("[data-loading]");
+  const grid = section.querySelector<HTMLUListElement>("[data-grid]");
+  const empty = section.querySelector<HTMLElement>("[data-empty]");
+  const error = section.querySelector<HTMLElement>("[data-error]");
+  const pager = section.querySelector<HTMLElement>("[data-pager]");
+  if (!grid || !loading || !empty || !error) return;
 
   let posts: NewsItem[];
   try {
     posts = await withTimeout(getAllPosts(), TIMEOUT_MS);
   } catch (err) {
-    console.warn("[news-hydrate] usando HTML estático:", err);
+    console.warn("[news-hydrate] no se pudo cargar el listado:", err);
+    loading.hidden = true;
+    error.hidden = false;
     return;
   }
-  const fresh = posts.slice(0, PAGE_SIZE);
-  const freshSlugs = new Set(fresh.map((p) => p.slug));
+  loading.hidden = true;
 
-  let grid = section.querySelector<HTMLUListElement>(".news__grid");
-  if (!grid) {
-    if (fresh.length === 0) return;
-    section.querySelector(".news__empty")?.remove();
-    grid = document.createElement("ul");
-    grid.className = "news__grid";
-    grid.setAttribute("data-reveal-stagger", "");
-    section.appendChild(grid);
+  const freshLast = Math.max(1, Math.ceil(posts.length / PAGE_SIZE));
+  const slice = posts.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  if (slice.length === 0) {
+    empty.hidden = false;
+  } else {
+    for (const post of slice) {
+      grid.appendChild(renderItem(post, placeholder, iconArrow));
+    }
+    grid.hidden = false;
   }
-  for (const post of fresh) {
-    const slug = CSS.escape(post.slug);
-    const li =
-      grid.querySelector<HTMLLIElement>(`li[data-slug="${slug}"]`) ??
-      renderItem(post, placeholder, iconArrow);
-    grid.appendChild(li); // `appendChild` mueve el nodo: deja el orden de la API viva
-  }
-  grid.querySelectorAll<HTMLLIElement>("li[data-slug]").forEach((li) => {
-    if (!freshSlugs.has(li.dataset.slug ?? "")) li.remove();
-  });
 
-  // Actualiza "1 / N" si la cantidad de páginas cambió.
-  const count = section.querySelector(".pager__count");
-  if (count) {
-    count.textContent = `1 / ${Math.max(1, Math.ceil(posts.length / PAGE_SIZE))}`;
+  // Paginador: solo enlaza a páginas que existen como archivo.
+  if (pager) {
+    const prev = pager.querySelector<HTMLAnchorElement>("[data-prev]");
+    const next = pager.querySelector<HTMLAnchorElement>("[data-next]");
+    const count = pager.querySelector("[data-count]");
+    if (count) count.textContent = `${page} / ${freshLast}`;
+    const showPrev = page > 1;
+    const showNext = page < freshLast && page < builtLast;
+    if (prev) {
+      prev.hidden = !showPrev;
+      if (showPrev) prev.href = pageHref(page - 1);
+    }
+    if (next) {
+      next.hidden = !showNext;
+      if (showNext) next.href = pageHref(page + 1);
+    }
+    pager.hidden = !(showPrev || showNext);
   }
 }

@@ -23,6 +23,14 @@ export const contact = {
   hours: "Lun - Vie, 8:00 a.m. - 6:00 p.m.",
 } as const;
 
+
+export const emails = {
+  rh: "sally.falconi@nbonanzamining.com",
+  logistica: "logistica01@nbonanzamining.com",
+  gerencia_comercial: "hector.acevedo@nbonanzamining.com",
+  prensa:"paola.acevedo@nbonanzamining.com",
+  proyectos:"gerencia01@nbonanzamining.com"
+}
 /**
  * Motivos del formulario de Contacto y a quién se envía cada uno (FormSubmit).
  * `to` admite el correo o, mejor, el alias aleatorio que FormSubmit entrega al
@@ -31,11 +39,11 @@ export const contact = {
  * mensaje de confirmación que FormSubmit le envía con el primer envío.
  */
 export const contactReasons = [
-  { label: "Propuesta de proyecto", to: contact.email },
-  { label: "Consulta comercial", to: contact.email },
-  { label: "Empleo y prácticas", to: contact.email },
-  { label: "Prensa y comunicaciones", to: contact.email },
-  { label: "Otro", to: contact.email },
+  { label: "Propuesta de proyecto", to: emails.proyectos },
+  { label: "Consulta comercial", to: emails.gerencia_comercial },
+  { label: "Empleo y prácticas", to: emails.rh },
+  { label: "Prensa y comunicaciones", to: emails.prensa },
+  { label: "Otro", to: emails.gerencia_comercial },
 ] as const;
 
 export const tagline ="Minería responsable con visión de futuro";

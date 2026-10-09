@@ -1,7 +1,6 @@
 ---
 import type { Page } from "astro";
 import Icon from "../Icon.astro";
-import NewsCard from "./NewsCard.astro";
 import type { NewsItem } from "../../lib/wordpress";
 import placeholder from "../../assets/img/news-1.png";
 import arrowRightUrl from "../../assets/icons/arrow-right.svg?url";
@@ -11,46 +10,42 @@ interface Props {
 }
 
 const { page } = Astro.props;
+// La grilla se dibuja en el navegador contra WordPress (ver `news-hydrate.ts`):
+// el build no guarda noticias, solo el cascarón con el loader.
+const prevHref = page.currentPage > 1 ? (page.currentPage === 2 ? "/noticias" : `/noticias/${page.currentPage - 1}`) : null;
+const nextHref = page.currentPage < page.lastPage ? `/noticias/${page.currentPage + 1}` : null;
 ---
 <section
   class="news"
   aria-labelledby="news-title"
   data-news-list
   data-page={page.currentPage}
+  data-last-page={page.lastPage}
   data-placeholder={placeholder.src}
   data-icon-arrow={arrowRightUrl}
 >
   <h2 id="news-title">ÚLTIMAS NOTICIAS</h2>
-  {
-    page.data.length > 0 ? (
-      <ul class="news__grid" data-reveal-stagger>
-        {page.data.map((item) => (
-          <li data-slug={item.slug}>
-            <NewsCard item={item} />
-          </li>
-        ))}
-      </ul>
-    ) : (
-      <p class="news__empty">No hay noticias publicadas por ahora.</p>
-    )
-  }
-  {
-    page.lastPage > 1 && (
-      <nav class="pager" aria-label="Paginación de noticias">
-        {page.url.prev ? (
-          <a href={page.url.prev} rel="prev">
-            <span class="icon--flip"><Icon name="arrow-back" size={16} /></span>Atrás
-          </a>
-        ) : <span />}
-        <span class="pager__count">{page.currentPage} / {page.lastPage}</span>
-        {page.url.next ? (
-          <a href={page.url.next} rel="next">
-            Siguiente<Icon name="arrow-forward" size={16} />
-          </a>
-        ) : <span />}
-      </nav>
-    )
-  }
+  <div class="news__loading" data-loading role="status">
+    <span class="news__spinner" aria-hidden="true"></span>
+    <p>Cargando noticias…</p>
+  </div>
+  <ul class="news__grid" data-grid data-reveal-stagger hidden></ul>
+  <p class="news__empty" data-empty hidden>No hay noticias publicadas por ahora.</p>
+  <p class="news__error" data-error hidden>No pudimos cargar las noticias. Inténtelo nuevamente en unos minutos.</p>
+  <noscript><p class="news__empty">Active JavaScript para ver las noticias.</p></noscript>
+  <nav class="pager" data-pager aria-label="Paginación de noticias" hidden>
+    {prevHref ? (
+      <a data-prev href={prevHref} rel="prev">
+        <span class="icon--flip"><Icon name="arrow-back" size={16} /></span>Atrás
+      </a>
+    ) : <span data-prev-hidden />}
+    <span class="pager__count" data-count>{page.currentPage} / {page.lastPage}</span>
+    {nextHref ? (
+      <a data-next href={nextHref} rel="next">
+        Siguiente<Icon name="arrow-forward" size={16} />
+      </a>
+    ) : <span data-next-hidden />}
+  </nav>
 </section>
 <style>
   .news {
@@ -75,6 +70,47 @@ const { page } = Astro.props;
   .news__empty {
     font: 400 18px / 1.55 var(--font-body);
     color: var(--nb-ink-600);
+  }
+  .news__error {
+    font: 400 18px / 1.55 var(--font-body);
+    color: var(--nb-ink-600);
+  }
+  /* `display:grid` del grid pisaría el `hidden` nativo: se fuerza acá. */
+  .news__grid[hidden],
+  .news__empty[hidden],
+  .news__error[hidden],
+  .news__loading[hidden],
+  .pager[hidden],
+  .pager a[hidden] {
+    display: none;
+  }
+  .news__loading {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 48px 0;
+    font: 400 18px / 1.55 var(--font-body);
+    color: var(--nb-taupe);
+  }
+  .news__spinner {
+    flex: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 3px solid var(--nb-sand);
+    border-top-color: var(--nb-gold);
+    animation: news-spin 0.8s linear infinite;
+  }
+  @keyframes news-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .news__spinner {
+      animation: none;
+      border-top-color: var(--nb-sand);
+    }
   }
   /* Mismo estilo que los controles ATRÁS / SIGUIENTE del carrusel de Inicio. */
   .pager {
