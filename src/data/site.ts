@@ -19,7 +19,7 @@ export const contact = {
   district: "Santiago de Surco",
   city :"Lima",
   phone: "+51 913 338 729",
-  email: "contacto@nbmining.pe",
+  email: "gerencia01@nbonanzamining.com",
   hours: "Lun - Vie, 8:00 a.m. - 6:00 p.m.",
 } as const;
 
@@ -39,11 +39,12 @@ export const emails = {
  * mensaje de confirmación que FormSubmit le envía con el primer envío.
  */
 export const contactReasons = [
-  { label: "Propuesta de proyecto", to: emails.proyectos },
-  { label: "Consulta comercial", to: emails.gerencia_comercial },
-  { label: "Empleo y prácticas", to: emails.rh },
-  { label: "Prensa y comunicaciones", to: emails.prensa },
-  { label: "Otro", to: emails.gerencia_comercial },
+  { label: "Propuesta de proyecto", to: "4bda3c158d7e89b1c28463e6230c4873" },
+  { label: "Consulta comercial", to: "aa8652f874dee24750d36e13603d5d5c" },
+  { label: "Empleo y prácticas", to: "93c3884a197ac293ffabf54a0ae78d30" },
+  { label: "Prensa y comunicaciones", to: "d5aff8dd18ce9fd3f5145d46cb6f4e0c" },
+  { label: "Logística y transporte", to: emails.logistica },
+  { label: "Otro", to: "aa8652f874dee24750d36e13603d5d5c" },
 ] as const;
 
 export const tagline ="Minería responsable con visión de futuro";

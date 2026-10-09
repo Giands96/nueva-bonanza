@@ -79,6 +79,76 @@ import { contactReasons } from "../../data/site";
         placeholder="Cuéntenos sobre su proyecto, requerimiento, ubicación y plazo estimado."
         required></textarea>
     </label>
+    <div class="field field--full" id="cv-field" hidden>
+      <span id="cv-label">Adjuntar CV (PDF o Word) *</span>
+      <div
+        class="cv-drop"
+        id="cv-drop"
+        role="button"
+        tabindex="0"
+        aria-labelledby="cv-label cv-drop-title"
+        aria-describedby="cv-help"
+      >
+        <input
+          id="cv-input"
+          class="cv-native"
+          type="file"
+          name="cv"
+          tabindex="-1"
+          aria-hidden="true"
+          accept=".doc,.docx,.pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/pdf"
+        />
+        <span class="cv-drop__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M12 15V4m0 0L7.5 8.5M12 4l4.5 4.5M4.5 15v4.5c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V15"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </span>
+        <span class="cv-drop__main">
+          <strong id="cv-drop-title">Elige tu archivo</strong>
+          <small id="cv-help">Arrastra y suelta o haz clic · PDF o Word (.pdf, .doc, .docx), máx. 5 MB</small>
+        </span>
+        <span class="cv-drop__btn" aria-hidden="true" style="color:#fff">Examinar</span>
+      </div>
+      <div class="cv-file" id="cv-file" hidden>
+        <span class="cv-file__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M6 3.5h8L19.5 9v11.5a1 1 0 0 1-1 1h-12a1 1 0 0 1-1-1v-16a1 1 0 0 1 1-1Z"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linejoin="round"
+            />
+            <path
+              d="M14 3.5V9h5.5"
+              stroke="currentColor"
+              stroke-width="1.8"
+              stroke-linejoin="round"
+            />
+          </svg>
+        </span>
+        <span class="cv-file__meta">
+          <strong id="cv-name">archivo.pdf</strong>
+          <small id="cv-size">1.2 MB</small>
+        </span>
+        <button type="button" class="cv-file__remove" id="cv-remove" aria-label="Quitar archivo adjunto">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path
+              d="M6 6l12 12M18 6L6 18"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+            />
+          </svg>
+        </button>
+      </div>
+      <p class="cv-error" id="cv-error" role="alert" hidden></p>
+    </div>
   </div>
   <label class="consent">
     <input type="checkbox" name="consentimiento" value="Sí" required />
@@ -153,40 +223,216 @@ import { contactReasons } from "../../data/site";
 <script>
   // Envío con FormSubmit (https://formsubmit.co). El destinatario depende del
   // motivo elegido: cada <option> lleva su correo o alias en data-to (site.ts).
+  // Para adjuntar el CV se usa FormData (multipart): JSON no puede llevar files.
   const form = document.querySelector<HTMLFormElement>("#contact-form");
   const error = document.querySelector<HTMLElement>("#contact-error");
+  const motivo = form?.querySelector<HTMLSelectElement>("[name=motivo]");
+  const cvField = document.querySelector<HTMLElement>("#cv-field");
+  const cvInput = document.querySelector<HTMLInputElement>("#cv-input");
+  const cvError = document.querySelector<HTMLElement>("#cv-error");
+  const cvDrop = document.querySelector<HTMLElement>("#cv-drop");
+  const cvFile = document.querySelector<HTMLElement>("#cv-file");
+  const cvName = document.querySelector<HTMLElement>("#cv-name");
+  const cvSize = document.querySelector<HTMLElement>("#cv-size");
+  const cvRemove = document.querySelector<HTMLButtonElement>("#cv-remove");
+  const cvTitle = document.querySelector<HTMLElement>("#cv-drop-title");
+
+  const CV_MAX_BYTES = 5 * 1024 * 1024;
+  const CV_EXTS = [".pdf", ".doc", ".docx"];
+  const CV_MIMES = [
+    "application/pdf",
+    "application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  ];
+  const EMPLEO_LABEL = "Empleo y prácticas";
+
+  const isEmpleo = () => motivo?.value === EMPLEO_LABEL;
+
+  function showCvError(msg: string) {
+    if (!cvError) return;
+    cvError.textContent = msg;
+    cvError.removeAttribute("hidden");
+  }
+
+  function clearCvError() {
+    if (!cvError) return;
+    cvError.textContent = "";
+    cvError.setAttribute("hidden", "");
+  }
+
+  function formatBytes(bytes: number): string {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  }
+
+  function clearCvFile() {
+    cvFile?.setAttribute("hidden", "");
+    if (cvTitle) cvTitle.textContent = "Elige tu archivo";
+  }
+
+  function renderCvFile(file: File) {
+    if (cvName) cvName.textContent = file.name;
+    if (cvSize) cvSize.textContent = `${formatBytes(file.size)} · listo para enviar`;
+    cvFile?.removeAttribute("hidden");
+    if (cvTitle) cvTitle.textContent = "Archivo cargado — haz clic para cambiarlo";
+  }
+
+  function resetCv() {
+    if (cvInput) cvInput.value = "";
+    clearCvError();
+    clearCvFile();
+  }
+
+  function updateCvVisibility() {
+    const show = isEmpleo();
+    cvField?.toggleAttribute("hidden", !show);
+    // No se usa `required` en el input oculto: el bubble nativo apuntaría a un
+    // elemento invisible. La obligatoriedad la valida validateCv() con mensaje propio.
+    if (cvInput) cvInput.required = false;
+    if (!show) resetCv();
+  }
+
+  function validateCv(): boolean {
+    if (!isEmpleo()) return true;
+    const file = cvInput?.files?.[0];
+    if (!file) {
+      clearCvFile();
+      showCvError("Adjunta tu CV en PDF o Word para postularte.");
+      cvDrop?.setAttribute("aria-invalid", "true");
+      return false;
+    }
+    const lower = file.name.toLowerCase();
+    const extOk = CV_EXTS.some((ext) => lower.endsWith(ext));
+    // Algunos .doc antiguos llegan con type vacío: en ese caso vale la extensión.
+    const mimeOk = file.type === "" || CV_MIMES.includes(file.type);
+    // El archivo siempre queda visible en la tarjeta (válido o no) para poder
+    // identificarlo y quitarlo; si es inválido se bloquea el envío con error.
+    renderCvFile(file);
+    if (!extOk || !mimeOk) {
+      showCvError("Formato no válido. Solo se admite PDF (.pdf) o Word (.doc, .docx).");
+      cvDrop?.setAttribute("aria-invalid", "true");
+      return false;
+    }
+    if (file.size > CV_MAX_BYTES) {
+      showCvError("El archivo supera los 5 MB. Comprímelo o usa un PDF más liviano.");
+      cvDrop?.setAttribute("aria-invalid", "true");
+      return false;
+    }
+    clearCvError();
+    cvDrop?.removeAttribute("aria-invalid");
+    return true;
+  }
+
+  // Asigna archivos al input de forma compatible (el FileList de un drop no se
+  // puede asignar directo en todos los navegadores: se reconstruye vía DataTransfer).
+  function setInputFiles(files: FileList | File[]): boolean {
+    if (!cvInput) return false;
+    try {
+      const dt = new DataTransfer();
+      for (const f of Array.from(files)) dt.items.add(f);
+      cvInput.files = dt.files;
+      return true;
+    } catch {
+      try {
+        (cvInput as HTMLInputElement).files = files as FileList;
+        return true;
+      } catch {
+        return false;
+      }
+    }
+  }
+
+  motivo?.addEventListener("change", updateCvVisibility);
+  cvInput?.addEventListener("change", () => {
+    if (cvInput.files?.length) validateCv();
+    else {
+      clearCvError();
+      clearCvFile();
+      cvDrop?.removeAttribute("aria-invalid");
+    }
+  });
+  // Clic y teclado sobre el drop abren el selector (el input está fuera del tab order).
+  cvDrop?.addEventListener("click", (e) => {
+    if (e.target !== cvInput) cvInput?.click();
+  });
+  cvDrop?.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      cvInput?.click();
+    }
+  });
+  cvRemove?.addEventListener("click", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    resetCv();
+    cvDrop?.removeAttribute("aria-invalid");
+    cvDrop?.focus();
+  });
+  // Drag & drop con highlight estable (contador evita parpadeo al pasar por hijos).
+  let dragDepth = 0;
+  cvDrop?.addEventListener("dragenter", (e) => {
+    e.preventDefault();
+    dragDepth += 1;
+    cvDrop.classList.add("is-dragover");
+  });
+  cvDrop?.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    if (e.dataTransfer) e.dataTransfer.dropEffect = "copy";
+  });
+  cvDrop?.addEventListener("dragleave", (e) => {
+    e.preventDefault();
+    dragDepth = Math.max(0, dragDepth - 1);
+    if (dragDepth === 0) cvDrop.classList.remove("is-dragover");
+  });
+  cvDrop?.addEventListener("drop", (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    dragDepth = 0;
+    cvDrop.classList.remove("is-dragover");
+    const files = e.dataTransfer?.files;
+    if (files?.length && setInputFiles(files)) validateCv();
+    else if (files?.length) showCvError("No se pudo leer el archivo. Intenta con Examinar.");
+  });
+  updateCvVisibility();
 
   form?.addEventListener("submit", async (e) => {
     e.preventDefault();
+    updateCvVisibility();
     if (!form.reportValidity()) return;
+    if (!validateCv()) {
+      cvDrop?.focus();
+      return;
+    }
 
-    const motivo = form.querySelector<HTMLSelectElement>("[name=motivo]");
     const to = motivo?.selectedOptions[0]?.dataset.to;
     const submit = form.querySelector<HTMLButtonElement>("[type=submit]");
     if (!to || !submit) return;
 
-    const data = Object.fromEntries(new FormData(form)) as Record<
-      string,
-      string
-    >;
-    
-    const isBot = Boolean(data._honey);
-    delete data._honey;
+    const data = new FormData(form);
+    const isBot = Boolean(String(data.get("_honey") ?? "").trim());
+    data.delete("_honey");
 
-    const payload = {
-      Motivo: data.motivo,
-      Nombre: data.nombre,
-      Empresa: data.empresa,
-      Correo: data.correo,
-      Teléfono: data.telefono,
-      Cargo: data.cargo || "-",
-      Mensaje: data.mensaje,
-      Consentimiento: data.consentimiento,
-      _subject: `${data.motivo} - ${data.empresa}`,
-      _replyto: data.correo,
-      _template: "table",
-      _captcha: "false",
-    };
+    const get = (k: string) => String(data.get(k) ?? "").trim();
+    const nombre = get("nombre");
+    const empresa = get("empresa");
+    const correo = get("correo");
+    const motivoVal = get("motivo");
+    data.set("Motivo", motivoVal);
+    data.set("Nombre", nombre);
+    data.set("Empresa", empresa);
+    data.set("Correo", correo);
+    data.set("Teléfono", get("telefono"));
+    data.set("Cargo", get("cargo") || "-");
+    data.set("Mensaje", get("mensaje"));
+    data.set("Consentimiento", get("consentimiento"));
+    data.set("_subject", `${motivoVal} - ${empresa}`);
+    data.set("_replyto", correo);
+    data.set("_template", "table");
+    data.set("_captcha", "false");
+    for (const k of ["nombre", "empresa", "correo", "telefono", "cargo", "mensaje", "motivo", "consentimiento"]) {
+      data.delete(k);
+    }
 
     error?.setAttribute("hidden", "");
     submit.disabled = true;
@@ -197,11 +443,8 @@ import { contactReasons } from "../../data/site";
           `https://formsubmit.co/ajax/${encodeURIComponent(to)}`,
           {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-            body: JSON.stringify(payload),
+            headers: { Accept: "application/json" },
+            body: data,
           },
         );
         const json = await res.json().catch(() => ({}));
@@ -286,6 +529,164 @@ import { contactReasons } from "../../data/site";
   .field select:focus,
   .field textarea:focus {
     box-shadow: inset 0 0 0 2px var(--nb-gold);
+  }
+  .cv-native {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+  .cv-drop {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 18px;
+    background: #fff;
+    box-shadow: inset 0 0 0 1px var(--nb-stone);
+    cursor: pointer;
+    transition: box-shadow 180ms ease, background 180ms ease, transform 180ms ease;
+  }
+  .cv-drop:hover {
+    background: var(--nb-cream);
+    box-shadow: inset 0 0 0 2px var(--nb-gold);
+  }
+  .cv-drop:focus-visible,
+  .cv-drop:focus-within {
+    outline: none;
+    background: var(--nb-cream);
+    box-shadow: inset 0 0 0 2px var(--nb-gold);
+  }
+  .cv-drop.is-dragover {
+    background: rgba(217, 166, 64, 0.16);
+    box-shadow: inset 0 0 0 2px var(--nb-gold);
+  }
+  .cv-drop__btn {
+    color: #fff;
+  }
+  .cv-drop__icon {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--nb-gold);
+    color: var(--nb-ink-800);
+  }
+  .cv-drop__icon svg {
+    width: 22px;
+    height: 22px;
+  }
+  .cv-drop__main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .cv-drop__main strong {
+    font: 600 14px / 1.3 var(--font-body);
+    color: var(--nb-ink-800);
+  }
+  .cv-drop__main small {
+    font: 400 12px / 1.4 var(--font-body);
+    color: var(--nb-taupe);
+  }
+  .cv-drop__btn {
+    flex: none;
+    padding: 12px 20px;
+    background: var(--nb-ink-800);
+    color: #fff;
+    font: 600 12px / 1 var(--font-body);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .cv-file {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--nb-cream);
+    box-shadow: inset 0 0 0 1px var(--nb-gold);
+  }
+  .cv-file[hidden] {
+    display: none;
+  }
+  .cv-file__icon {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--nb-gold);
+    color: var(--nb-ink-800);
+  }
+  .cv-file__icon svg {
+    width: 20px;
+    height: 20px;
+  }
+  .cv-file__meta {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .cv-file__meta strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font: 600 13px / 1.3 var(--font-body);
+    color: var(--nb-ink-800);
+  }
+  .cv-file__meta small {
+    font: 400 12px / 1 var(--font-body);
+    color: var(--nb-taupe);
+  }
+  .cv-file__remove {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--nb-ink-700);
+    cursor: pointer;
+  }
+  .cv-file__remove:hover {
+    background: rgba(0, 0, 0, 0.08);
+  }
+  .cv-file__remove svg {
+    width: 16px;
+    height: 16px;
+  }
+  .cv-error {
+    margin: 0;
+    font: 400 13px / 1.4 var(--font-body);
+    color: #9c2a1a;
+  }
+  .cv-error[hidden],
+  #cv-field[hidden] {
+    display: none;
+  }
+  @media (max-width: 760px) {
+    .cv-drop {
+      flex-wrap: wrap;
+    }
+    .cv-drop__btn {
+      width: 100%;
+      text-align: center;
+    }
   }
   .consent {
     display: flex;
