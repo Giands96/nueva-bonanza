@@ -5,6 +5,7 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import HeroImage from "../../assets/img/news-2.png";
 import News from "../../components/news/News.astro";
 import { getAllPosts } from "../../lib/wordpress";
+import { heroPreload } from "../../lib/hero";
 
 // /noticias, /noticias/2, /noticias/3… (9 por página, como el diseño).
 export const getStaticPaths = (async ({ paginate }) => {
@@ -14,9 +15,15 @@ export const getStaticPaths = (async ({ paginate }) => {
 
 const { page } = Astro.props;
 const title = page.currentPage > 1 ? `Noticias - Página ${page.currentPage}` : "Noticias";
+const preload = await heroPreload(HeroImage);
 ---
 
-<BaseLayout title={title} current="noticias">
+<BaseLayout
+  title={title}
+  description="Novedades de Nueva Bonanza Mining: avances de la mina Bonanza, seguridad, gestión ambiental y trabajo con comunidades en Arequipa."
+  current="noticias"
+  heroPreload={preload}
+>
     <main>
         <PageHero
           eyebrow="NOTICIAS"
