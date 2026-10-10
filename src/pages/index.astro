@@ -5,8 +5,17 @@ import HeroHome from "../components/home/HeroHome.astro";
 import AboutSplit from "../components/home/AboutSplit.astro";
 import ProductsCarousel from "../components/home/ProductsCarousel.astro";
 import Team from "../components/home/Team.astro";
+import heroImage from "../assets/img/hero-mine.png";
+import { heroPreload } from "../lib/hero";
+
+const preload = await heroPreload(heroImage);
 ---
-<BaseLayout title="Inicio" current="inicio">
+<BaseLayout
+  title="Mina de oro Bonanza en Arequipa"
+  description="Nueva Bonanza Mining opera la mina de oro Bonanza en Arequipa: extracción responsable de oro y plata con altos estándares de seguridad y gestión ambiental."
+  current="inicio"
+  heroPreload={preload}
+>
   <main>
     <HeroHome />
     <AboutSplit />

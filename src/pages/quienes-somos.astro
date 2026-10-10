@@ -6,11 +6,15 @@ import Timeline from "../components/about/Timeline.astro";
 import Principles from "../components/about/Principles.astro";
 import ContactBand from "../components/ContactBand.astro";
 import heroImage from "../assets/img/qs-hero-team.png";
+import { heroPreload } from "../lib/hero";
+
+const preload = await heroPreload(heroImage);
 ---
 <BaseLayout
   title="Quiénes somos"
   description="Nueva Bonanza Mining es una empresa minera arequipeña que opera la mina de oro Bonanza con altos estándares de seguridad y gestión ambiental."
   current="quienes-somos"
+  heroPreload={preload}
 >
   <main>
     <PageHero

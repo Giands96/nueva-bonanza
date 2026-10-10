@@ -4,14 +4,22 @@
  * Página estática única; los datos se piden a WordPress (WPGraphQL) desde el
  * navegador, así que una noticia nueva se ve sin rebuild.
  */
+import { getImage } from "astro:assets";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import Eyebrow from "../../components/Eyebrow.astro";
 import Icon from "../../components/Icon.astro";
 import placeholder from "../../assets/img/news-1.png";
+
+const placeholderOpt = await getImage({
+  src: placeholder,
+  widths: [800],
+  formats: ["webp"],
+  quality: 65,
+});
 ---
 <BaseLayout title="Noticia" current="noticias" ogType="article">
   <main>
-    <article class="post" id="post" data-state="loading" data-placeholder={placeholder.src} aria-busy="true">
+    <article class="post" id="post" data-state="loading" data-placeholder={placeholderOpt.src} aria-busy="true">
       <div class="post__inner">
         <div class="post__top">
           <h1 class="post__title" id="post-title"></h1>
@@ -86,9 +94,14 @@ import placeholder from "../../assets/img/news-1.png";
 
     title.textContent = post.title;
     document.title = `${post.title} | Nueva Bonanza Mining`;
+    const urlWithSlug = `${location.origin}${location.pathname}?slug=${encodeURIComponent(slug)}`;
     document.querySelector('meta[name="description"]')?.setAttribute("content", post.excerpt);
     document.querySelector('meta[property="og:title"]')?.setAttribute("content", post.title);
     document.querySelector('meta[property="og:description"]')?.setAttribute("content", post.excerpt);
+    document.querySelector('meta[property="og:url"]')?.setAttribute("content", urlWithSlug);
+    document.querySelector('meta[name="twitter:title"]')?.setAttribute("content", post.title);
+    document.querySelector('meta[name="twitter:description"]')?.setAttribute("content", post.excerpt);
+    document.querySelector('link[rel="canonical"]')?.setAttribute("href", urlWithSlug);
 
     setText($(".post__category"), post.category);
     const date = $<HTMLTimeElement>("#post-date");

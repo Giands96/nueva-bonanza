@@ -4,8 +4,16 @@ import PageHero from "../components/PageHero.astro";
 import ContactInfo from "../components/contact/ContactInfo.astro";
 import ContactForm from "../components/contact/ContactForm.astro";
 import heroImage from "../assets/img/hero-mine.png";
+import { heroPreload } from "../lib/hero";
+
+const preload = await heroPreload(heroImage);
 ---
-<BaseLayout title="Contacto" current="contacto">
+<BaseLayout
+  title="Contacto"
+  description="Contacte a Nueva Bonanza Mining por proyectos mineros, consultas comerciales o empleo: Av. Manuel Olguín 325, Surco, Lima. Respondemos en 1 a 2 días hábiles."
+  current="contacto"
+  heroPreload={preload}
+>
   <main>
     <PageHero
       eyebrow="CONTACTO"

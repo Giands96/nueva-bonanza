@@ -6,11 +6,15 @@ import ProcessSteps from "../components/products/ProcessSteps.astro";
 import Measures from "../components/products/Measures.astro";
 import ContactBand from "../components/ContactBand.astro";
 import heroImage from "../assets/img/proyectos-hero.png";
+import { heroPreload } from "../lib/hero";
+
+const preload = await heroPreload(heroImage);
 ---
 <BaseLayout
   title="Productos"
   description="Oro, barras de oro y plata extraídos por Nueva Bonanza Mining en la mina Bonanza, Arequipa. Una operación de extracción que entrega su producción a refinerías autorizadas."
   current="productos"
+  heroPreload={preload}
 >
   <main>
     <PageHero

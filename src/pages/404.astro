@@ -1,0 +1,77 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Button from "../components/Button.astro";
+---
+
+<BaseLayout
+  title="Página no encontrada"
+  description="La página que busca no existe o fue movida. Vuelva al inicio o explore los productos de Nueva Bonanza Mining."
+  noindex
+>
+  <main>
+    <section class="notfound" aria-labelledby="notfound-title">
+      <span class="notfound__kicker">Error 404</span>
+      <h1 id="notfound-title">PÁGINA NO ENCONTRADA</h1>
+      <p>
+        La dirección que busca no existe o fue movida. Puede volver al inicio
+        o conocer lo que producimos en la mina Bonanza.
+      </p>
+      <div class="notfound__cta">
+        <Button variant="solid" href="/" icon="arrow-right">Volver al inicio</Button>
+        <Button variant="outline-dark" href="/productos" icon="arrow-right"
+          >Ver productos</Button
+        >
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+<style>
+  .notfound {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 16px;
+    min-height: 60vh;
+    padding: 72px var(--pad-inline);
+    background: var(--nb-cream);
+  }
+  .notfound__kicker {
+    font: 600 12px / 1 var(--font-body);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--nb-gold-ink);
+  }
+  .notfound h1 {
+    font: 700 64px / 1.05 var(--font-display);
+    text-transform: uppercase;
+    text-wrap: balance;
+    color: var(--nb-ink-800);
+  }
+  .notfound p {
+    max-width: 560px;
+    font: 400 16px / 1.55 var(--font-body);
+    color: var(--nb-ink-700);
+  }
+  .notfound__cta {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    margin-top: 8px;
+  }
+  @media (max-width: 760px) {
+    .notfound {
+      padding: 56px 20px;
+    }
+    .notfound h1 {
+      font-size: 40px;
+    }
+    .notfound__cta {
+      flex-direction: column;
+      align-items: stretch;
+      width: 100%;
+    }
+  }
+</style>
