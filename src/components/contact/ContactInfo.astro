@@ -1,15 +1,23 @@
 ---
+import { Image } from "astro:assets";
 import Icon from "../Icon.astro";
 import asideImg from "../../assets/img/hero-mine.png";
 import { contact } from "../../data/site";
 ---
 <aside class="caside" data-reveal>
-  <div
-    class="caside__img"
-    role="img"
-    aria-label="Operación minera Nueva Bonanza"
-    style={`background-image:url(${asideImg.src})`}
-  ></div>
+  <div class="caside__imgwrap">
+    <Image
+      class="caside__img"
+      src={asideImg}
+      alt="Operación minera Nueva Bonanza"
+      widths={[480, 800]}
+      sizes="(max-width: 1100px) 100vw, 400px"
+      formats={["webp"]}
+      quality={70}
+      loading="lazy"
+      decoding="async"
+    />
+  </div>
   <div class="caside__body">
     <div>
       <b class="caside__kicker">CONTACTO DIRECTO</b>
@@ -45,18 +53,23 @@ import { contact } from "../../data/site";
     align-self: flex-start;
     box-shadow: var(--shadow-aside);
   }
-  .caside__img {
+  .caside__imgwrap {
     position: relative;
     height: 208px;
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
+    overflow: hidden;
   }
-  .caside__img::after {
+  .caside__imgwrap::after {
     content: "";
     position: absolute;
     inset: 0;
     background: linear-gradient(180deg, rgba(0, 0, 0, 0) 42%, var(--nb-ink-800) 100%);
+  }
+  .caside__img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
   }
   .caside__body {
     padding: 32px;

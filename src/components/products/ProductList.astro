@@ -18,7 +18,12 @@ import { products } from "../../data/products";
           data-reveal="image"
           src={p.image}
           alt={p.imageAlt}
+          widths={[480, 800, 1200]}
           sizes="(max-width: 760px) 100vw, 50vw"
+          formats={["webp"]}
+          quality={70}
+          loading="lazy"
+          decoding="async"
         />
         <div class="product__text" data-reveal-stagger>
           <span class="product__label">{p.label}</span>

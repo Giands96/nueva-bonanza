@@ -1,9 +1,18 @@
 ---
+import { getImage } from "astro:assets";
 import { milestones, historyNote } from "../../data/about";
 import Rule from "../Rule.astro";
 import historyBg from "../../assets/img/hitos-plant.png";
+
+// Fondo decorativo bajo overlay del 85%: basta una versión liviana.
+const historyBgOpt = await getImage({
+  src: historyBg,
+  widths: [1200],
+  formats: ["webp"],
+  quality: 60,
+});
 ---
-<section class="history" aria-labelledby="history-title" style={`--history-bg:url(${historyBg.src})`}>
+<section class="history" aria-labelledby="history-title" style={`--history-bg:url(${historyBgOpt.src})`}>
   <div class="history__head" data-reveal-stagger>
     <b>NUESTROS HITOS</b>
     <h2 id="history-title">NUESTRA HISTORIA</h2>

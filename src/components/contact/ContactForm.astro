@@ -49,6 +49,7 @@ import { contactReasons } from "../../data/site";
         placeholder="+51 999 999 999"
         required
         autocomplete="tel"
+        maxlength="15"
       />
     </label>
     <label class="field">
@@ -65,7 +66,7 @@ import { contactReasons } from "../../data/site";
         <option value="">Seleccione una opción</option>
         {
           contactReasons.map((r) => (
-            <option value={r.label} data-to={r.to}>
+            <option value={r.key} data-cv={"cv" in r ? "true" : undefined}>
               {r.label}
             </option>
           ))
@@ -156,7 +157,7 @@ import { contactReasons } from "../../data/site";
       >Autorizo el tratamiento de mis datos para atender esta consulta. *</span
     >
   </label>
-  <!-- Trampa anti-spam de FormSubmit: los humanos no la ven ni la rellenan. -->
+  <!-- Trampa anti-spam (honeypot): los humanos no la ven ni la rellenan. -->
   <input
     class="honey"
     type="text"
@@ -221,9 +222,11 @@ import { contactReasons } from "../../data/site";
   </div>
 </div>
 <script>
-  // Envío con FormSubmit (https://formsubmit.co). El destinatario depende del
-  // motivo elegido: cada <option> lleva su correo o alias en data-to (site.ts).
+  // Envío al endpoint propio (public/api/contacto.php), que valida todo en el
+  // servidor y decide el destinatario según el motivo. Las validaciones de aquí
+  // son solo para dar feedback rápido: la seguridad real está en el PHP.
   // Para adjuntar el CV se usa FormData (multipart): JSON no puede llevar files.
+  const ENDPOINT = "/api/contacto.php";
   const form = document.querySelector<HTMLFormElement>("#contact-form");
   const error = document.querySelector<HTMLElement>("#contact-error");
   const motivo = form?.querySelector<HTMLSelectElement>("[name=motivo]");
@@ -244,9 +247,16 @@ import { contactReasons } from "../../data/site";
     "application/msword",
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
   ];
-  const EMPLEO_LABEL = "Empleo y prácticas";
+  const isEmpleo = () => motivo?.selectedOptions[0]?.dataset.cv === "true";
 
-  const isEmpleo = () => motivo?.value === EMPLEO_LABEL;
+  // Errores del CV que devuelve el servidor, con el mismo tono que los del cliente.
+  const CV_SERVER_ERRORS: Record<string, string> = {
+    required: "Adjunta tu CV en PDF o Word para postularte.",
+    file_type: "Formato no válido. Solo se admite PDF (.pdf) o Word (.doc, .docx).",
+    file_too_large: "El archivo supera los 5 MB. Comprímelo o usa un PDF más liviano.",
+    file_active:
+      "El archivo contiene macros o contenido activo y no se puede recibir. Guárdalo como PDF e inténtalo de nuevo.",
+  };
 
   function showCvError(msg: string) {
     if (!cvError) return;
@@ -405,57 +415,39 @@ import { contactReasons } from "../../data/site";
       return;
     }
 
-    const to = motivo?.selectedOptions[0]?.dataset.to;
     const submit = form.querySelector<HTMLButtonElement>("[type=submit]");
-    if (!to || !submit) return;
+    if (!submit) return;
 
+    // Los nombres de los campos ya son los que espera el endpoint. Si el motivo
+    // no pide CV, no se envía el archivo (el servidor también lo descartaría).
     const data = new FormData(form);
-    const isBot = Boolean(String(data.get("_honey") ?? "").trim());
-    data.delete("_honey");
-
-    const get = (k: string) => String(data.get(k) ?? "").trim();
-    const nombre = get("nombre");
-    const empresa = get("empresa");
-    const correo = get("correo");
-    const motivoVal = get("motivo");
-    data.set("Motivo", motivoVal);
-    data.set("Nombre", nombre);
-    data.set("Empresa", empresa);
-    data.set("Correo", correo);
-    data.set("Teléfono", get("telefono"));
-    data.set("Cargo", get("cargo") || "-");
-    data.set("Mensaje", get("mensaje"));
-    data.set("Consentimiento", get("consentimiento"));
-    data.set("_subject", `${motivoVal} - ${empresa}`);
-    data.set("_replyto", correo);
-    data.set("_template", "table");
-    data.set("_captcha", "false");
-    for (const k of ["nombre", "empresa", "correo", "telefono", "cargo", "mensaje", "motivo", "consentimiento"]) {
-      data.delete(k);
-    }
+    if (!isEmpleo()) data.delete("cv");
 
     error?.setAttribute("hidden", "");
     submit.disabled = true;
     form.setAttribute("aria-busy", "true");
     try {
-      if (!isBot) {
-        const res = await fetch(
-          `https://formsubmit.co/ajax/${encodeURIComponent(to)}`,
-          {
-            method: "POST",
-            headers: { Accept: "application/json" },
-            body: data,
-          },
-        );
-        const json = await res.json().catch(() => ({}));
-        if (!res.ok || String(json.success) !== "true")
-          throw new Error(json.message ?? res.statusText);
+      const res = await fetch(ENDPOINT, {
+        method: "POST",
+        headers: { Accept: "application/json" },
+        body: data,
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok || json.ok !== true) {
+        const cvMsg = json.field === "cv" ? CV_SERVER_ERRORS[json.error] : undefined;
+        if (cvMsg) {
+          showCvError(cvMsg);
+          cvDrop?.setAttribute("aria-invalid", "true");
+          cvDrop?.focus();
+          return;
+        }
+        throw new Error(json.error ?? res.statusText);
       }
       form.hidden = true;
       document.querySelector("#contact-thanks")?.removeAttribute("hidden");
       document.querySelector("#contact-urgent")?.removeAttribute("hidden");
     } catch (err) {
-      console.error("[contacto] FormSubmit:", err);
+      console.error("[contacto] envío:", err);
       error?.removeAttribute("hidden");
     } finally {
       submit.disabled = false;

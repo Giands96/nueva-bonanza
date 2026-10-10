@@ -1,4 +1,5 @@
 ---
+import { Image } from "astro:assets";
 import type { Product } from "../../data/products";
 
 interface Props {
@@ -10,8 +11,18 @@ const { product } = Astro.props;
 <a
   class="product"
   href={`/productos#${product.id}`}
-  style={`background-image:url(${product.image.src})`}
 >
+  <Image
+    class="product__bg"
+    src={product.image}
+    alt={product.imageAlt}
+    widths={[480, 800, 1200]}
+    sizes="(max-width: 760px) 100vw, 33vw"
+    formats={["webp"]}
+    quality={70}
+    loading="lazy"
+    decoding="async"
+  />
   <span class="product__region">{product.label}</span>
   <span class="product__name">{product.name}</span>
   <span class="product__desc"><span>{product.summary}</span></span>
@@ -20,26 +31,34 @@ const { product } = Astro.props;
   .product {
     position: relative;
     height: 480px;
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-    filter: grayscale(1);
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     gap: 8px;
     padding: 32px;
     color: #fff;
+    overflow: hidden;
+    background: var(--nb-ink-800);
+  }
+  .product__bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    filter: grayscale(1);
     transition: filter 300ms ease;
   }
-  .product:hover { filter: grayscale(0); }
+  .product:hover .product__bg { filter: grayscale(0); }
   .product::before {
     content: "";
     position: absolute;
     inset: 0;
+    z-index: 1;
     background: linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.57) 62.98%);
   }
-  .product > * { position: relative; }
+  .product > *:not(.product__bg) { position: relative; z-index: 2; }
   .product__desc {
     display: grid;
     grid-template-rows: 0fr;

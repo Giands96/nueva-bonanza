@@ -1,9 +1,18 @@
 ---
 import type { Page } from "astro";
+import { getImage } from "astro:assets";
 import Icon from "../Icon.astro";
 import type { NewsItem } from "../../lib/wordpress";
 import placeholder from "../../assets/img/news-1.png";
 import arrowRightUrl from "../../assets/icons/arrow-right.svg?url";
+
+// Placeholder de tarjetas sin imagen: versión liviana generada en build.
+const placeholderOpt = await getImage({
+  src: placeholder,
+  widths: [800],
+  formats: ["webp"],
+  quality: 65,
+});
 
 interface Props {
   page: Page<NewsItem>;
@@ -21,7 +30,7 @@ const nextHref = page.currentPage < page.lastPage ? `/noticias/${page.currentPag
   data-news-list
   data-page={page.currentPage}
   data-last-page={page.lastPage}
-  data-placeholder={placeholder.src}
+  data-placeholder={placeholderOpt.src}
   data-icon-arrow={arrowRightUrl}
 >
   <h2 id="news-title">ÚLTIMAS NOTICIAS</h2>
