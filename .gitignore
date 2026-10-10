@@ -17,6 +17,10 @@ pnpm-debug.log*
 .env
 .env.production
 
+# secretos del endpoint de contacto (contraseña SMTP, correos internos)
+server/config.php
+nbm-private/
+
 # macOS-specific files
 .DS_Store
 
