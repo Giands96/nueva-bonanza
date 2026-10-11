@@ -43,11 +43,14 @@ export const contactReasons = [
   { label: "Consulta comercial", to: "aa8652f874dee24750d36e13603d5d5c" },
   { label: "Empleo y prácticas", to: "93c3884a197ac293ffabf54a0ae78d30" },
   { label: "Prensa y comunicaciones", to: "d5aff8dd18ce9fd3f5145d46cb6f4e0c" },
-  { label: "Logística y transporte", to: emails.logistica },
+  { label: "Logística y transporte", to: "61cb2035270792a91bc3504a68ae209b" },
   { label: "Otro", to: "aa8652f874dee24750d36e13603d5d5c" },
 ] as const;
 
 export const tagline ="Minería responsable con visión de futuro";
+
+/** Dominio canónico de producción (sitemap, canonical, Open Graph). */
+export const siteUrl = "https://nbonanzamining.com";
 
 // URLs pendientes (Decisión pendiente §10): placeholders centralizados.
 export const socials = [
