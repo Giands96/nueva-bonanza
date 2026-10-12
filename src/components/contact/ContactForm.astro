@@ -3,7 +3,7 @@ import Button from "../Button.astro";
 import { contactReasons } from "../../data/site";
 ---
 
-<form class="cform" id="contact-form" data-reveal novalidate>
+<form class="cform" id="contact-form" data-reveal novalidate method="POST" action="/enviar-consulta.php" enctype="multipart/form-data">
   <div class="cform__intro">
     <h2>ENVÍENOS SU CONSULTA</h2>
     <p>
@@ -93,6 +93,7 @@ import { contactReasons } from "../../data/site";
           id="cv-input"
           class="cv-native"
           type="file"
+
           name="cv"
           tabindex="-1"
           aria-hidden="true"
@@ -179,51 +180,10 @@ import { contactReasons } from "../../data/site";
     escríbanos directamente a nuestro correo.
   </p>
 </form>
-<div class="thanks" id="contact-thanks" hidden>
-  <span class="thanks__badge" aria-hidden="true">
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <path
-        d="M5 12.5l4.5 4.5L19 7.5"
-        stroke="currentColor"
-        stroke-width="2.4"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        class="thanks__check"
-      />
-    </svg>
-  </span>
-  <span class="thanks__kicker">Consulta registrada</span>
-  <h2>Gracias por contactarnos</h2>
-  <p>
-    Hemos recibido su mensaje correctamente. Un especialista de Nueva Bonanza
-    Mining revisará la información y se comunicará con usted.
-  </p>
-  <p class="thanks__eta">
-    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
-      <circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8" />
-      <path
-        d="M12 7.5V12l3 2"
-        stroke="currentColor"
-        stroke-width="1.8"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      />
-    </svg>
-    <span
-      ><strong>Tiempo estimado de respuesta:</strong> dentro de 1 a 2 días hábiles.</span
-    >
-  </p>
-  <div class="thanks__cta">
-    <Button variant="solid" href="/" icon="arrow-right">Volver al inicio</Button>
-    <Button variant="outline-dark" href="/productos" icon="arrow-right"
-      >Ver productos</Button
-    >
-  </div>
-</div>
 <script>
-  // Envío con FormSubmit (https://formsubmit.co). El destinatario depende del
-  // motivo elegido: cada <option> lleva su correo o alias en data-to (site.ts).
-  // Para adjuntar el CV se usa FormData (multipart): JSON no puede llevar files.
+  // Envío al backend propio (public/enviar-consulta.php): valida campos y el
+  // adjunto en servidor (anti-malware) y envía el correo. Éxito real ->
+  // redirige a /gracias; fallo real -> error inline debajo del form.
   const form = document.querySelector<HTMLFormElement>("#contact-form");
   const error = document.querySelector<HTMLElement>("#contact-error");
   const motivo = form?.querySelector<HTMLSelectElement>("[name=motivo]");
@@ -407,56 +367,35 @@ import { contactReasons } from "../../data/site";
 
     const to = motivo?.selectedOptions[0]?.dataset.to;
     const submit = form.querySelector<HTMLButtonElement>("[type=submit]");
-    if (!to || !submit) return;
+    if (!submit) return;
+    // `data-to` queda como referencia visual; el destino real lo decide el PHP
+    // en servidor según el motivo (no se confía en el cliente).
+    void to;
 
     const data = new FormData(form);
     const isBot = Boolean(String(data.get("_honey") ?? "").trim());
-    data.delete("_honey");
-
-    const get = (k: string) => String(data.get(k) ?? "").trim();
-    const nombre = get("nombre");
-    const empresa = get("empresa");
-    const correo = get("correo");
-    const motivoVal = get("motivo");
-    data.set("Motivo", motivoVal);
-    data.set("Nombre", nombre);
-    data.set("Empresa", empresa);
-    data.set("Correo", correo);
-    data.set("Teléfono", get("telefono"));
-    data.set("Cargo", get("cargo") || "-");
-    data.set("Mensaje", get("mensaje"));
-    data.set("Consentimiento", get("consentimiento"));
-    data.set("_subject", `${motivoVal} - ${empresa}`);
-    data.set("_replyto", correo);
-    data.set("_template", "table");
-    data.set("_captcha", "false");
-    for (const k of ["nombre", "empresa", "correo", "telefono", "cargo", "mensaje", "motivo", "consentimiento"]) {
-      data.delete(k);
-    }
 
     error?.setAttribute("hidden", "");
     submit.disabled = true;
     form.setAttribute("aria-busy", "true");
     try {
       if (!isBot) {
-        const res = await fetch(
-          `https://formsubmit.co/ajax/${encodeURIComponent(to)}`,
-          {
-            method: "POST",
-            headers: { Accept: "application/json" },
-            body: data,
-          },
-        );
+        const res = await fetch("/enviar-consulta.php", {
+          method: "POST",
+          headers: { Accept: "application/json", "X-Requested-With": "fetch" },
+          body: data,
+        });
         const json = await res.json().catch(() => ({}));
-        if (!res.ok || String(json.success) !== "true")
-          throw new Error(json.message ?? res.statusText);
+        // Gracias SOLO con éxito real confirmado por el servidor: redirigir.
+        if (!res.ok || json.success !== true)
+          throw new Error(json.error ?? res.statusText);
       }
-      form.hidden = true;
-      document.querySelector("#contact-thanks")?.removeAttribute("hidden");
-      document.querySelector("#contact-urgent")?.removeAttribute("hidden");
+      window.location.assign("/gracias");
     } catch (err) {
-      console.error("[contacto] FormSubmit:", err);
+      // Fallo real de envío: cuadro de error debajo del form, sin redirigir.
+      console.error("[contacto] envío:", err);
       error?.removeAttribute("hidden");
+      error?.scrollIntoView({ block: "nearest" });
     } finally {
       submit.disabled = false;
       form.removeAttribute("aria-busy");

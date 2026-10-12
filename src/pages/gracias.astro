@@ -1,0 +1,46 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import ContactThanks from "../components/contact/ContactThanks.astro";
+import heroImage from "../assets/img/hero-mine.png";
+import { heroPreload } from "../lib/hero";
+
+const preload = await heroPreload(heroImage);
+---
+
+<BaseLayout
+  title="Gracias"
+  description="Hemos recibido su consulta. Un especialista de Nueva Bonanza Mining se comunicará con usted."
+  current="contacto"
+  heroPreload={preload}
+  noindex={true}
+>
+  <main>
+    <PageHero
+      eyebrow="CONTACTO"
+      title="HABLEMOS DE SU PROYECTO"
+      text="Conectamos oportunidades con experiencia minera, criterio técnico y una operación responsable."
+      image={heroImage}
+      filled={true}
+      eyebrowColor="#fff"
+      compact
+    />
+    <section class="cwrap" aria-label="Confirmación de contacto">
+      <ContactThanks />
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .cwrap {
+    display: flex;
+    gap: 48px;
+    padding: 56px var(--pad-inline) 64px;
+    background: #fff;
+  }
+  @media (max-width: 760px) {
+    .cwrap {
+      padding: 40px 20px 48px;
+    }
+  }
+</style>
