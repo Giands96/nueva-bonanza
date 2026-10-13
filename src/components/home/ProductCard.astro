@@ -18,7 +18,7 @@ const { product } = Astro.props;
     alt={product.imageAlt}
     widths={[480, 800, 1200]}
     sizes="(max-width: 760px) 100vw, 33vw"
-    formats={["webp"]}
+    format="webp"
     quality={70}
     loading="lazy"
     decoding="async"
@@ -47,7 +47,6 @@ const { product } = Astro.props;
     height: 100%;
     object-fit: cover;
     object-position: center;
-    filter: grayscale(1);
     transition: filter 300ms ease;
   }
   .product:hover .product__bg { filter: grayscale(0); }
