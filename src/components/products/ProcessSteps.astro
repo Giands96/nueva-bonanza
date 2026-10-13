@@ -5,8 +5,8 @@ import { processSteps } from "../../data/products";
   <h2 id="process-title" class="title" data-reveal>DEL YACIMIENTO A LA COMERCIALIZACIÓN</h2>
   <p>Desarrollamos nuestras operaciones mineras mediante procesos planificados, con énfasis en la seguridad, la eficiencia operativa y la gestión responsable de los recursos minerales.</p>
   <ol class="steps" data-reveal-stagger>
-    {processSteps.map((s) => (
-      <li class="step">
+    {processSteps.map((s, i) => (
+      <li class="step" style={`--i:${i}`}>
         <i aria-hidden="true"></i>
         <h3>{s.title}</h3>
         <p>{s.text}</p>
@@ -64,6 +64,45 @@ import { processSteps } from "../../data/products";
     max-width: 220px;
     font: 400 16px / 1.5 var(--font-body);
     color: var(--nb-ink-700);
+  }
+  /* Secuencia de aparición: primero se dibuja la línea y, al terminar, entran los pasos uno
+     tras otro (el punto crece sobre la línea y el texto sube). Reemplaza la cascada genérica
+     de [data-reveal-stagger] de global.css. El total (1900ms) queda por debajo de los 2600ms
+     en que el script de BaseLayout quita el atributo. */
+  @media screen and (prefers-reduced-motion: no-preference) {
+    :global(html.js) .steps[data-reveal-stagger]::before {
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform 800ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    :global(html.js) .steps[data-reveal-stagger].is-revealed::before {
+      transform: none;
+    }
+    :global(html.js) .steps[data-reveal-stagger] > .step {
+      transform: none;
+      transition: opacity 600ms cubic-bezier(0.2, 0.7, 0.2, 1);
+      transition-delay: calc(700ms + var(--i, 0) * 150ms);
+    }
+    :global(html.js) .steps[data-reveal-stagger] > .step > * {
+      transition: transform 600ms cubic-bezier(0.2, 0.7, 0.2, 1);
+      transition-delay: calc(700ms + var(--i, 0) * 150ms);
+    }
+    :global(html.js) .steps[data-reveal-stagger] > .step > i {
+      transform: scale(0.4);
+    }
+    :global(html.js) .steps[data-reveal-stagger] > .step > :is(h3, p) {
+      transform: translateY(12px);
+    }
+    :global(html.js) .steps[data-reveal-stagger].is-revealed > .step > * {
+      transform: none;
+    }
+  }
+  /* En una columna la línea es vertical: se dibuja de arriba hacia abajo. */
+  @media screen and (prefers-reduced-motion: no-preference) and (max-width: 760px) {
+    :global(html.js) .steps[data-reveal-stagger]::before {
+      transform: scaleY(0);
+      transform-origin: center top;
+    }
   }
   @media (max-width: 1100px) {
     .step h3 {

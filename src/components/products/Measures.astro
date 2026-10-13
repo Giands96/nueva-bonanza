@@ -1,6 +1,16 @@
 ---
-import Rule from "../Rule.astro";
 import { measures } from "../../data/products";
+
+const icons = [
+  // Seguridad: escudo con check
+  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>`,
+  // Medio ambiente: hoja
+  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19C5 9.5 12.5 5 20 4c-1 8-5.5 15-15 15z"/><path d="M5 19c3-5.2 7-9 11.5-11"/></svg>`,
+  // Trazabilidad: portapapeles con check (registros y seguimiento)
+  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 13.5l2 2 4-4"/></svg>`,
+  // Compromiso: corazón
+  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7.2-4.6-7.2-10.2A4.1 4.1 0 0 1 12 7.4a4.1 4.1 0 0 1 7.2 2.4C19.2 15.4 12 20 12 20z"/></svg>`,
+];
 ---
 <section class="measures" aria-labelledby="measures-title">
   <div class="measures__head" data-reveal-stagger>
@@ -8,11 +18,20 @@ import { measures } from "../../data/products";
     <p>Cada etapa de la operación sigue las mismas prioridades.</p>
   </div>
   <ul class="measures__grid" data-reveal-stagger>
-    {measures.map((m) => (
-      <li>
-        <Rule width={56} />
-        <h3>{m.title}</h3>
-        <p>{m.text}</p>
+    {measures.map((m, i) => (
+      <li class="flip" tabindex="0" aria-label={`${m.title}: ${m.text}`}>
+        <div class="flip__inner">
+          <div class="flip__face flip__front" aria-hidden="true">
+            <span class="flip__glyph" set:html={icons[i % icons.length]} />
+            <span class="sr-only">{m.title}</span>
+            <h3>{m.title}</h3>
+          </div>
+          <div class="flip__face flip__back" aria-hidden="true">
+            <span class="flip__glyph flip__glyph--sm" set:html={icons[i % icons.length]} />
+            <h3>{m.title}</h3>
+            <p>{m.text}</p>
+          </div>
+        </div>
       </li>
     ))}
   </ul>
@@ -43,23 +62,122 @@ import { measures } from "../../data/products";
     grid-template-columns: repeat(4, 1fr);
     gap: 40px;
   }
-  .measures__grid li {
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .flip {
+    perspective: 1200px;
+    border-radius: 16px;
+    outline-offset: 4px;
+  }
+  .flip__inner {
+    position: relative;
+    min-height: 320px;
+    transform-style: preserve-3d;
+    transition: transform 1000ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .flip__face {
+    position: absolute;
+    inset: 0;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
     gap: 14px;
+    padding: 32px 28px;
+    border: 1.5px solid var(--nb-gold);
+    border-radius: 16px;
+    background: transparent;
+    text-align: center;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
   }
-  .measures__grid h3 {
-    font: 700 28px / 1 var(--font-display);
-    color: var(--nb-ink-800);
+  .flip__back {
+    transform: rotateY(180deg);
   }
-  .measures__grid p {
-    font-size: 16px;
+  .flip__glyph {
+    display: inline-flex;
+    width: 88px;
+    height: 88px;
+    color: var(--nb-gold);
+  }
+  .flip__glyph svg {
+    width: 100%;
+    height: 100%;
+  }
+  .flip__glyph--sm {
+    width: 40px;
+    height: 40px;
+  }
+  .flip__face h3 {
+    font: 700 26px / 1.1 var(--font-display);
+    color: var(--nb-gold-ink);
+  }
+  .flip__back p {
+    font-size: 15px;
     line-height: 1.55;
-    color: var(--nb-ink-600);
+    color: var(--nb-gold-ink);
   }
+
+  @media (hover: hover) and (pointer: fine) {
+    .flip:hover .flip__inner,
+    .flip:focus-visible .flip__inner,
+    .flip:focus-within .flip__inner {
+      transform: rotateY(180deg);
+    }
+  }
+
+  /* Sin hover (táctil): mostrar contenido estático sin giro. */
+  @media (hover: none) {
+    .flip__inner {
+      transform: none;
+      display: flex;
+      flex-direction: column;
+    }
+    .flip__face {
+      position: static;
+      transform: none;
+    }
+    .flip__front {
+      padding-bottom: 20px;
+    }
+    .flip__back {
+      padding-top: 0;
+    }
+    .flip__front .flip__glyph {
+      width: 56px;
+      height: 56px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .flip__inner {
+      transition: none;
+      transform: none;
+      display: flex;
+      flex-direction: column;
+    }
+    .flip__face {
+      position: static;
+      transform: none;
+    }
+    .flip__back {
+      padding-top: 0;
+    }
+  }
+
   @media (max-width: 1100px) {
     .measures__grid {
       grid-template-columns: repeat(2, 1fr);
+    }
+    .flip__inner {
+      min-height: 300px;
     }
   }
   @media (max-width: 760px) {
@@ -72,9 +190,9 @@ import { measures } from "../../data/products";
     }
     .measures__grid {
       grid-template-columns: 1fr;
-      gap: 32px;
+      gap: 24px;
     }
-    .measures__grid h3 {
+    .flip__face h3 {
       font-size: 24px;
     }
   }

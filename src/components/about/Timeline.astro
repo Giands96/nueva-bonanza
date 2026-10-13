@@ -18,8 +18,8 @@ const historyBgOpt = await getImage({
     <h2 id="history-title">NUESTRA HISTORIA</h2>
   </div>
   <ol class="timeline" data-reveal-stagger style={`--count:${milestones.length}`}>
-    {milestones.map((m) => (
-      <li class="milestone">
+    {milestones.map((m, i) => (
+      <li class="milestone" style={`--i:${i}`}>
         <i aria-hidden="true"></i>
         <b>{m.year}</b>
         <p>{m.text}</p>
@@ -111,6 +111,45 @@ const historyBgOpt = await getImage({
     max-width: 240px;
     font: 500 16px / 1.4 var(--font-body);
     color: var(--nb-ink-800);
+  }
+  /* Secuencia de aparición: primero se dibuja la línea y, al terminar, entran los hitos uno
+     tras otro (el punto crece sobre la línea y el año y el texto suben). Reemplaza la cascada
+     genérica de [data-reveal-stagger] de global.css. El total (1900ms con 5 hitos) queda por
+     debajo de los 2600ms en que el script de BaseLayout quita el atributo. */
+  @media screen and (prefers-reduced-motion: no-preference) {
+    :global(html.js) .timeline[data-reveal-stagger]::before {
+      transform: scaleX(0);
+      transform-origin: left center;
+      transition: transform 800ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    :global(html.js) .timeline[data-reveal-stagger].is-revealed::before {
+      transform: none;
+    }
+    :global(html.js) .timeline[data-reveal-stagger] > .milestone {
+      transform: none;
+      transition: opacity 600ms cubic-bezier(0.2, 0.7, 0.2, 1);
+      transition-delay: calc(700ms + var(--i, 0) * 150ms);
+    }
+    :global(html.js) .timeline[data-reveal-stagger] > .milestone > * {
+      transition: transform 600ms cubic-bezier(0.2, 0.7, 0.2, 1);
+      transition-delay: calc(700ms + var(--i, 0) * 150ms);
+    }
+    :global(html.js) .timeline[data-reveal-stagger] > .milestone > i {
+      transform: scale(0.4);
+    }
+    :global(html.js) .timeline[data-reveal-stagger] > .milestone > :is(b, p) {
+      transform: translateY(12px);
+    }
+    :global(html.js) .timeline[data-reveal-stagger].is-revealed > .milestone > * {
+      transform: none;
+    }
+  }
+  /* En una columna la línea es vertical: se dibuja de arriba hacia abajo. */
+  @media screen and (prefers-reduced-motion: no-preference) and (max-width: 760px) {
+    :global(html.js) .timeline[data-reveal-stagger]::before {
+      transform: scaleY(0);
+      transform-origin: center top;
+    }
   }
   .history__note {
     display: flex;
