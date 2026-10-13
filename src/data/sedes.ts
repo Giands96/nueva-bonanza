@@ -30,7 +30,7 @@ export const sedes: Sede[] = [
   {
     id: "sede-minera-arequipa",
     nombre: "Sede de Producción",
-    direccion: ["Atico Carretera KM 56 - UEA Nueva Bonanza Nro. S/N.", "Atico, Caraveli, Arequipa"],
+    direccion: ["Atico Carretera KM 56 - UEA Nueva Bonanza Nro. S/N.", "Atico - Caraveli - Arequipa"],
     telefonos: [],
     coords: [-15.8058466, -73.5719589],
     departamento: "arequipa",

@@ -14,22 +14,22 @@ export const policies: Policy[] = [
   {
     id: "gestion",
     title: "Gestión",
-    text: "Planificamos, medimos y mejoramos de forma continua cada proceso. Gestionamos los recursos con eficiencia y transparencia para cumplir nuestros objetivos y generar valor para nuestros grupos de interés.",
+    text: "Planificamos y supervisamos nuestras operaciones para optimizar los recursos, fortalecer el control de los procesos y promover la mejora contínua.",
   },
   {
     id: "calidad",
     title: "Calidad",
-    text: "Cumplimos los requisitos de nuestros clientes y las normas aplicables. Estandarizamos procesos y verificamos resultados para entregar un servicio consistente y confiable.",
+    text: "Promovemos el cumplimiento de los procedimientos y estándares establecidos, buscando la eficiencia y la consistencia en nuestras operaciones.",
   },
   {
     id: "medio-ambiente",
     title: "Medio ambiente",
-    text: "Prevenimos, mitigamos y controlamos los impactos ambientales de la operación. Usamos los recursos naturales de forma sostenible y respetamos la biodiversidad del entorno.",
+    text: "Desarrollamos nuestras actividades con responsabilidad ambiental, priorizando la prevención de impactos y el cumplimientos de los compromisos ambientales.",
   },
   {
-    id: "seguridad",
-    title: "Seguridad",
-    text: "La vida y la salud de nuestros colaboradores son innegociables. Identificamos riesgos, capacitamos de forma constante y aplicamos protocolos para mantener ambientes de trabajo seguros.",
+    id: "seguridad-y-salud-en-el-trabajo",
+    title: "Seguridad y salud en el trabajo",
+    text: "Priorizamos la protección de nuestros colaboradores, mediante la prevención de riesgos, la capacitación contínua y el desarrollo de prácticas de trabajo seguras",
   },
 ];
 
@@ -39,20 +39,22 @@ export interface Milestone {
 }
 
 export const milestones: Milestone[] = [
-  { year: "2010", text: "Inicio de operaciones en el Perú" },
-  { year: "2015", text: "Primer gran proyecto minero" },
-  { year: "2020", text: "Expansión a nuevas regiones del país" },
+  { year: "2004", text: "Inicio de operaciones en el Perú" },
+  { year: "2010", text: "Ampliación de proyectos mineros" },
+  { year: "2020", text: "Ampliación de nuevas exploraciones" },
+  { year: "2025", text: "Inversión en infraestructura" },
   { year: "2026", text: "Consolidación como aliado estratégico del sector minero" },
+  
 ];
 
 export const historyNote =
   "Más de una década construyendo una minería responsable, basada en seguridad, innovación y compromiso con el desarrollo del Perú.";
 
 export const mission =
-  "Desarrollar operaciones mineras eficientes y responsables, aplicando altos estándares de seguridad, calidad y gestión ambiental.";
+  "Desarrollar actividades mineras de manera eficiente y responsable, priorizando la seguridad de las personas, la excelencia operativa y el cuidado del medio ambiente.";
 
 export const vision =
-  "Ser la empresa minera de referencia en el Perú por nuestra capacidad operativa, innovación y compromiso con una minería segura y responsable.";
+  "Consolidarnos como una empresa minera reconocida por su gestión responsable, eficiencia operativa y compromiso con el desarrollo sostenible";
 
 export interface Value {
   number: string;
@@ -61,11 +63,11 @@ export interface Value {
 }
 
 export const values: Value[] = [
-  { number: "01", title: "SEGURIDAD", text: "Protegemos la vida y el bienestar en cada tarea." },
-  { number: "02", title: "INTEGRIDAD", text: "Actuamos con ética, transparencia y responsabilidad." },
-  { number: "03", title: "COMPROMISO", text: "Cumplimos con disciplina y enfoque en resultados." },
-  { number: "04", title: "RESPETO", text: "Valoramos a las personas, las comunidades y el entorno." },
-  { number: "05", title: "EXCELENCIA", text: "Mejoramos continuamente para operar mejor." },
+  { number: "01", title: "SEGURIDAD", text: "Protegemos la vida y promovemos condiciones de trabajo seguras en cada operación." },
+  { number: "02", title: "INTEGRIDAD", text: "Actuamos con honestidad, ética y transparencia en todas nuestras actividades." },
+  { number: "03", title: "RESPONSABILIDAD", text: "Cumplimos nuestros compromisos y gestionamos nuestras operaciones de manera responsable." },
+  { number: "04", title: "RESPETO", text: "Valoramos a las personas, las comunidades y el entorno donde desarrollamos nuestras actividades." },
+  { number: "05", title: "EXCELENCIA", text: "Impulsamos la mejora contínua para fortalecer nuestros procesos y resultados." },
 ];
 
 export interface Stat {
@@ -96,4 +98,4 @@ export const stats: Stat[] = [
 export const companyHeading = "COMPROMETIDOS CON UN FUTURO SOSTENIBLE";
 
 export const companyText =
-  "En la mina Bonanza, en Arequipa, desarrollamos una operación aurífera planificada y supervisada en cada etapa. Integramos experiencia técnica, innovación y altos estándares de seguridad para generar valor compartido con nuestros colaboradores, las comunidades y el Perú.";
+  "En Nueva Bonanza Mining desarrollamos una operación aurifera planificada y supervisada en cada etapa. Integramos experiencia técnica, innovación y seguridad para generar valor compartido con nuestros colaboradores y comunidades del Perú";

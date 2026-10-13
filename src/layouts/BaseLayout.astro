@@ -119,11 +119,12 @@ const orgSchema = {
       const reveal = (el: Element) => {
         el.classList.add("is-revealed");
         // Al terminar, se quitan los atributos para que el componente recupere sus transiciones.
+        // 2600ms cubre la duración máxima (1500ms) + el stagger máximo (450ms) + margen.
         setTimeout(() => {
           el.removeAttribute("data-reveal");
           el.removeAttribute("data-reveal-stagger");
           el.classList.remove("is-revealed");
-        }, 1600);
+        }, 2600);
       };
       if ("IntersectionObserver" in window) {
         const io = new IntersectionObserver(

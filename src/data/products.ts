@@ -2,9 +2,9 @@
 // Textos redactados a partir de lo que hace una operación aurífera que extrae y no refina.
 // Confirmar con el cliente las etapas de beneficio y fundición, y el destino de la producción.
 // Imágenes PROVISIONALES: reemplazar por fotos reales de cada producto.
-import oroImage from "../assets/img/oro-bruto.png";
-import doreImage from "../assets/img/barra-oro.png";
-import plataImage from "../assets/img/plata.png";
+import oroImage from "../assets/img/ORO.webp";
+import doreImage from "../assets/img/BARRA.webp";
+import plataImage from "../assets/img/PLATA.webp";
 
 export interface Product {
   id: string;
@@ -20,20 +20,20 @@ export const products: Product[] = [
   {
     id: "oro",
     name: "ORO",
-    label: "Mineral aurífero",
+    label: "Extracción de mineral aurífero",
     summary: "Mineral con contenido de oro que extraemos del yacimiento de la mina Bonanza, en Arequipa.",
     description:
-      "Es el punto de partida de nuestra operación. Extraemos el mineral con métodos planificados y control geológico en cada frente de trabajo, para aprovechar el yacimiento de forma ordenada y segura.",
+      "Extraemos mineral con contenido de oro mediante labores planificadas y controles operativos adaptados a las características del yacimiento, priorizando la seguridad y la eficiencia en cada etapa de la operación.",
     image: oroImage,
     imageAlt: "Frente de explotación de la mina",
   },
   {
     id: "barra-dore",
-    name: "BARRA DE ORO",
+    name: "BARRA DORE",
     label: "Oro sin refinar",
     summary: "Barra de oro obtenida del mineral, que se entrega a refinerías para su purificación.",
     description:
-      "La barra de oro  que todavía no ha pasado por refinación; su composición varía según el mineral de origen. No refinamos: entregamos las barras a refinerías autorizadas, que obtienen el oro y la plata de alta pureza.",
+      "Extraemos mineral con contenido de oro mediante labores planificadas y controles operativos adaptados a las características del yacimiento, priorizando la seguridad y la eficiencia en cada etapa de la operación.",
     image: doreImage,
     imageAlt: "Planta de tratamiento de mineral",
   },
@@ -43,7 +43,7 @@ export const products: Product[] = [
     label: "Metal asociado",
     summary: "Metal que acompaña al oro en el mineral y forma parte de la barra doré.",
     description:
-      "La plata está presente de forma natural en el mineral aurífero. Se recupera junto con el oro y se separa después, en la refinación que realizan terceros.",
+      "Metal precioso presente junto con el oro en determinados minerales y que puede formar parte de la composición de la barra doré. La plata se recupera durante el procesamiento del mineral y, cuando corresponde, se separa del oro en etapas posteriores de refinación. Su contenido depende de las características del mineral procesado.",
     image: plataImage,
     imageAlt: "Camión de acarreo en la mina",
   },
@@ -55,11 +55,11 @@ export interface ProcessStep {
 }
 
 export const processSteps: ProcessStep[] = [
-  { title: "Exploración", text: "Estudiamos el yacimiento para definir dónde y cómo extraer." },
-  { title: "Extracción", text: "Arrancamos el mineral con equipos y personal capacitado." },
-  { title: "Beneficio", text: "Tratamos el mineral para recuperar el oro y la plata." },
-  { title: "Fundición", text: "Obtenemos la barra doré, lista para refinar." },
-  { title: "Despacho", text: "Trasladamos cada lote, documentado, hasta la refinería." },
+  { title: "Exploración", text: "Evaluamos las características geológicas del yacimiento para identificar el potencial de los recursos minerales." },
+  { title: "Planificación Minera", text: "Organizamos las labores, los equipos y los recursos necesarios para desarrollar una operación eficiente y segura." },
+  { title: "Extracción", text: "Realizamos la extracción de minerales auríferos y argentíferos de acuerdo con las características del yacimiento." },
+  { title: "Control de producción", text: "Supervisamos y registramos la producción para mantener un control ordenado de las operaciones." },
+  { title: "Despacho", text: "Coordinamos el traslado y la entrega de la producción conforme a los procedimientos logísticos establecidos." },
 ];
 
 export interface Measure {
@@ -70,18 +70,18 @@ export interface Measure {
 export const measures: Measure[] = [
   {
     title: "SEGURIDAD",
-    text: "Capacitación continua, equipos de protección personal y evaluación de riesgos antes de cada tarea.",
+    text: "Priorizamos la protección de las personas mediante la prevención de riesgos y prácticas de trabajo seguras",
   },
   {
     title: "MEDIO AMBIENTE",
-    text: "Manejo responsable del agua y de los residuos, y monitoreo del entorno de la operación.",
+    text: "Gestionamos nuestras actividades con responsabilidad y medidas orientadas a prevenir y controlar los impactos ambientales.",
   },
   {
     title: "TRAZABILIDAD",
-    text: "Registro del origen y del recorrido de cada lote, desde la mina hasta la refinería.",
+    text: "Mantenemos registros para facilitar el seguimiento y control de la producción y sus movimientos.",
   },
   {
-    title: "COMUNIDADES",
-    text: "Una relación de respeto y diálogo con las comunidades del entorno de la mina.",
+    title: "COMPROMISO",
+    text: "Actuamos con responsabilidad, transparencia y respeto hacia las comunidades y el entorno.",
   },
 ];
