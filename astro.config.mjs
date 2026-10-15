@@ -7,6 +7,10 @@ export default defineConfig({
   // Dominio canónico de producción: alimenta <link rel="canonical">,
   // las metas Open Graph y el sitemap generado en /sitemap-index.xml.
   site: 'https://nbonanzamining.com',
+  // Apache sirve cada página como carpeta (/contacto/index.html) y redirige
+  // /contacto -> /contacto/ con un 301. Exigir la barra final mantiene links,
+  // canonical y sitemap en la misma URL, sin redirecciones intermedias.
+  trailingSlash: 'always',
   // Español sin prefijo (/productos) e inglés bajo /en/. Mantener en sincronía
   // con `languages` y `defaultLang` de src/i18n/ui.ts.
   i18n: {
@@ -16,14 +20,22 @@ export default defineConfig({
   },
   integrations: [
     sitemap({
-      // /proyectos solo existe como redirect hacia /productos y la 404 no
-      // debe indexarse.
-      filter: (page) => !page.endsWith('/proyectos/') && !page.endsWith('/404/'),
+      // Fuera del sitemap: /proyectos (solo redirige), la 404, las páginas de
+      // gracias (noindex) y la plantilla de noticia (/noticias/noticia/ sin
+      // ?slug= es una ficha vacía).
+      filter: (page) =>
+        ![
+          '/proyectos/',
+          '/404/',
+          '/gracias/',
+          '/en/thanks/',
+          '/noticias/noticia/',
+        ].some((path) => page.endsWith(path)),
     }),
   ],
   redirects: {
     // La sección Proyectos se reemplazó por Productos.
-    "/proyectos": "/productos",
+    "/proyectos": "/productos/",
   },
   build: {
     // El CSS total por página ronda los 10 KB: incrustarlo en <style> elimina

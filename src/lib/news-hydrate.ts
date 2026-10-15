@@ -60,7 +60,7 @@ function renderItem(
 }
 
 function pageHref(page: number): string {
-  return page <= 1 ? "/noticias" : `/noticias/${page}`;
+  return page <= 1 ? "/noticias/" : `/noticias/${page}/`;
 }
 
 /**

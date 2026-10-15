@@ -1,6 +1,6 @@
 ---
 /**
- * Ficha de noticia: /noticias/noticia?slug={slug}
+ * Ficha de noticia: /noticias/noticia/?slug={slug}
  * Página estática única; los datos se piden a WordPress (WPGraphQL) desde el
  * navegador, así que una noticia nueva se ve sin rebuild.
  */
@@ -23,7 +23,7 @@ const placeholderOpt = await getImage({
       <div class="post__inner">
         <div class="post__top">
           <h1 class="post__title" id="post-title"></h1>
-          <a class="back" href="/noticias">
+          <a class="back" href="/noticias/">
             <span class="icon--flip"><Icon name="arrow-right" size={14} /></span>Noticias
           </a>
         </div>

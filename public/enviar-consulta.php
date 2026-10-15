@@ -28,8 +28,8 @@ $FROM = 'no-reply@nbonanzamining.com';
 $LANG = (isset($_POST['lang']) && $_POST['lang'] === 'en') ? 'en' : 'es';
 
 $RUTAS = array(
-  'es' => array('contacto' => '/contacto', 'gracias' => '/gracias'),
-  'en' => array('contacto' => '/en/contact', 'gracias' => '/en/thanks'),
+  'es' => array('contacto' => '/contacto/', 'gracias' => '/gracias/'),
+  'en' => array('contacto' => '/en/contact/', 'gracias' => '/en/thanks/'),
 );
 
 $IDIOMAS = array('es' => 'Español', 'en' => 'Inglés');
