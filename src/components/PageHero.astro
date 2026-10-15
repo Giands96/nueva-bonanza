@@ -17,10 +17,6 @@ interface Props {
 const { eyebrow, title, text, image, filled = true, compact = false, tall = false, eyebrowColor } = Astro.props;
 ---
 <section class:list={["phero", compact && "phero--compact", tall && "phero--tall"]}>
-  {/*
-    LCP de las páginas internas como <img> real (no CSS background):
-    descubrimiento temprano + fetchpriority alta.
-  */}
   <Image
     class="phero__bg"
     src={image}
@@ -44,18 +40,14 @@ const { eyebrow, title, text, image, filled = true, compact = false, tall = fals
 <style>
   .phero {
     position: relative;
-    min-height: 500px;
+    min-height: 670px;
     padding: 48px var(--pad-inline);
     display: flex;
     align-items: center;
     overflow: hidden;
     background-color: var(--nb-ink-800);
   }
-  /* Variante alta (solo Quiénes Somos): más aire arriba/abajo para que el
-     contenido largo se vea centrado y respire. */
-  .phero--tall {
-    min-height: 700px;
-  }
+
   .phero__bg {
     position: absolute;
     inset: 0;
@@ -80,7 +72,6 @@ const { eyebrow, title, text, image, filled = true, compact = false, tall = fals
     gap: 16px;
     max-width: 640px;
     color: #fff;
-    /* Misma entrada que el hero de Inicio (HeroHome). */
     animation: phero-in 1.4s cubic-bezier(0.2, 0.7, 0.2, 1) both;
   }
   @keyframes phero-in {
@@ -94,8 +85,6 @@ const { eyebrow, title, text, image, filled = true, compact = false, tall = fals
     font-size: 20px;
     line-height: 1.4;
   }
-  /* Hero con texto largo (varios párrafos): letra más chica y aireada para
-     no saturar, con separación clara entre párrafos (vía el gap del flex). */
   .phero__content--long {
     gap: 20px;
     max-width: 680px;
@@ -111,7 +100,7 @@ const { eyebrow, title, text, image, filled = true, compact = false, tall = fals
     font-size: 64px;
   }
   .phero--compact p {
-    font: 400 18px / 1.45 var(--font-body);
+    font: 400 20px / 1.45 var(--font-body);
     color: var(--nb-cream-2);
     max-width: 610px;
   }
