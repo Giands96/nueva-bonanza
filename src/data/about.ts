@@ -98,9 +98,9 @@ const companyData: Record<Lang, CompanyText> = {
     historyNote:
       "Más de una década construyendo una minería responsable, basada en seguridad, innovación y compromiso con el desarrollo del Perú.",
     mission:
-      "Desarrollar actividades mineras de manera eficiente y responsable, priorizando la seguridad de las personas, la excelencia operativa y el cuidado del medio ambiente.",
+      "Extraer y comercializar minerales auríferos mediante operaciones subterráneas eficientes. Generamos valor para nuestros accionistas, garantizando la seguridad de nuestros colaboradores, el cumplimiento normativo y la responsabilidad socioambiental.",
     vision:
-      "Consolidarnos como una empresa minera reconocida por su gestión responsable, eficiencia operativa y compromiso con el desarrollo sostenible",
+      "Consolidarnos como el referente regional de excelencia en la pequeña minería subterránea, reconocidos por nuestra rigurosidad técnica, la trazabilidad ética de nuestra producción y el compromiso con el desarrollo sostenible.",
     companyHeading: "COMPROMETIDOS CON UN FUTURO SOSTENIBLE",
     companyText:
       "En Nueva Bonanza Mining desarrollamos una operación aurifera planificada y supervisada en cada etapa. Integramos experiencia técnica, innovación y seguridad para generar valor compartido con nuestros colaboradores y comunidades del Perú",
@@ -109,9 +109,9 @@ const companyData: Record<Lang, CompanyText> = {
     historyNote:
       "More than a decade building responsible mining, based on safety, innovation and commitment to the development of Peru.",
     mission:
-      "To carry out mining activities efficiently and responsibly, prioritizing the safety of people, operational excellence and care for the environment.",
+      "To extract and market gold-bearing ores through efficient underground operations. We create value for our shareholders while ensuring the safety of our workers, regulatory compliance and social and environmental responsibility.",
     vision:
-      "To establish ourselves as a mining company recognized for its responsible management, operational efficiency and commitment to sustainable development.",
+      "To become the regional benchmark of excellence in small-scale underground mining, recognized for our technical rigor, the ethical traceability of our production and our commitment to sustainable development.",
     companyHeading: "COMMITTED TO A SUSTAINABLE FUTURE",
     companyText:
       "At Nueva Bonanza Mining we run a gold operation that is planned and supervised at every stage. We combine technical expertise, innovation and safety to create shared value with our employees and communities in Peru.",
