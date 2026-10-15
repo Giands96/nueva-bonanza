@@ -4,7 +4,7 @@ import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { siteUrl, socials, getContact } from "../data/site";
 import { defaultLang, languages, ogLocales } from "../i18n/ui";
-import { getAlternates, getLang, useTranslations } from "../i18n/utils";
+import { getAlternates, getLang, getLanguageLinks, useTranslations } from "../i18n/utils";
 
 interface Props {
   title: string;
@@ -45,6 +45,11 @@ const alternates = getAlternates(Astro.url.pathname).map(({ lang: altLang, path 
   href: new URL(path, siteUrl).href,
 }));
 const defaultAlternate = alternates.find((alt) => alt.lang === defaultLang);
+// Aviso para visitantes con navegador en inglés: solo en páginas en español.
+const showLangBanner = lang === "es";
+// Se ejecuta antes del primer pintado para evitar un salto de layout.
+const langBannerScript = `try{var l=(navigator.language||(navigator.languages&&navigator.languages[0])||"").toLowerCase();if(l.indexOf("en")===0&&!localStorage.getItem("nb-lang-banner-dismissed"))document.documentElement.classList.add("show-lang-banner")}catch(e){}`;
+const englishHref = getLanguageLinks(Astro.url.pathname, lang).find((l) => l.lang === "en")?.href ?? "/en/";
 
 // Teléfono, correo y dirección no cambian de idioma.
 const contact = getContact(lang);
@@ -102,6 +107,9 @@ const orgSchema = {
     <script type="application/ld+json" set:html={JSON.stringify(orgSchema)} />
     <!-- Marca JS activo antes del primer pintado: las animaciones de aparición solo ocultan contenido con JS. -->
     <script is:inline>document.documentElement.classList.add("js");</script>
+    {showLangBanner && (
+      <script is:inline set:html={langBannerScript} />
+    )}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     {heroPreload && (
       <link
@@ -129,9 +137,27 @@ const orgSchema = {
     />
   </head>
   <body>
+    {showLangBanner && (
+      <div class="lang-banner" lang="en">
+        <p>This site is also available in English.</p>
+        <a href={englishHref} hreflang="en">View in English →</a>
+        <button type="button" aria-label="Close">✕</button>
+      </div>
+    )}
     <Header current={current} />
     <slot />
     <Footer />
+    {showLangBanner && (
+      <script>
+        // Cerrar el aviso y recordarlo para no volver a mostrarlo.
+        document.querySelector(".lang-banner button")?.addEventListener("click", () => {
+          try {
+            localStorage.setItem("nb-lang-banner-dismissed", "1");
+          } catch {}
+          document.documentElement.classList.remove("show-lang-banner");
+        });
+      </script>
+    )}
     <script>
       // Aparición al desplazar: ver [data-reveal] en global.css.
       const targets = document.querySelectorAll("[data-reveal], [data-reveal-stagger]");
@@ -164,3 +190,60 @@ const orgSchema = {
     </script>
   </body>
 </html>
+<style>
+  /* Aviso de idioma: oculto salvo que el script del <head> marque el <html>. */
+  .lang-banner {
+    display: none;
+  }
+  :global(html.show-lang-banner) .lang-banner {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 9px 48px 9px 16px;
+    background: var(--nb-ink-700);
+    color: #fff;
+    font: 400 14px / 1.4 var(--font-body);
+  }
+  .lang-banner p {
+    margin: 0;
+    text-align: left;
+    hyphens: none;
+  }
+  .lang-banner a {
+    color: var(--nb-gold);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+  .lang-banner a:hover,
+  .lang-banner a:focus-visible {
+    text-decoration: underline;
+  }
+  .lang-banner button {
+    position: absolute;
+    top: 50%;
+    right: 14px;
+    transform: translateY(-50%);
+    min-width: 32px;
+    min-height: 32px;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    color: #c4c4c4;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+  }
+  .lang-banner button:hover {
+    color: #fff;
+  }
+  @media (max-width: 760px) {
+    :global(html.show-lang-banner) .lang-banner {
+      justify-content: flex-start;
+      flex-wrap: wrap;
+      gap: 2px 14px;
+      font-size: 13px;
+    }
+  }
+</style>

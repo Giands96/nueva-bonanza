@@ -37,20 +37,42 @@ export function localizePath(key: RouteKey, lang: Lang): string {
 
 const stripSlash = (path: string) => (path.length > 1 ? path.replace(/\/$/, "") : path);
 
+/** Entrada de `routes` que corresponde a la ruta dada (con o sin barra final). */
+function findRoute(pathname: string) {
+  const current = stripSlash(pathname);
+  return Object.values(routes).find((route) =>
+    Object.values(route).some((path) => stripSlash(path) === current),
+  );
+}
+
 /**
  * Versiones de la página actual en cada idioma, para los `<link hreflang>`.
  * Vacío si la página existe en un solo idioma. Las rutas salen con barra final,
  * igual que el canonical del build (formato `directory`).
  */
 export function getAlternates(pathname: string): { lang: Lang; path: string }[] {
-  const current = stripSlash(pathname);
-  const entry = Object.values(routes).find((route) =>
-    Object.values(route).some((path) => stripSlash(path) === current),
-  );
+  const entry = findRoute(pathname);
   if (!entry) return [];
   const alternates = (Object.keys(languages) as Lang[]).flatMap((lang) => {
     const path = entry[lang];
     return path ? [{ lang, path: `${stripSlash(path)}/`.replace(/^\/\/$/, "/") }] : [];
   });
   return alternates.length > 1 ? alternates : [];
+}
+
+/**
+ * Un destino por idioma para el selector de idioma. Si la página no existe en
+ * un idioma (noticias, 404), el destino es la portada de ese idioma.
+ * Las rutas salen tal cual están en `routes`, igual que los links del menú.
+ */
+export function getLanguageLinks(
+  pathname: string,
+  lang: Lang,
+): { lang: Lang; href: string; current: boolean }[] {
+  const entry = findRoute(pathname);
+  return (Object.keys(languages) as Lang[]).map((target) => ({
+    lang: target,
+    href: entry?.[target] ?? localizePath("inicio", target),
+    current: target === lang,
+  }));
 }

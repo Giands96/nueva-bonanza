@@ -66,7 +66,15 @@ users, so the switch is user-driven.
   "Idioma del formulario: …" to the email body (approved by the user 2026-10-15).
   Separate fix `9db00d2`: CV recipient changed from the test Gmail to
   `sally.falconi@nbonanzamining.com` (user request).
-- [ ] T5 — Language selector and suggestion banner (after design approval).
+- [x] T5 — Language selector and suggestion banner. Design approved by the user
+  2026-10-15 from a mockup: `ES | EN` after the nav links (same Oswald gold, current
+  language white, thin umber divider); on mobile it is the last row of the open menu.
+  Each option links to the same page in the other language, or `/en/` when the page has
+  no English version (news). Banner on Spanish pages only, when `navigator.language`
+  starts with `en`: `--nb-ink-700` strip above the header, "This site is also available
+  in English." + gold "View in English →" + ✕ (dismissal remembered in
+  `localStorage`). An inline `<head>` script decides visibility before first paint to
+  avoid layout shift.
 
 ## Checks
 
@@ -106,6 +114,8 @@ into T3:
 | T3c | delegated writer (3 views, 6 wrappers, 6 components, Impact fix, compat exports removed) | see git log `feat(i18n): productos` | `npm run build` OK (13 pages); Spanish diff vs post-T3b baseline: only JSON-LD `availableLanguage` `["es","en"]` on all pages, hreflang/`og:locale:alternate` on `/productos/`, `/contacto/`, `/gracias/`, 3 sitemap URLs, contact-form `data-*` strings + `data-success-url`, and scoped-style hash changes from moving page bodies into views (rules identical); English pages: lang/canonical/hreflang correct, leftover scan only proper nouns, addresses and example name; parent verified English `<option>` values stay Spanish with English text, `data-success-url="/en/thanks"`. Client to confirm: "CV" vs "résumé". Measures icons still paired by index (no icon field in data; low risk). |
 
 | T4 | inline (1 hidden input + 1 PHP file) | see git log `feat(contacto)` | `npm run build` OK (13 pages); hidden input renders `value="es"` on `/contacto/` and `value="en"` on `/en/contact/`; client script sends `new FormData(form)` so the field travels on the JS path too; no hardcoded `Location:` left in the PHP (5 via `nb_ruta`). PHP NOT executed: no PHP runtime on this machine — must be tested on Ferozo (submit from `/en/contact` with JavaScript disabled, plus one Spanish submission). |
+
+| T5 | delegated writer (Header, BaseLayout, utils) | see git log `feat(i18n): selector` | `npm run build` OK (13 pages); selector links verified (`/productos` → EN `/en/products`, news → `/en/`, English pages → ES current-page link); banner markup + head script only on Spanish pages; nav links byte-identical. Parent browser check (dev server): desktop header + forced banner match the mockup; ✕ hides it and stores `nb-lang-banner-dismissed`; mobile open menu by computed styles: 4 links unchanged (28px, border), `ES | EN` row below at 18px without border. Note: the banner's scoped CSS is inlined on English pages too (unused rules, a few hundred bytes). |
 
 RDD review of slice `996ccde..d5a827a` (T3a+T3b plus user commits `fec2836`, `2e01185`;
 644 lines, medium): user granted consent; lineage `review-3da5ca8d8de831b0`, lens

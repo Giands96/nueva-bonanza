@@ -1,7 +1,7 @@
 ---
 import { getNavigation } from "../data/site";
-import { getLang, localizePath } from "../i18n/utils";
-import type { Lang } from "../i18n/ui";
+import { getLang, getLanguageLinks, localizePath } from "../i18n/utils";
+import { languages, type Lang } from "../i18n/ui";
 import logoUrl from "../assets/img/logo-dorado.webp";
 
 interface Props {
@@ -11,13 +11,19 @@ interface Props {
 const { current = "" } = Astro.props;
 
 const lang = getLang(Astro.currentLocale);
-const es = { menuOpen: "Abrir menú", menuClose: "Cerrar menú", mainNav: "Principal" };
+const es = {
+  menuOpen: "Abrir menú",
+  menuClose: "Cerrar menú",
+  mainNav: "Principal",
+  langGroup: "Idioma",
+};
 const copy: Record<Lang, typeof es> = {
   es,
-  en: { menuOpen: "Open menu", menuClose: "Close menu", mainNav: "Main" },
+  en: { menuOpen: "Open menu", menuClose: "Close menu", mainNav: "Main", langGroup: "Language" },
 };
 const t = copy[lang];
 const navigation = getNavigation(lang);
+const languageLinks = getLanguageLinks(Astro.url.pathname, lang);
 ---
 
 <header class="header">
@@ -48,6 +54,33 @@ const navigation = getNavigation(lang);
         </a>
       ))
     }
+    <div class="lang" role="group" aria-label={t.langGroup}>
+      {
+        languageLinks.map((item, index) => (
+          <>
+            {index > 0 && (
+              <span class="lang-sep" aria-hidden="true">
+                |
+              </span>
+            )}
+            {item.current ? (
+              <span aria-current="true" aria-label={languages[item.lang]}>
+                {item.lang.toUpperCase()}
+              </span>
+            ) : (
+              <a
+                href={item.href}
+                hreflang={item.lang}
+                lang={item.lang}
+                aria-label={languages[item.lang]}
+              >
+                {item.lang.toUpperCase()}
+              </a>
+            )}
+          </>
+        ))
+      }
+    </div>
   </nav>
 </header>
 <script>
@@ -125,6 +158,27 @@ const navigation = getNavigation(lang);
   .nav a[aria-current="page"] {
     color: #fff;
   }
+  /* Selector de idioma: mismo tipo que los links, separado por una línea fina. */
+  .lang {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-left: 20px;
+    border-left: 1px solid var(--nb-umber);
+    font: 500 16px / 1 var(--font-display);
+    color: var(--nb-gold);
+    text-transform: uppercase;
+  }
+  .lang [aria-current="true"] {
+    color: #fff;
+  }
+  .lang .lang-sep {
+    color: var(--nb-umber);
+  }
+  /* Más específico que `.nav a`: los links del selector heredan la tipografía del grupo. */
+  .nav .lang a {
+    font: inherit;
+  }
   .menu-btn {
     display: none;
   }
@@ -133,6 +187,10 @@ const navigation = getNavigation(lang);
       gap: 22px;
     }
     .nav a {
+      font-size: 14px;
+    }
+    .lang {
+      padding-left: 14px;
       font-size: 14px;
     }
   }
@@ -235,6 +293,39 @@ const navigation = getNavigation(lang);
     }
     .nav.is-open a:nth-child(5) {
       transition-delay: 280ms;
+    }
+    /* Selector de idioma: última fila del menú, aparece tras el cuarto link. */
+    .lang {
+      gap: 14px;
+      margin-top: 24px;
+      padding-left: 0;
+      border-left: 0;
+      font-size: 18px;
+      opacity: 0;
+      transform: translateY(12px);
+      transition:
+        opacity 250ms ease,
+        transform 300ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    .nav.is-open .lang {
+      opacity: 1;
+      transform: none;
+      transition-delay: 330ms;
+    }
+    /* Neutraliza las reglas de `.nav a` (padding, borde, opacidad, retardos). */
+    .nav .lang a,
+    .nav .lang span {
+      padding: 8px 0;
+    }
+    .nav .lang a {
+      border-bottom: 0;
+      font-size: inherit;
+      opacity: 1;
+      transform: none;
+      transition: color 200ms ease;
+    }
+    .nav.is-open .lang a:nth-child(n) {
+      transition-delay: 0s;
     }
   }
 </style>
