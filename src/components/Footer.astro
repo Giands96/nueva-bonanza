@@ -1,7 +1,31 @@
 ---
 import Icon from "./Icon.astro";
-import { navigation, contact, socials, tagline } from "../data/site";
+import { getNavigation, getContact, socials } from "../data/site";
+import { getLang, localizePath } from "../i18n/utils";
+import type { Lang } from "../i18n/ui";
 import logoUrl from "../assets/img/logo-dorado.webp";
+
+const lang = getLang(Astro.currentLocale);
+const es = {
+  tagline: "Minería responsable que genera valor para el Perú.",
+  footerNav: "Pie",
+  navHeading: "NAVEGACIÓN",
+  contactHeading: "CONTACTO",
+  socialHeading: "REDES",
+};
+const copy: Record<Lang, typeof es> = {
+  es,
+  en: {
+    tagline: "Responsible mining that creates value for Peru.",
+    footerNav: "Footer",
+    navHeading: "NAVIGATION",
+    contactHeading: "CONTACT",
+    socialHeading: "SOCIAL",
+  },
+};
+const t = copy[lang];
+const navigation = getNavigation(lang);
+const contact = getContact(lang);
 
 const socialIcons = {
   Instagram: "instagram-icon",
@@ -23,13 +47,13 @@ const socialSizes = {
   <div>
     <a
       class="logo"
-      href="/"
+      href={localizePath("inicio", lang)}
       aria-label="Nueva Bonanza Mining"
       style={`background-image:url(${logoUrl.src})`}></a>
-    <p class="footerTag">Minería responsable que genera valor para el Perú.</p>
+    <p class="footerTag">{t.tagline}</p>
   </div>
-  <nav aria-label="Pie">
-    <h3>NAVEGACIÓN</h3>
+  <nav aria-label={t.footerNav}>
+    <h3>{t.navHeading}</h3>
     <ul>
       {
         navigation.map((item) => (
@@ -41,7 +65,7 @@ const socialSizes = {
     </ul>
   </nav>
   <div>
-    <h3>CONTACTO</h3>
+    <h3>{t.contactHeading}</h3>
     <ul id="contacto-footer">
       <li><Icon name="location" size={20} color="var(--nb-gold)" />{contact.address}</li>
       <li><Icon name="call" size={20} color="var(--nb-gold)" /><a href={`tel:${contact.phone.replace(/\s/g, "")}`}>{contact.phone}</a></li>
@@ -50,7 +74,7 @@ const socialSizes = {
     </ul>
   </div>
   <div>
-    <h3>REDES</h3>
+    <h3>{t.socialHeading}</h3>
     <div class="social">
       {
         socials.map((s) => (

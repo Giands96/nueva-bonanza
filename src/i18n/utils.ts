@@ -2,7 +2,7 @@ import { defaultLang, languages, ui, type Lang, type UiKey } from "./ui";
 
 /** Normaliza `Astro.currentLocale` a un idioma conocido. */
 export function getLang(locale: string | undefined): Lang {
-  return locale && locale in languages ? (locale as Lang) : defaultLang;
+  return locale && Object.hasOwn(languages, locale) ? (locale as Lang) : defaultLang;
 }
 
 export function useTranslations(lang: Lang) {

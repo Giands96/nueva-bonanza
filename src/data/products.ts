@@ -110,7 +110,7 @@ const processStepData: Record<Lang, ProcessStep[]> = {
 };
 
 export function getProcessSteps(lang: Lang): ProcessStep[] {
-  return processStepData[lang];
+  return processStepData[lang].map((step) => ({ ...step }));
 }
 
 // Compatibilidad: se elimina cuando los componentes pidan el idioma (T3).
@@ -161,7 +161,7 @@ const measureData: Record<Lang, Measure[]> = {
 };
 
 export function getMeasures(lang: Lang): Measure[] {
-  return measureData[lang];
+  return measureData[lang].map((measure) => ({ ...measure }));
 }
 
 // Compatibilidad: se elimina cuando los componentes pidan el idioma (T3).
