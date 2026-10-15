@@ -40,8 +40,11 @@ users, so the switch is user-driven.
 
 - [x] T1 — Base i18n: `i18n` config, `src/i18n/` dictionary and route helpers,
   locale-aware `BaseLayout` (`lang`, `og:locale`, `hreflang`).
-- [ ] T2 — Locale data: `site.ts`, `about.ts`, `products.ts`, `sedes.ts` per locale;
-  hardcoded slugs go through the route helper.
+- [x] T2 — Locale data: `site.ts`, `about.ts`, `products.ts`, `sedes.ts` per locale
+  (getters `getX(lang)`, Spanish exports kept for compatibility until T3); navigation
+  hrefs go through the route helper. Other hardcoded slugs in components move in T3.
+  Removed the "por confirmar / texto de relleno / imágenes provisionales" comments:
+  the user confirmed texts and images are final (2026-10-15).
 - [ ] T3 — English pages and locale-aware components (no visual change).
 - [ ] T4 — Contact form `lang` field and PHP redirects.
 - [ ] T5 — Language selector and suggestion banner (after design approval).
@@ -62,9 +65,15 @@ users, so the switch is user-driven.
 
 | Task | Route | Commit | Checks |
 | --- | --- | --- | --- |
-| T1 | inline (3 small files, already mapped) | see git log `feat(i18n): base` | `npm run build` OK (8 pages); `dist` Spanish pages unchanged (`lang="es"`, `es_PE`, no `hreflang` while no English routes exist); `getAlternates`/`localizePath`/`getLang`/`t` checked with a scratch script (es-only → none; es+en → both with trailing slash, matching the canonical; unknown path → none). |
+| T1 | inline (3 small files, already mapped) | `fb2cc06`; RDD assess: medium, `under_budget` (193 lines), review pending in slice | `npm run build` OK (8 pages); `dist` Spanish pages unchanged (`lang="es"`, `es_PE`, no `hreflang` while no English routes exist); `getAlternates`/`localizePath`/`getLang`/`t` checked with a scratch script (es-only → none; es+en → both with trailing slash, matching the canonical; unknown path → none). |
+
+| T2 | delegated writer (4 non-trivial files) | see git log `feat(i18n): datos` | `npm run build` OK; `diff -rq -x _astro dist-before dist` → no differences (Spanish HTML identical); parent re-ran build + diff. Type check NOT run: no TypeScript/`@astrojs/check` installed, build does not type-check. |
 
 Notes:
+- Contact reasons: the form keeps submitting the Spanish label as `value` (PHP routes by it);
+  only the visible label is translated.
+- English copy drafted by Claude, pending client review. Two additions to confirm: final
+  periods added where the Spanish has none, and "Tambo store" in the office reference.
 - The build canonical uses a trailing slash (`/quienes-somos/`), so `hreflang` paths
   are emitted with a trailing slash too.
 - `routes` in `src/i18n/utils.ts` holds only Spanish paths until T3 adds the English
@@ -72,4 +81,4 @@ Notes:
 
 ## Next step
 
-T2 — locale data files.
+T3 — English pages and locale-aware components.

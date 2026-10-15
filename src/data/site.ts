@@ -1,26 +1,70 @@
+import type { Lang } from "../i18n/ui";
+import { localizePath, type RouteKey } from "../i18n/utils";
+
 export interface NavItem {
   label: string;
   href: string;
   key: "inicio" | "quienes-somos" | "productos" | "noticias" | "contacto";
 }
 
-export const navigation: NavItem[] = [
-  { label: "Inicio", href: "/", key: "inicio" },
-  { label: "Quiénes somos", href: "/quienes-somos", key: "quienes-somos" },
-  { label: "Productos", href: "/productos", key: "productos" },
-  { label: "Contacto", href: "/contacto", key: "contacto" },
+/* Orden del menú; "noticias" no tiene versión en inglés, por eso no está aquí. */
+const navLabels: { key: NavItem["key"] & RouteKey; es: string; en: string }[] = [
+  { key: "inicio", es: "Inicio", en: "Home" },
+  { key: "quienes-somos", es: "Quiénes somos", en: "About us" },
+  { key: "productos", es: "Productos", en: "Products" },
+  { key: "contacto", es: "Contacto", en: "Contact" },
 ];
 
-export const contact = {
+export function getNavigation(lang: Lang): NavItem[] {
+  return navLabels.map((item) => ({
+    label: item[lang],
+    href: localizePath(item.key, lang),
+    key: item.key,
+  }));
+}
+
+// Compatibilidad: se elimina cuando los componentes pidan el idioma (T3).
+export const navigation: NavItem[] = getNavigation("es");
+
+export interface Contact {
+  readonly address: string;
+  readonly office: string;
+  readonly reference: string;
+  readonly district: string;
+  readonly city: string;
+  readonly phone: string;
+  readonly email: string;
+  readonly hours: string;
+}
+
+/* Dirección, teléfono y correo no cambian de idioma. */
+const contactShared = {
   address: "Av. Manuel Olguin 325 - Santiago de Surco",
-  office: "Oficina 802",
-  reference: "Referencia: Al frente del Jockey Plaza, hay un tambo en el primer piso.",
   district: "Santiago de Surco",
-  city :"Lima",
+  city: "Lima",
   phone: "+51 913 338 729",
   email: "gerencia01@nbonanzamining.com",
-  hours: "Lun - Vie, 8:00 a.m. - 6:00 p.m.",
 } as const;
+
+const contactText: Record<Lang, Pick<Contact, "office" | "reference" | "hours">> = {
+  es: {
+    office: "Oficina 802",
+    reference: "Referencia: Al frente del Jockey Plaza, hay un tambo en el primer piso.",
+    hours: "Lun - Vie, 8:00 a.m. - 6:00 p.m.",
+  },
+  en: {
+    office: "Office 802",
+    reference: "Reference: Across from Jockey Plaza, there is a Tambo store on the first floor.",
+    hours: "Mon - Fri, 8:00 a.m. - 6:00 p.m.",
+  },
+};
+
+export function getContact(lang: Lang): Contact {
+  return { ...contactShared, ...contactText[lang] };
+}
+
+// Compatibilidad: se elimina cuando los componentes pidan el idioma (T3).
+export const contact: Contact = getContact("es");
 
 
 export const emails = {
@@ -45,6 +89,28 @@ export const contactReasons = [
   { label: "Logística y transporte", to: "61cb2035270792a91bc3504a68ae209b" },
   { label: "Otro", to: "aa8652f874dee24750d36e13603d5d5c" },
 ] as const;
+
+/* Etiqueta en inglés de cada motivo, indexada por la etiqueta en español. */
+const contactReasonLabels: Record<(typeof contactReasons)[number]["label"], string> = {
+  "Propuesta de proyecto": "Project proposal",
+  "Consulta comercial": "Business inquiry",
+  "Empleo y prácticas": "Jobs and internships",
+  "Prensa y comunicaciones": "Press and communications",
+  "Logística y transporte": "Logistics and transportation",
+  "Otro": "Other",
+};
+
+/**
+ * `value` es la etiqueta en español: es lo que se envía en el formulario y lo que
+ * usa el PHP para enrutar el correo. `label` es lo que ve la persona.
+ */
+export function getContactReasons(lang: Lang) {
+  return contactReasons.map((reason) => ({
+    value: reason.label,
+    label: lang === "en" ? contactReasonLabels[reason.label] : reason.label,
+    to: reason.to,
+  }));
+}
 
 export const tagline =``;
 

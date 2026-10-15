@@ -1,4 +1,5 @@
-import { contact } from "./site";
+import type { Lang } from "../i18n/ui";
+import { getContact, type Contact } from "./site";
 
 export interface Sede {
   id: string;
@@ -14,28 +15,51 @@ export interface Sede {
   mapsQuery?: string;
 }
 
-export const sedes: Sede[] = [
+/* Datos de cada sede; solo el nombre y el país de la dirección cambian de idioma. */
+type SedeText = { nombre: string; pais: string };
+type SedeEntry = Omit<Sede, "nombre" | "direccion"> & {
+  /* Recibe el país y el contacto ya traducidos y devuelve las líneas de dirección. */
+  direccion: (pais: string, contact: Contact) => string[];
+} & Record<Lang, SedeText>;
+
+/* Campos del contacto que no dependen del idioma. */
+const neutral = getContact("es");
+
+const sedeData: SedeEntry[] = [
   {
     id: "oficina-lima",
-    nombre: "Oficina Administrativa",
-    direccion: [
+    direccion: (pais, contact) => [
       `${contact.address.split(" - ")[0]}, ${contact.office}`,
-      `${contact.district}, ${contact.city}, Perú`,
+      `${contact.district}, ${contact.city}, ${pais}`,
     ],
-    telefonos: [contact.phone],
+    telefonos: [neutral.phone],
     coords: [-12.0858, -76.9765],
     departamento: "lima",
-    mapsQuery: `Av. Manuel Olguín 325, ${contact.district}, ${contact.city}, Perú`,
+    mapsQuery: `Av. Manuel Olguín 325, ${neutral.district}, ${neutral.city}, Perú`,
+    es: { nombre: "Oficina Administrativa", pais: "Perú" },
+    en: { nombre: "Administrative Office", pais: "Peru" },
   },
   {
     id: "sede-minera-arequipa",
-    nombre: "Sede de Producción",
-    direccion: ["Atico Carretera KM 56 - UEA Nueva Bonanza Nro. S/N.", "Atico - Caraveli - Arequipa"],
+    // Nombres propios: la dirección se mantiene igual en todos los idiomas.
+    direccion: () => ["Atico Carretera KM 56 - UEA Nueva Bonanza Nro. S/N.", "Atico - Caraveli - Arequipa"],
     telefonos: [],
     coords: [-15.8058466, -73.5719589],
     departamento: "arequipa",
+    es: { nombre: "Sede de Producción", pais: "Perú" },
+    en: { nombre: "Production Site", pais: "Peru" },
   },
 ];
+
+export function getSedes(lang: Lang): Sede[] {
+  return sedeData.map(({ es, en, direccion, ...shared }) => {
+    const { nombre, pais } = lang === "en" ? en : es;
+    return { ...shared, nombre, direccion: direccion(pais, getContact(lang)) };
+  });
+}
+
+// Compatibilidad: se elimina cuando los componentes pidan el idioma (T3).
+export const sedes: Sede[] = getSedes("es");
 
 export function comoLlegarUrl(sede: Sede): string {
   const query = sede.mapsQuery ?? sede.coords.join(",");
