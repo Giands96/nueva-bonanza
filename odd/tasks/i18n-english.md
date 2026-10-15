@@ -2,7 +2,10 @@
 
 - **Branch:** `feat/i18n-english` (from `master`)
 - **Engram mirror:** `odd/i18n-english/tasks`
-- **Status:** in progress (stage 1)
+- **Status:** implementation complete (T1–T5). Last slice `d520f74..2bdf0aa` (fix
+  `9db00d2`, T4, T5; 273 lines, medium) is under the review budget and not reviewed yet.
+  Pending outside the code: PHP test on Ferozo (JS disabled, both languages), client
+  review of the English copy.
 
 ## Objective
 
