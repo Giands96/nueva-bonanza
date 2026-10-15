@@ -4,6 +4,7 @@ import PageHero from "../components/PageHero.astro";
 import ContactInfo from "../components/contact/ContactInfo.astro";
 import ContactForm from "../components/contact/ContactForm.astro";
 import heroImage from "../assets/img/contacto.webp";
+import heroImageMobile from "../assets/img/CONTACTO_HERO_RESPONSIVE.webp";
 import { heroPreload } from "../lib/hero";
 import { getLang } from "../i18n/utils";
 import type { Lang } from "../i18n/ui";
@@ -34,7 +35,7 @@ const copy: Record<Lang, typeof es> = {
 };
 const t = copy[lang];
 
-const preload = await heroPreload(heroImage);
+const preload = await heroPreload(heroImage, heroImageMobile);
 ---
 <BaseLayout
   title={t.title}
@@ -49,6 +50,7 @@ const preload = await heroPreload(heroImage);
       text={t.heroText}
       focus="35% center"
       image={heroImage}
+      imageMobile={heroImageMobile}
       filled={true}
       eyebrowColor="#fff"
     />

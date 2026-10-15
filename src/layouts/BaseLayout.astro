@@ -15,8 +15,8 @@ interface Props {
   ogType?: "website" | "article";
   /** Token de verificación de Google Search Console (meta google-site-verification). */
   googleVerification?: string;
-  /** Preload del LCP (hero): { href, srcset, sizes } generado con heroPreload(). */
-  heroPreload?: { href: string; srcset: string; sizes: string };
+  /** Preload del LCP (hero): lista generada con heroPreload(). Con imagen mobile son 2 entradas (desktop + mobile, cada una con su `media`). */
+  heroPreload?: Array<{ href: string; srcset: string; sizes: string; media?: string }>;
   /** Suma <meta name="robots" content="noindex"> (p. ej. página 404). */
   noindex?: boolean;
 }
@@ -111,16 +111,17 @@ const orgSchema = {
       <script is:inline set:html={langBannerScript} />
     )}
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    {heroPreload && (
+    {heroPreload?.map((entry) => (
       <link
         rel="preload"
         as="image"
-        href={heroPreload.href}
-        imagesrcset={heroPreload.srcset}
-        imagesizes={heroPreload.sizes}
+        href={entry.href}
+        imagesrcset={entry.srcset}
+        imagesizes={entry.sizes}
+        media={entry.media}
         fetchpriority="high"
       />
-    )}
+    ))}
     <link
       rel="preload"
       href="/fonts/Oswald.woff2"

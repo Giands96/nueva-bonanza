@@ -6,7 +6,8 @@ import AboutSplit from "../components/home/AboutSplit.astro";
 import ProductsCarousel from "../components/home/ProductsCarousel.astro";
 import Team from "../components/home/Team.astro";
 import Impact from "../components/home/Impact.astro";
-import heroImage from "../assets/img/hero-mine.png";
+import heroImage from "../assets/img/Hero.webp";
+import heroImageMobile from "../assets/img/INDEX_HERO_RESPONSIVE.webp";
 import { heroPreload } from "../lib/hero";
 import { getLang } from "../i18n/utils";
 import type { Lang } from "../i18n/ui";
@@ -27,7 +28,7 @@ const copy: Record<Lang, typeof es> = {
 };
 const t = copy[lang];
 
-const preload = await heroPreload(heroImage);
+const preload = await heroPreload(heroImage, heroImageMobile);
 ---
 <BaseLayout
   title={t.title}

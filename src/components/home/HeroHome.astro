@@ -2,6 +2,7 @@
 import { Image } from "astro:assets";
 import Button from "../Button.astro";
 import heroMine from "../../assets/img/Hero.webp";
+import heroMineMobile from "../../assets/img/INDEX_HERO_RESPONSIVE.webp";
 import { getLang, localizePath } from "../../i18n/utils";
 import type { Lang } from "../../i18n/ui";
 
@@ -18,18 +19,21 @@ const t = copy[lang];
     LCP de la home como <img> real (no CSS background): el navegador lo
     descubre en el HTML inicial y lo prioriza con fetchpriority="high".
   */}
-  <Image
-    class="hero__bg"
-    src={heroMine}
-    alt=""
-    aria-hidden="true"
-    widths={[768, 1280, 1366, 1600]}
-    sizes="100vw"
-    format="webp"
-    quality={75}
-    loading="eager"
-    fetchpriority="high"
-  />
+  <picture>
+    <source media="(max-width: 760px)" srcset={heroMineMobile.src} />
+    <Image
+      class="hero__bg"
+      src={heroMine}
+      alt=""
+      aria-hidden="true"
+      widths={[768, 1280, 1920]}
+      sizes="100vw"
+      format="webp"
+      quality={75}
+      loading="eager"
+      fetchpriority="high"
+    />
+  </picture>
   <div class="hero__content">
     <h1 class="hero__title">{t.lead}{" "}<span>{t.emphasis}</span></h1>
     <Button variant="outline" href={localizePath("productos", lang)}>{t.cta}</Button>
@@ -91,7 +95,11 @@ const t = copy[lang];
   }
   @media (max-width: 760px) {
     .hero {
-      height: 780px;
+      min-height: 100vh;
+      /* svh y no dvh: altura estable al mostrar/ocultar la barra del navegador.
+         Con unidad dinámica el hero se redimensionaba al hacer scroll y la
+         imagen con object-fit: cover parecía hacer "zoom". */
+      min-height: 100svh;
       padding: 0 20px;
       align-items: flex-end;
       padding-bottom: 64px;

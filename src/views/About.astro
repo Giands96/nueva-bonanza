@@ -6,6 +6,7 @@ import Timeline from "../components/about/Timeline.astro";
 import Principles from "../components/about/Principles.astro";
 import ContactBand from "../components/ContactBand.astro";
 import heroImage from "../assets/img/quienes_somos_hero.webp";
+import heroImageMobile from "../assets/img/QUIENES_SOMOS_HERO_RESPONSIVE.webp";
 import { heroPreload } from "../lib/hero";
 import { getLang } from "../i18n/utils";
 import type { Lang } from "../i18n/ui";
@@ -38,7 +39,7 @@ const copy: Record<Lang, typeof es> = {
 };
 const t = copy[lang];
 
-const preload = await heroPreload(heroImage);
+const preload = await heroPreload(heroImage, heroImageMobile);
 ---
 <BaseLayout
   title={t.title}
@@ -54,7 +55,8 @@ const preload = await heroPreload(heroImage);
       text={t.heroText}
       focus="68% center"
       image={heroImage}
-      tall
+      imageMobile={heroImageMobile}
+      autoHeight
     />
     <Timeline />
     <Principles />
