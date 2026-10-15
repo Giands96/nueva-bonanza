@@ -15,7 +15,7 @@ if (!defined('EMPLEO_LABEL')) define('EMPLEO_LABEL', 'Empleo y prácticas');
 $DESTINOS = array(
   'Propuesta de proyecto'    => 'gerencia01@nbonanzamining.com',
   'Consulta comercial'       => 'hector.acevedo@nbonanzamining.com',
-  'Empleo y prácticas'       => 'axeldelsolar.dev@gmail.com',
+  'Empleo y prácticas'       => 'sally.falconi@nbonanzamining.com',
   'Prensa y comunicaciones'  => 'paola.acevedo@nbonanzamining.com',
   'Logística y transporte'   => 'logistica01@nbonanzamining.com',
   'Otro'                     => 'hector.acevedo@nbonanzamining.com',
