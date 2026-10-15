@@ -1,9 +1,26 @@
 ---
-import { processSteps } from "../../data/products";
+import { getProcessSteps } from "../../data/products";
+import { getLang } from "../../i18n/utils";
+import type { Lang } from "../../i18n/ui";
+
+const lang = getLang(Astro.currentLocale);
+const es = {
+  title: "DEL YACIMIENTO A LA COMERCIALIZACIÓN",
+  text: "Desarrollamos nuestras operaciones mineras mediante procesos planificados, con énfasis en la seguridad, la eficiencia operativa y la gestión responsable de los recursos minerales.",
+};
+const copy: Record<Lang, typeof es> = {
+  es,
+  en: {
+    title: "FROM DEPOSIT TO MARKET",
+    text: "We carry out our mining operations through planned processes, with an emphasis on safety, operational efficiency and the responsible management of mineral resources.",
+  },
+};
+const t = copy[lang];
+const processSteps = getProcessSteps(lang);
 ---
 <section class="process" aria-labelledby="process-title">
-  <h2 id="process-title" class="title" data-reveal>DEL YACIMIENTO A LA COMERCIALIZACIÓN</h2>
-  <p>Desarrollamos nuestras operaciones mineras mediante procesos planificados, con énfasis en la seguridad, la eficiencia operativa y la gestión responsable de los recursos minerales.</p>
+  <h2 id="process-title" class="title" data-reveal>{t.title}</h2>
+  <p>{t.text}</p>
   <ol class="steps" data-reveal-stagger>
     {processSteps.map((s, i) => (
       <li class="step" style={`--i:${i}`}>

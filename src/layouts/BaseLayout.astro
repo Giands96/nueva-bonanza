@@ -2,8 +2,8 @@
 import "../styles/global.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-import { siteUrl, socials, contact } from "../data/site";
-import { defaultLang, ogLocales } from "../i18n/ui";
+import { siteUrl, socials, getContact } from "../data/site";
+import { defaultLang, languages, ogLocales } from "../i18n/ui";
 import { getAlternates, getLang, useTranslations } from "../i18n/utils";
 
 interface Props {
@@ -46,6 +46,9 @@ const alternates = getAlternates(Astro.url.pathname).map(({ lang: altLang, path 
 }));
 const defaultAlternate = alternates.find((alt) => alt.lang === defaultLang);
 
+// Teléfono, correo y dirección no cambian de idioma.
+const contact = getContact(lang);
+
 const orgSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
@@ -58,7 +61,7 @@ const orgSchema = {
     email: contact.email,
     contactType: "sales",
     areaServed: "PE",
-    availableLanguage: "es",
+    availableLanguage: Object.keys(languages),
   },
   address: {
     "@type": "PostalAddress",

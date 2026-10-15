@@ -8,24 +8,6 @@ const es = {
   eyebrow: "NUESTRO IMPACTO",
   title: "EL IMPACTO DE NUESTRA MINERÍA FORMAL",
   text: "La minería formal genera beneficios que van más allá de la operación.",
-  items: [
-    {
-      title: "GENERACIÓN DE EMPLEO SEGURO Y BIEN REMUNERADO",
-      text: "Promueve empleos formales, condiciones laborales seguras y oportunidades de crecimiento para los trabajadores del sector minero.",
-    },
-    {
-      title: "CONTRIBUCIÓN ECONÓMICA",
-      text: "Genera ingresos para el país mediante impuestos y regalías, impulsando la economía y el desarrollo productivo.",
-    },
-    {
-      title: "DESARROLLO SOCIAL",
-      text: "Contribuye al bienestar de las comunidades mediante oportunidades laborales, colaboración local e iniciativas de desarrollo sostenible.",
-    },
-    {
-      title: "INVERSIÓN EN INFRAESTRUCTURA COMUNITARIA",
-      text: "Favorece el desarrollo de infraestructura y servicios que contribuyen a mejorar la conectividad y la calidad de vida de las comunidades.",
-    },
-  ],
 };
 const copy: Record<Lang, typeof es> = {
   es,
@@ -33,40 +15,62 @@ const copy: Record<Lang, typeof es> = {
     eyebrow: "OUR IMPACT",
     title: "THE IMPACT OF OUR FORMAL MINING",
     text: "Formal mining delivers benefits that go beyond the operation.",
-    items: [
-      {
-        title: "CREATION OF SAFE, WELL-PAID JOBS",
-        text: "Promotes formal employment, safe working conditions and growth opportunities for workers in the mining sector.",
-      },
-      {
-        title: "ECONOMIC CONTRIBUTION",
-        text: "Generates revenue for the country through taxes and royalties, boosting the economy and productive development.",
-      },
-      {
-        title: "SOCIAL DEVELOPMENT",
-        text: "Contributes to the well-being of communities through job opportunities, local collaboration and sustainable development initiatives.",
-      },
-      {
-        title: "INVESTMENT IN COMMUNITY INFRASTRUCTURE",
-        text: "Supports the development of infrastructure and services that help improve connectivity and quality of life in communities.",
-      },
-    ],
   },
 };
 const t = copy[lang];
 
-// Íconos en el mismo orden que `items`; no dependen del idioma.
-const icons = [
-  // Casco de seguridad: trabajo protegido
-  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 15a7 7 0 0 1 5-6.7V5a1.5 1.5 0 0 1 3 0v3.3A7 7 0 0 1 18 15"/><rect x="3.5" y="15" width="17" height="2.6" rx="1.3"/><path d="M12 5v3.3"/></svg>`,
-  // Gráfico en crecimiento: aporte económico
-  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>`,
-  // Personas: comunidad y bienestar
-  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3 2.8-4.5 5.5-4.5s4.9 1.5 5.5 4.5"/><circle cx="16.5" cy="9" r="2.6"/><path d="M15.8 14.6c2.7.2 4.1 1.6 4.7 4.4"/></svg>`,
-  // Camino: conectividad e infraestructura
-  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 20L10 4M18 20L14 4"/><path d="M12 6.5v2M12 11v2M12 15.5v2"/></svg>`,
+// Cada ícono va junto a su texto; el ícono no depende del idioma.
+const itemData = [
+  {
+    // Casco de seguridad: trabajo protegido
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 15a7 7 0 0 1 5-6.7V5a1.5 1.5 0 0 1 3 0v3.3A7 7 0 0 1 18 15"/><rect x="3.5" y="15" width="17" height="2.6" rx="1.3"/><path d="M12 5v3.3"/></svg>`,
+    es: {
+      title: "GENERACIÓN DE EMPLEO SEGURO Y BIEN REMUNERADO",
+      text: "Promueve empleos formales, condiciones laborales seguras y oportunidades de crecimiento para los trabajadores del sector minero.",
+    },
+    en: {
+      title: "CREATION OF SAFE, WELL-PAID JOBS",
+      text: "Promotes formal employment, safe working conditions and growth opportunities for workers in the mining sector.",
+    },
+  },
+  {
+    // Gráfico en crecimiento: aporte económico
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg>`,
+    es: {
+      title: "CONTRIBUCIÓN ECONÓMICA",
+      text: "Genera ingresos para el país mediante impuestos y regalías, impulsando la economía y el desarrollo productivo.",
+    },
+    en: {
+      title: "ECONOMIC CONTRIBUTION",
+      text: "Generates revenue for the country through taxes and royalties, boosting the economy and productive development.",
+    },
+  },
+  {
+    // Personas: comunidad y bienestar
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3 2.8-4.5 5.5-4.5s4.9 1.5 5.5 4.5"/><circle cx="16.5" cy="9" r="2.6"/><path d="M15.8 14.6c2.7.2 4.1 1.6 4.7 4.4"/></svg>`,
+    es: {
+      title: "DESARROLLO SOCIAL",
+      text: "Contribuye al bienestar de las comunidades mediante oportunidades laborales, colaboración local e iniciativas de desarrollo sostenible.",
+    },
+    en: {
+      title: "SOCIAL DEVELOPMENT",
+      text: "Contributes to the well-being of communities through job opportunities, local collaboration and sustainable development initiatives.",
+    },
+  },
+  {
+    // Camino: conectividad e infraestructura
+    icon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 20L10 4M18 20L14 4"/><path d="M12 6.5v2M12 11v2M12 15.5v2"/></svg>`,
+    es: {
+      title: "INVERSIÓN EN INFRAESTRUCTURA COMUNITARIA",
+      text: "Favorece el desarrollo de infraestructura y servicios que contribuyen a mejorar la conectividad y la calidad de vida de las comunidades.",
+    },
+    en: {
+      title: "INVESTMENT IN COMMUNITY INFRASTRUCTURE",
+      text: "Supports the development of infrastructure and services that help improve connectivity and quality of life in communities.",
+    },
+  },
 ];
-const impacts = t.items.map((item, i) => ({ ...item, icon: icons[i] }));
+const impacts = itemData.map(({ icon, ...texts }) => ({ icon, ...texts[lang] }));
 ---
 <section class="impact" aria-labelledby="impact-title">
   <div class="impact__head" data-reveal-stagger>

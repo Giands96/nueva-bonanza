@@ -1,6 +1,24 @@
 ---
-import { measures } from "../../data/products";
+import { getMeasures } from "../../data/products";
+import { getLang } from "../../i18n/utils";
+import type { Lang } from "../../i18n/ui";
 
+const lang = getLang(Astro.currentLocale);
+const es = {
+  title: "CÓMO LO HACEMOS",
+  text: "Cada etapa de la operación sigue las mismas prioridades.",
+};
+const copy: Record<Lang, typeof es> = {
+  es,
+  en: {
+    title: "HOW WE DO IT",
+    text: "Every stage of the operation follows the same priorities.",
+  },
+};
+const t = copy[lang];
+const measures = getMeasures(lang);
+
+// Íconos en el mismo orden que `measures`; no dependen del idioma.
 const icons = [
   // Seguridad: escudo con check
   `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6l7-3z"/><path d="M9 12l2 2 4-4"/></svg>`,
@@ -14,8 +32,8 @@ const icons = [
 ---
 <section class="measures" aria-labelledby="measures-title">
   <div class="measures__head" data-reveal-stagger>
-    <h2 id="measures-title" class="title">CÓMO LO HACEMOS</h2>
-    <p>Cada etapa de la operación sigue las mismas prioridades.</p>
+    <h2 id="measures-title" class="title">{t.title}</h2>
+    <p>{t.text}</p>
   </div>
   <ul class="measures__grid" data-reveal-stagger>
     {measures.map((m, i) => (

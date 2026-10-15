@@ -1,0 +1,57 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import ProductList from "../components/products/ProductList.astro";
+import ProcessSteps from "../components/products/ProcessSteps.astro";
+import Measures from "../components/products/Measures.astro";
+import ContactBand from "../components/ContactBand.astro";
+import heroImage from "../assets/img/productos.webp";
+import { heroPreload } from "../lib/hero";
+import { getLang } from "../i18n/utils";
+import type { Lang } from "../i18n/ui";
+
+const lang = getLang(Astro.currentLocale);
+const es = {
+  title: "Productos",
+  description:
+    "Oro, barras de oro y plata extraídos por Nueva Bonanza Mining en la mina Bonanza, Arequipa. Una operación de extracción que entrega su producción a refinerías autorizadas.",
+  eyebrow: "NUESTRA PRODUCCIÓN",
+  heroTitle: "PRODUCTOS",
+  heroText:
+    "Nos dedicamos a la extracción de minerales de oro y plata en nuestras operaciones mineras en Arequipa. Conoce nuestra producción, las características de los minerales que obtenemos y las etapas de nuestra actividad minera.",
+};
+const copy: Record<Lang, typeof es> = {
+  es,
+  en: {
+    title: "Products",
+    description:
+      "Gold, gold bars and silver extracted by Nueva Bonanza Mining at the Bonanza mine, Arequipa. A mining operation that delivers its production to authorized refineries.",
+    eyebrow: "OUR PRODUCTION",
+    heroTitle: "PRODUCTS",
+    heroText:
+      "We are dedicated to the extraction of gold and silver ores at our mining operations in Arequipa. Learn about our production, the characteristics of the minerals we obtain and the stages of our mining activity.",
+  },
+};
+const t = copy[lang];
+
+const preload = await heroPreload(heroImage);
+---
+<BaseLayout
+  title={t.title}
+  description={t.description}
+  current="productos"
+  heroPreload={preload}
+>
+  <main>
+    <PageHero
+      eyebrow={t.eyebrow}
+      title={t.heroTitle}
+      text={t.heroText}
+      image={heroImage}
+    />
+    <ProductList />
+    <ProcessSteps />
+    <Measures />
+    <ContactBand />
+  </main>
+</BaseLayout>

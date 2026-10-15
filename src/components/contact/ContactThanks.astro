@@ -1,5 +1,31 @@
 ---
 import Button from "../Button.astro";
+import { getLang, localizePath } from "../../i18n/utils";
+import type { Lang } from "../../i18n/ui";
+
+const lang = getLang(Astro.currentLocale);
+const es = {
+  kicker: "Consulta registrada",
+  title: "Gracias por contactarnos",
+  text: "Hemos recibido su mensaje correctamente. Un especialista de Nueva Bonanza Mining revisará la información y se comunicará con usted.",
+  etaLabel: "Tiempo estimado de respuesta:",
+  etaText: "dentro de 1 a 2 días hábiles.",
+  home: "Volver al inicio",
+  products: "Ver productos",
+};
+const copy: Record<Lang, typeof es> = {
+  es,
+  en: {
+    kicker: "Inquiry registered",
+    title: "Thank you for contacting us",
+    text: "We have successfully received your message. A Nueva Bonanza Mining specialist will review the information and contact you.",
+    etaLabel: "Estimated response time:",
+    etaText: "within 1 to 2 business days.",
+    home: "Back to home",
+    products: "View products",
+  },
+};
+const t = copy[lang];
 ---
 
 <div class="thanks">
@@ -15,12 +41,9 @@ import Button from "../Button.astro";
       />
     </svg>
   </span>
-  <span class="thanks__kicker">Consulta registrada</span>
-  <h2>Gracias por contactarnos</h2>
-  <p>
-    Hemos recibido su mensaje correctamente. Un especialista de Nueva Bonanza
-    Mining revisará la información y se comunicará con usted.
-  </p>
+  <span class="thanks__kicker">{t.kicker}</span>
+  <h2>{t.title}</h2>
+  <p>{t.text}</p>
   <p class="thanks__eta">
     <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <circle cx="12" cy="12" r="8.5" stroke="currentColor" stroke-width="1.8" />
@@ -32,14 +55,12 @@ import Button from "../Button.astro";
         stroke-linejoin="round"
       />
     </svg>
-    <span
-      ><strong>Tiempo estimado de respuesta:</strong> dentro de 1 a 2 días hábiles.</span
-    >
+    <span><strong>{t.etaLabel}</strong> {t.etaText}</span>
   </p>
   <div class="thanks__cta">
-    <Button variant="solid" href="/" icon="arrow-right">Volver al inicio</Button>
-    <Button variant="outline-dark" href="/productos" icon="arrow-right"
-      >Ver productos</Button
+    <Button variant="solid" href={localizePath("inicio", lang)} icon="arrow-right">{t.home}</Button>
+    <Button variant="outline-dark" href={localizePath("productos", lang)} icon="arrow-right"
+      >{t.products}</Button
     >
   </div>
 </div>

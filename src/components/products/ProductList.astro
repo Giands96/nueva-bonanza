@@ -1,6 +1,10 @@
 ---
 import { Image } from "astro:assets";
-import { products } from "../../data/products";
+import { getProducts } from "../../data/products";
+import { getLang } from "../../i18n/utils";
+
+const lang = getLang(Astro.currentLocale);
+const products = getProducts(lang);
 ---
 <section class="plist" aria-labelledby="plist-title">
   <div class="plist__items">

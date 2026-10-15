@@ -58,9 +58,6 @@ export function getSedes(lang: Lang): Sede[] {
   });
 }
 
-// Compatibilidad: se elimina cuando los componentes pidan el idioma (T3).
-export const sedes: Sede[] = getSedes("es");
-
 export function comoLlegarUrl(sede: Sede): string {
   const query = sede.mapsQuery ?? sede.coords.join(",");
   return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;

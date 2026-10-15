@@ -23,9 +23,6 @@ export function getNavigation(lang: Lang): NavItem[] {
   }));
 }
 
-// Compatibilidad: se elimina cuando los componentes pidan el idioma (T3).
-export const navigation: NavItem[] = getNavigation("es");
-
 export interface Contact {
   readonly address: string;
   readonly office: string;
@@ -62,10 +59,6 @@ const contactText: Record<Lang, Pick<Contact, "office" | "reference" | "hours">>
 export function getContact(lang: Lang): Contact {
   return { ...contactShared, ...contactText[lang] };
 }
-
-// Compatibilidad: se elimina cuando los componentes pidan el idioma (T3).
-export const contact: Contact = getContact("es");
-
 
 export const emails = {
   rh: "sally.falconi@nbonanzamining.com",

@@ -45,7 +45,7 @@ users, so the switch is user-driven.
   hrefs go through the route helper. Other hardcoded slugs in components move in T3.
   Removed the "por confirmar / texto de relleno / imágenes provisionales" comments:
   the user confirmed texts and images are final (2026-10-15).
-- [ ] T3 — English pages and locale-aware components (no visual change). Approach
+- [x] T3 — English pages and locale-aware components (no visual change). Approach
   explained to the user 2026-10-15: each page body moves to `src/views/<Name>.astro`
   (markup and styles unchanged); `src/pages/*.astro` and `src/pages/en/*.astro` become
   thin wrappers. Component copy lives in a colocated `{ es, en }` block; the language
@@ -54,7 +54,7 @@ users, so the switch is user-driven.
     `ui.ts`; review fixes R3-002 (`Object.hasOwn`) and R3-003 (getters return copies).
   - [x] T3b — Views Home and About; `/en/` and `/en/about-us`; `home/*` and `about/*`
     components; English route entries for both.
-  - [ ] T3c — Views Products, Contact, Thanks; `/en/products`, `/en/contact`,
+  - [x] T3c — Views Products, Contact, Thanks; `/en/products`, `/en/contact`,
     `/en/thanks`; `products/*` and `contact/*` components; remove T2 compatibility
     exports; JSON-LD `availableLanguage: ["es", "en"]`.
   - Out of scope: news pages and 404 stay Spanish-only; contact form redirect is T4;
@@ -98,6 +98,17 @@ into T3:
   `Object.hasOwn(languages, locale)`.
 - R3-003: `getProcessSteps`/`getMeasures` return the module arrays by reference; return
   copies like the other getters.
+
+| T3c | delegated writer (3 views, 6 wrappers, 6 components, Impact fix, compat exports removed) | see git log `feat(i18n): productos` | `npm run build` OK (13 pages); Spanish diff vs post-T3b baseline: only JSON-LD `availableLanguage` `["es","en"]` on all pages, hreflang/`og:locale:alternate` on `/productos/`, `/contacto/`, `/gracias/`, 3 sitemap URLs, contact-form `data-*` strings + `data-success-url`, and scoped-style hash changes from moving page bodies into views (rules identical); English pages: lang/canonical/hreflang correct, leftover scan only proper nouns, addresses and example name; parent verified English `<option>` values stay Spanish with English text, `data-success-url="/en/thanks"`. Client to confirm: "CV" vs "résumé". Measures icons still paired by index (no icon field in data; low risk). |
+
+RDD review of slice `996ccde..d5a827a` (T3a+T3b plus user commits `fec2836`, `2e01185`;
+644 lines, medium): user granted consent; lineage `review-3da5ca8d8de831b0`, lens
+`review-reliability` → **approved**, acknowledged. Reviewed boundary is now `d5a827a`.
+Non-blocking suggestions:
+- R3-001/R3-002 (again): no automated tests for `getLang`, `routes`, `getAlternates`,
+  `localizePath`. Needs a user decision on adding a test runner (dev dependency).
+- R3-003: `Impact.astro` pairs icons with translated items by array index; keep each icon
+  next to its item. Folded into T3c.
 
 Notes:
 - Contact reasons: the form keeps submitting the Spanish label as `value` (PHP routes by it);

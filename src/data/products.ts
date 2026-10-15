@@ -84,9 +84,6 @@ export function getProducts(lang: Lang): Product[] {
   return productData.map((item) => ({ id: item.id, image: item.image, ...item[lang] }));
 }
 
-// Compatibilidad: se elimina cuando los componentes pidan el idioma (T3).
-export const products: Product[] = getProducts("es");
-
 export interface ProcessStep {
   title: string;
   text: string;
@@ -112,9 +109,6 @@ const processStepData: Record<Lang, ProcessStep[]> = {
 export function getProcessSteps(lang: Lang): ProcessStep[] {
   return processStepData[lang].map((step) => ({ ...step }));
 }
-
-// Compatibilidad: se elimina cuando los componentes pidan el idioma (T3).
-export const processSteps: ProcessStep[] = getProcessSteps("es");
 
 export interface Measure {
   title: string;
@@ -163,6 +157,3 @@ const measureData: Record<Lang, Measure[]> = {
 export function getMeasures(lang: Lang): Measure[] {
   return measureData[lang].map((measure) => ({ ...measure }));
 }
-
-// Compatibilidad: se elimina cuando los componentes pidan el idioma (T3).
-export const measures: Measure[] = getMeasures("es");

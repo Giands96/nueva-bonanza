@@ -61,9 +61,6 @@ export function getPolicies(lang: Lang): Policy[] {
   return policyData.map((item) => ({ id: item.id, ...item[lang] }));
 }
 
-// Compatibilidad: se elimina cuando los componentes pidan el idioma (T3).
-export const policies: Policy[] = getPolicies("es");
-
 export interface Milestone {
   year: string;
   text: string;
@@ -86,9 +83,6 @@ const milestoneData: MilestoneEntry[] = [
 export function getMilestones(lang: Lang): Milestone[] {
   return milestoneData.map((item) => ({ year: item.year, text: item[lang] }));
 }
-
-// Compatibilidad: se elimina cuando los componentes pidan el idioma (T3).
-export const milestones: Milestone[] = getMilestones("es");
 
 /* Textos sueltos de la empresa, un bloque por idioma. */
 interface CompanyText {
@@ -127,11 +121,6 @@ const companyData: Record<Lang, CompanyText> = {
 export function getCompanyText(lang: Lang): CompanyText {
   return companyData[lang];
 }
-
-// Compatibilidad: se elimina cuando los componentes pidan el idioma (T3).
-export const historyNote = companyData.es.historyNote;
-export const mission = companyData.es.mission;
-export const vision = companyData.es.vision;
 
 export interface Value {
   number: string;
@@ -174,9 +163,6 @@ export function getValues(lang: Lang): Value[] {
   return valueData.map((item) => ({ number: item.number, ...item[lang] }));
 }
 
-// Compatibilidad: se elimina cuando los componentes pidan el idioma (T3).
-export const values: Value[] = getValues("es");
-
 export interface Stat {
   value: string;
   title: string;
@@ -201,7 +187,3 @@ export const stats: Stat[] = [
     text: "Contribuyendo al crecimiento de la industria minera del Perú.",
   },
 ];
-
-// Compatibilidad: se elimina cuando los componentes pidan el idioma (T3).
-export const companyHeading = companyData.es.companyHeading;
-export const companyText = companyData.es.companyText;
