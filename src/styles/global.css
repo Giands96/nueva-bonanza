@@ -59,7 +59,6 @@ p {
 }
 
 
-
 /* Título de sección: line-height con aire para diacríticos (Á, É, Í, Ó, Ú, Ü)
  * y descendentes (Q, J) de Oswald. Con `1` exacto esos glifos desbordan la
  * caja de línea y cualquier ancestro con overflow los recorta. */
@@ -118,15 +117,6 @@ p {
   .title { font-size: 44px; }
 }
 
-/*
- * Aparición al desplazar (script en BaseLayout).
- * - [data-reveal]: el elemento entra con fade y desplazamiento corto.
- * - [data-reveal="image"]: imágenes, con fade y una cortina vertical (sin escalar: no desborda).
- * - [data-reveal-stagger]: los hijos directos entran en cascada.
- * Solo se ocultan con JS activo (html.js) y sin movimiento reducido. "html.js" sube la
- * especificidad por encima de las transiciones propias de cada componente; el script quita
- * los atributos al terminar para que esas transiciones vuelvan a aplicarse.
- */
 @media (prefers-reduced-motion: no-preference) {
   html.js [data-reveal],
   html.js [data-reveal-stagger] > * {
@@ -159,6 +149,11 @@ p {
     opacity: 1;
     transform: none;
     clip-path: inset(0 0 0 0);
+  }
+
+  html.js [data-reveal].is-revealed:is(h1, h2, h3, p),
+  html.js [data-reveal-stagger].is-revealed > :is(h1, h2, h3, p) {
+    clip-path: none;
   }
 }
 

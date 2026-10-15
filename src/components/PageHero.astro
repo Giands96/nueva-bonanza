@@ -6,16 +6,17 @@ import Eyebrow from "./Eyebrow.astro";
 interface Props {
   eyebrow: string;
   title: string;
-  text: string;
+  text: string | string[];
   image: ImageMetadata;
   filled?: boolean;
   compact?: boolean;
+  tall?: boolean;
   eyebrowColor?: string;
 }
 
-const { eyebrow, title, text, image, filled = true, compact = false, eyebrowColor } = Astro.props;
+const { eyebrow, title, text, image, filled = true, compact = false, tall = false, eyebrowColor } = Astro.props;
 ---
-<section class:list={["phero", compact && "phero--compact"]}>
+<section class:list={["phero", compact && "phero--compact", tall && "phero--tall"]}>
   {/*
     LCP de las páginas internas como <img> real (no CSS background):
     descubrimiento temprano + fetchpriority alta.
@@ -27,26 +28,33 @@ const { eyebrow, title, text, image, filled = true, compact = false, eyebrowColo
     aria-hidden="true"
     widths={[768, 1280, 1920]}
     sizes="100vw"
-    formats={["webp"]}
+    format="webp"
     quality={75}
     loading="eager"
     fetchpriority="high"
   />
-  <div class="phero__content">
+  <div class:list={["phero__content", Array.isArray(text) && "phero__content--long"]}>
     <Eyebrow filled={filled} color={eyebrowColor}>{eyebrow}</Eyebrow>
     <h1>{title}</h1>
-    <p>{text}</p>
+    {Array.isArray(text)
+      ? text.map((paragraph) => <p>{paragraph}</p>)
+      : <p>{text}</p>}
   </div>
 </section>
 <style>
   .phero {
     position: relative;
-    height: 500px;
-    padding: 0 var(--pad-inline);
+    min-height: 500px;
+    padding: 48px var(--pad-inline);
     display: flex;
     align-items: center;
     overflow: hidden;
     background-color: var(--nb-ink-800);
+  }
+  /* Variante alta (solo Quiénes Somos): más aire arriba/abajo para que el
+     contenido largo se vea centrado y respire. */
+  .phero--tall {
+    min-height: 720px;
   }
   .phero__bg {
     position: absolute;
@@ -86,6 +94,16 @@ const { eyebrow, title, text, image, filled = true, compact = false, eyebrowColo
     font-size: 20px;
     line-height: 1.4;
   }
+  /* Hero con texto largo (varios párrafos): letra más chica y aireada para
+     no saturar, con separación clara entre párrafos (vía el gap del flex). */
+  .phero__content--long {
+    gap: 20px;
+    max-width: 680px;
+  }
+  .phero__content--long p {
+    font-size: 18px;
+    line-height: 1.6;
+  }
   .phero--compact::before {
     background: linear-gradient(90deg, rgba(21, 18, 15, 0.85) 0%, rgba(21, 18, 15, 0.45) 65%, rgba(21, 18, 15, 0.2) 100%);
   }
@@ -104,12 +122,12 @@ const { eyebrow, title, text, image, filled = true, compact = false, eyebrowColo
   }
   @media (max-width: 760px) {
     .phero {
-      height: 420px;
-      padding: 0 20px 40px;
+      min-height: 420px;
+      padding: 48px 20px 40px;
       align-items: flex-end;
     }
     .phero--compact {
-      height: 440px;
+      min-height: 440px;
     }
     .phero--compact h1 {
       font-size: 40px;

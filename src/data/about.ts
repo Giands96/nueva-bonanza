@@ -99,3 +99,8 @@ export const companyHeading = "COMPROMETIDOS CON UN FUTURO SOSTENIBLE";
 
 export const companyText =
   "En Nueva Bonanza Mining desarrollamos una operación aurifera planificada y supervisada en cada etapa. Integramos experiencia técnica, innovación y seguridad para generar valor compartido con nuestros colaboradores y comunidades del Perú";
+
+export const heroParagraphs: string[] = [
+  "Somos una empresa minera dedicada a la exploración, explotación y comercialización de minerales de oro y plata en Arequipa, Perú. Desarrollamos nuestras operaciones mediante procesos técnicos que comprenden la evaluación geológica, el mapeo y muestreo de estructuras mineralizadas, la estimación de leyes y el planeamiento de labores mineras, orientados al aprovechamiento eficiente y responsable de los recursos minerales.",
+  "Nuestras operaciones de minería subterránea abarcan el desarrollo y preparación de galerías, rampas y accesos, así como la perforación, voladura, sostenimiento de roca, ventilación, limpieza, carguío y acarreo de mineral. Gestionamos cada etapa priorizando la seguridad minera, la eficiencia productiva, el cumplimiento normativo y la responsabilidad ambiental, con un enfoque de mejora continua orientado a generar valor sostenible y contribuir al desarrollo de la minería peruana.",
+];
