@@ -7,6 +7,13 @@ export default defineConfig({
   // Dominio canónico de producción: alimenta <link rel="canonical">,
   // las metas Open Graph y el sitemap generado en /sitemap-index.xml.
   site: 'https://nbonanzamining.com',
+  // Español sin prefijo (/productos) e inglés bajo /en/. Mantener en sincronía
+  // con `languages` y `defaultLang` de src/i18n/ui.ts.
+  i18n: {
+    locales: ['es', 'en'],
+    defaultLocale: 'es',
+    routing: { prefixDefaultLocale: false },
+  },
   integrations: [
     sitemap({
       // /proyectos solo existe como redirect hacia /productos y la 404 no
