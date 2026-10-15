@@ -51,10 +51,10 @@ export const historyNote =
   "Más de una década construyendo una minería responsable, basada en seguridad, innovación y compromiso con el desarrollo del Perú.";
 
 export const mission =
-  "Desarrollar actividades mineras de manera eficiente y responsable, priorizando la seguridad de las personas, la excelencia operativa y el cuidado del medio ambiente.";
+  "Extraer y comercializar minerales auríferos mediante operaciones subterráneas eficientes. Generamos valor para nuestros accionistas, garantizando la seguridad de nuestros colaboradores, el cumplimiento normativo y la responsabilidad socioambiental.";
 
 export const vision =
-  "Consolidarnos como una empresa minera reconocida por su gestión responsable, eficiencia operativa y compromiso con el desarrollo sostenible";
+  "Consolidarnos como el referente regional de excelencia en la pequeña minería subterránea, reconocidos por nuestra rigurosidad técnica, la trazabilidad ética de nuestra producción y el compromiso con el desarrollo sostenible.";
 
 export interface Value {
   number: string;

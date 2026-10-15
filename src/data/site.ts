@@ -53,7 +53,6 @@ export const siteUrl = "https://nbonanzamining.com";
 
 // URLs pendientes (Decisión pendiente §10): placeholders centralizados.
 export const socials = [
-  { label: "Instagram", href: "https://www.instagram.com/nueva-bonanza-mining" },
-  { label: "Facebook", href: "https://www.facebook.com/nueva-bonanza-mining" },
+  { label: "Instagram", href: "https://www.instagram.com/nbm2025hap" },
   { label: "LinkedIn", href: "https://www.linkedin.com/company/nueva-bonanza-mining" },
 ];
