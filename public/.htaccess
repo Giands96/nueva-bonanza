@@ -1,6 +1,27 @@
 # Página 404 personalizada (generada como /404.html por Astro).
 ErrorDocument 404 /404.html
 
+# Una sola versión del sitio, la misma que declara el canonical:
+# https://nbonanzamining.com (sin www). Evita que Google vea duplicados.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # www -> dominio sin www.
+  RewriteCond %{HTTP_HOST} ^www\. [NC]
+  RewriteRule ^ https://nbonanzamining.com%{REQUEST_URI} [R=301,L]
+
+  # http -> https. X-Forwarded-Proto cubre el caso de un proxy que termina el
+  # TLS antes de Apache (sin esa condición, la regla entraría en bucle).
+  RewriteCond %{HTTPS} !=on
+  RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+  RewriteRule ^ https://nbonanzamining.com%{REQUEST_URI} [R=301,L]
+
+  # /carpeta/index.html pedido explícitamente -> /carpeta/. THE_REQUEST mira
+  # la petición original, así no choca con el DirectoryIndex interno.
+  RewriteCond %{THE_REQUEST} \s/(.*/)?index\.html[\s?] [NC]
+  RewriteRule ^(.*/)?index\.html$ /$1 [R=301,L]
+</IfModule>
+
 # Caché larga para assets versionados por Astro (nombres con hash único).
 # Solo aplica en hostings Apache (Ferozo). Si el servidor lo ignora, no afecta.
 <IfModule mod_expires.c>

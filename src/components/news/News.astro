@@ -21,8 +21,8 @@ interface Props {
 const { page } = Astro.props;
 // La grilla se dibuja en el navegador contra WordPress (ver `news-hydrate.ts`):
 // el build no guarda noticias, solo el cascarón con el loader.
-const prevHref = page.currentPage > 1 ? (page.currentPage === 2 ? "/noticias" : `/noticias/${page.currentPage - 1}`) : null;
-const nextHref = page.currentPage < page.lastPage ? `/noticias/${page.currentPage + 1}` : null;
+const prevHref = page.currentPage > 1 ? (page.currentPage === 2 ? "/noticias/" : `/noticias/${page.currentPage - 1}/`) : null;
+const nextHref = page.currentPage < page.lastPage ? `/noticias/${page.currentPage + 1}/` : null;
 ---
 <section
   class="news"

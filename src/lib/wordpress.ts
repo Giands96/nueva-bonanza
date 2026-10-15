@@ -3,7 +3,7 @@
  * Lee el tipo de contenido `noticia` (taxonomía `categoriasNoticia`, campos ACF
  * `datosNoticia`) y lo normaliza al modelo `NewsItem` de las páginas de Noticias.
  *
- * Se usa en el build (listado) y en el navegador (detalle, /noticias/noticia?slug=…),
+ * Se usa en el build (listado) y en el navegador (detalle, /noticias/noticia/?slug=…),
  * por eso la URL es pública: PUBLIC_WP_GRAPHQL_URL en `.env`
  * (https://nbonanzamining.com/cms/graphql).
  * Sin URL se devuelven listas vacías (el listado muestra su estado vacío).
@@ -181,7 +181,7 @@ export async function getAllPosts(): Promise<NewsItem[]> {
 
 /** URL de la ficha de una noticia. */
 export function newsUrl(slug: string): string {
-  return `/noticias/noticia?slug=${encodeURIComponent(slug)}`;
+  return `/noticias/noticia/?slug=${encodeURIComponent(slug)}`;
 }
 
 /** Noticia completa (con `content`) o `null` si no existe o no está publicada. */

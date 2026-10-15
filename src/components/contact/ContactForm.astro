@@ -474,7 +474,7 @@ const reasons = getContactReasons(lang);
         if (!res.ok || json.success !== true)
           throw new Error(json.error ?? res.statusText);
       }
-      window.location.assign(form.dataset.successUrl ?? "/gracias");
+      window.location.assign(form.dataset.successUrl ?? "/gracias/");
     } catch (err) {
       // Fallo real de envío: cuadro de error debajo del form, sin redirigir.
       console.error("[contacto] envío:", err);

@@ -24,11 +24,11 @@ export type RouteKey =
  */
 export const routes: Record<RouteKey, { es: string } & Partial<Record<Lang, string>>> = {
   inicio: { es: "/", en: "/en/" },
-  "quienes-somos": { es: "/quienes-somos", en: "/en/about-us" },
-  productos: { es: "/productos", en: "/en/products" },
-  noticias: { es: "/noticias" },
-  contacto: { es: "/contacto", en: "/en/contact" },
-  gracias: { es: "/gracias", en: "/en/thanks" },
+  "quienes-somos": { es: "/quienes-somos/", en: "/en/about-us/" },
+  productos: { es: "/productos/", en: "/en/products/" },
+  noticias: { es: "/noticias/" },
+  contacto: { es: "/contacto/", en: "/en/contact/" },
+  gracias: { es: "/gracias/", en: "/en/thanks/" },
 };
 
 export function localizePath(key: RouteKey, lang: Lang): string {
