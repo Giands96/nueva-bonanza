@@ -110,6 +110,14 @@ Non-blocking suggestions:
 - R3-003: `Impact.astro` pairs icons with translated items by array index; keep each icon
   next to its item. Folded into T3c.
 
+RDD review of slice `d5a827a..d520f74` (T3c, 848 lines, medium): user granted consent;
+lineage `review-1b579b2923062034`, lens `review-reliability` → **approved**, acknowledged.
+Reviewed boundary is now `d520f74`. Non-blocking suggestions:
+- R3-001: `ContactForm` client helper `text(key)` returns `""` when a `data-*` key is
+  missing; fall back to Spanish or warn so messages never render blank.
+- R3-002: tests again (reason values stay Spanish, locale success redirect, routes) —
+  pending the test-runner decision.
+
 Notes:
 - Contact reasons: the form keeps submitting the Spanish label as `value` (PHP routes by it);
   only the visible label is translated.
