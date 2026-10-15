@@ -3,16 +3,14 @@ import { Image } from "astro:assets";
 import Eyebrow from "../Eyebrow.astro";
 import PolicyAccordion from "./PolicyAccordion.astro";
 import { policies } from "../../data/about";
-import operatorCabin from "../../assets/img/operator-cabin.png";
+import operatorCabin from "../../assets/img/index_quienes_somos.webp";
 ---
 <section class="about" aria-label="Quiénes somos">
   <div class="about__text" data-reveal-stagger>
     <span class="about__eyebrow"><Eyebrow>NUESTRA IDENTIDAD</Eyebrow></span>
     <h2 class="title about__title">QUIÉNES SOMOS</h2>
     <p class="about__lead">
-      Somos una empresa minera dedicada a la exploración, explotación y comercialización de oro y plata.
-      Desarrollamos nuestras operaciones con responsabilidad y eficiencia, priorizando la seguridad de las personas,
-      el cuidado del medio ambiente y la mejora contínua, contribuyendo al desarrollo de la minería y economía peruana.
+      Somos una empresa minera dedicada a la exploración, explotación y comercialización de oro y plata. Desarrollamos nuestras operaciones con responsabilidad y eficiencia, priorizando la seguridad de las personas, la protección del medio ambiente y la mejora continua. Contribuimos al desarrollo de la industria minera y al crecimiento de la economía peruana.
     </p>
     <h3 class="about__sub">POLÍTICAS Y COMPROMISOS</h3>
     <PolicyAccordion policies={policies} />

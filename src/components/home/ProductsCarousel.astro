@@ -1,6 +1,5 @@
 ---
 import Eyebrow from "../Eyebrow.astro";
-import Icon from "../Icon.astro";
 import ProductCard from "./ProductCard.astro";
 import { products } from "../../data/products";
 
@@ -12,51 +11,86 @@ const featured = products.slice(0, 3);
     <div class="products__intro" data-reveal-stagger>
       <Eyebrow filled>NUESTRA PRODUCCIÓN</Eyebrow>
       <h2 id="products-title" class="title">PRODUCTOS</h2>
-      <p>
-        Oro, barras de oro y plata extraídos en la mina Bonanza, en Arequipa, con
-        altos estándares de seguridad y gestión ambiental.
+      <p id="products_description">
+        Conoce nuestra producción, las características de los minerales que obtenemos y las etapas de nuestra actividad minera.
       </p>
-    </div>
-    <div class="carousel-ctl">
-      <button type="button" data-dir="-1">
-        <span class="icon--flip"><Icon name="arrow-back" size={16} /></span
-        >Atrás
-      </button>
-      <button type="button" data-dir="1">
-        Siguiente<Icon name="arrow-forward" size={16} />
-      </button>
     </div>
   </div>
   <div class="products__track" data-reveal-stagger>
     {featured.map((p) => <ProductCard product={p} />)}
   </div>
-  <div class="dots" aria-hidden="true">
-    <span class="is-active"></span><span></span><span></span>
+  <div class="dots">
+    <button type="button" class="is-active" aria-label="Ver producto 1"></button><button
+      type="button"
+      aria-label="Ver producto 2"
+    ></button><button type="button" aria-label="Ver producto 3"></button>
   </div>
 </section>
 <script>
-  const track = document.querySelector(".products__track");
-  const dots = [...document.querySelectorAll(".dots span")];
-  const step = () => track?.querySelector(".product")?.clientWidth ?? 0;
-  document.querySelectorAll(".carousel-ctl button").forEach((btn) => {
-    btn.addEventListener("click", () => {
-      track?.scrollBy({
-        left: Number(btn.getAttribute("data-dir")) * step(),
-        behavior: "smooth",
-      });
+  // Misma lógica que los botones Atrás/Siguiente: avance discreto de a 1 slide.
+  // El swipe táctil solo decide la dirección; el movimiento lo hace goTo().
+  const section = document.querySelector(".products");
+  const track = section?.querySelector<HTMLElement>(".products__track") ?? null;
+  const dots = [...(section?.querySelectorAll<HTMLButtonElement>(".dots button") ?? [])];
+  const mq = window.matchMedia("(max-width: 1024px)");
+  let current = 0;
+
+  const step = () => {
+    const card = track?.querySelector(".product");
+    if (!track || !card) return 0;
+    const gap = parseFloat(
+      getComputedStyle(track).columnGap || getComputedStyle(track).gap || "0",
+    );
+    return card.clientWidth + (Number.isNaN(gap) ? 0 : gap);
+  };
+  const goTo = (i: number, smooth = true) => {
+    if (!track) return;
+    current = Math.max(0, Math.min(dots.length - 1, i));
+    track.scrollTo({
+      left: current * step(),
+      behavior: smooth ? "smooth" : "auto",
     });
-  });
+    dots.forEach((dot, n) => dot.classList.toggle("is-active", n === current));
+  };
+  // Dots con la misma lógica de controles
+  dots.forEach((dot, n) => dot.addEventListener("click", () => goTo(n)));
+
+  // Sin listener de scroll a propósito: el track es overflow hidden y solo
+  // se mueve por goTo(), que ya actualiza los dots de forma sincrónica.
+  // Escuchar el scroll durante la animación suave recalculaba el índice
+  // con valores intermedios y hacía parpadear los dots.
+
+  // Swipe táctil = Atrás / Siguiente. Umbral fijo, un producto por gesto.
+  let startX = 0;
+  let startY = 0;
   track?.addEventListener(
-    "scroll",
-    () => {
-      const activeIndex = Math.round(track.scrollLeft / step() || 0);
-      dots.forEach((dot, n) =>
-        
-        dot.classList.toggle("is-active", n === activeIndex),
-      );
+    "touchstart",
+    (e: TouchEvent) => {
+      if (!mq.matches) return;
+      const t = e.touches[0];
+      if (!t) return;
+      startX = t.clientX;
+      startY = t.clientY;
     },
     { passive: true },
   );
+  track?.addEventListener(
+    "touchend",
+    (e: TouchEvent) => {
+      if (!mq.matches) return;
+      const t = e.changedTouches[0];
+      if (!t) return;
+      const dx = t.clientX - startX;
+      const dy = t.clientY - startY;
+      // Solo gestos horizontales claros: evita pelear con el scroll vertical
+      if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+      goTo(current + (dx < 0 ? 1 : -1));
+    },
+    { passive: true },
+  );
+
+  // Al volver a desktop o rotar, re-clava el slide actual sin animación
+  window.addEventListener("resize", () => goTo(current, false));
 </script>
 <style>
   .products {
@@ -72,11 +106,15 @@ const featured = products.slice(0, 3);
     justify-content: space-between;
     gap: 48px;
   }
+
+  #products_description {
+    min-width:100%
+  }
+
   .products__intro {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    max-width: 759px;
   }
   .products__intro .title {
     color: var(--nb-ink-100);
@@ -86,33 +124,6 @@ const featured = products.slice(0, 3);
     line-height: 1.4;
     color: #fff;
   }
-  .carousel-ctl {
-    display: flex;
-    gap: 24px;
-  }
-  .carousel-ctl button {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: none;
-    border: 0;
-    padding: 10px;
-    font: 600 14px / 1 var(--font-body);
-    letter-spacing: var(--ls-caps);
-    color: #f8f8f8;
-    cursor: pointer;
-    text-transform: uppercase;
-  }
-
-  .carousel-ctl button:hover {
-    color: var(--nb-gold);
-  }
-
-  .icon--flip {
-    display: inline-flex;
-    transform: scaleX(-1);
-  }
-
   .products__track {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -128,6 +139,44 @@ const featured = products.slice(0, 3);
       align-items: stretch;
     }
   }
+  /* Tablet y móvil: un producto por vista, avance discreto como los botones.
+     Sin scroll-snap ni corrección por JS: el swipe solo elige dirección. */
+  @media (max-width: 1024px) {
+    .products__track {
+      display: flex;
+      gap: 20px;
+      overflow-x: hidden;
+      overflow-y: hidden;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      touch-action: pan-y;
+      overscroll-behavior-x: contain;
+      padding-bottom: 4px;
+    }
+    .products__track::-webkit-scrollbar {
+      display: none;
+    }
+    .products__track :global(.product) {
+      flex: 0 0 100%;
+    }
+    .dots {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+    }
+    .dots button {
+      width: 10px;
+      height: 10px;
+      padding: 0;
+      border: 0;
+      border-radius: var(--radius-round);
+      background: rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+    }
+    .dots button.is-active {
+      background: var(--nb-gold);
+    }
+  }
   @media (max-width: 760px) {
     .products {
       padding: 48px 20px;
@@ -140,37 +189,6 @@ const featured = products.slice(0, 3);
     }
     .products__intro p {
       font-size: 16px;
-    }
-    .carousel-ctl {
-      justify-content: space-between;
-    }
-    .carousel-ctl button {
-      padding: 12px 0;
-      min-height: 44px;
-    }
-    .products__track {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      scrollbar-width: none;
-    }
-    .products__track::-webkit-scrollbar {
-      display: none;
-    }
-    .dots {
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-    }
-    .dots span {
-      width: 10px;
-      height: 10px;
-      border-radius: var(--radius-round);
-      background: rgba(255, 255, 255, 0.4);
-    }
-    
-    .dots span.is-active {
-      background: var(--nb-gold);
     }
   }
 </style>

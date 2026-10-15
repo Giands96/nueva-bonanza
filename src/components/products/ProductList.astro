@@ -3,13 +3,6 @@ import { Image } from "astro:assets";
 import { products } from "../../data/products";
 ---
 <section class="plist" aria-labelledby="plist-title">
-  <div class="plist__head" data-reveal-stagger>
-    <h2 id="plist-title" class="title">LO QUE PRODUCIMOS</h2>
-    <p>
-      Somos una operación de extracción: no refinamos ni vendemos al público.
-      Nuestra producción se entrega a refinerías autorizadas.
-    </p>
-  </div>
   <div class="plist__items">
     {products.map((p, i) => (
       <article id={p.id} class:list={["product", { "product--reverse": i % 2 === 1 }]}>

@@ -1,7 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import Button from "../Button.astro";
-import heroMine from "../../assets/img/hero-mine.png";
+import heroMine from "../../assets/img/Hero.webp";
 ---
 <section class="hero">
   {/*
@@ -13,9 +13,9 @@ import heroMine from "../../assets/img/hero-mine.png";
     src={heroMine}
     alt=""
     aria-hidden="true"
-    widths={[768, 1280, 1920]}
+    widths={[768, 1280, 1366, 1600]}
     sizes="100vw"
-    formats={["webp"]}
+    format="webp"
     quality={75}
     loading="eager"
     fetchpriority="high"

@@ -35,7 +35,7 @@ const historyBgOpt = await getImage({
   .history {
     position: relative;
     isolation: isolate;
-    padding: 80px var(--pad-inline);
+    padding: clamp(80px, 10vw, 140px) var(--pad-inline);
     background: var(--nb-cream);
     display: flex;
     flex-direction: column;
@@ -108,7 +108,6 @@ const historyBgOpt = await getImage({
     color: var(--nb-ink-800);
   }
   .milestone p {
-    max-width: 240px;
     font: 500 16px / 1.4 var(--font-body);
     color: var(--nb-ink-800);
   }
@@ -158,7 +157,6 @@ const historyBgOpt = await getImage({
     gap: 16px;
   }
   .history__note p {
-    max-width: 60ch;
     font: 400 18px / 1.5 var(--font-body);
     color: var(--nb-ink-800);
   }

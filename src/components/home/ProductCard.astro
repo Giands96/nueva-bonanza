@@ -17,7 +17,7 @@ const { product } = Astro.props;
     src={product.image}
     alt={product.imageAlt}
     widths={[480, 800, 1200]}
-    sizes="(max-width: 760px) 100vw, 33vw"
+    sizes="(max-width: 1024px) 100vw, 33vw"
     format="webp"
     quality={70}
     loading="lazy"
@@ -85,11 +85,18 @@ const { product } = Astro.props;
     letter-spacing: var(--ls-caps);
   }
   .product__name { font: 700 40px / 1 var(--font-display); }
+  @media (max-width: 1024px) {
+    .product {
+      flex: 0 0 100%;
+      width: 100%;
+      height: 440px;
+    }
+  }
   @media (max-width: 760px) {
     .product {
       flex: 0 0 100%;
+      width: 100%;
       height: 420px;
-      scroll-snap-align: start;
       padding: 24px;
     }
     .product__name { font-size: 36px; }
