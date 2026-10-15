@@ -2,14 +2,45 @@
 import { Image } from "astro:assets";
 import Icon from "../Icon.astro";
 import asideImg from "../../assets/img/hero-mine.png";
-import { contact } from "../../data/site";
+import { getContact } from "../../data/site";
+import { getLang } from "../../i18n/utils";
+import type { Lang } from "../../i18n/ui";
+
+const lang = getLang(Astro.currentLocale);
+const es = {
+  imageAlt: "Operación minera Nueva Bonanza",
+  kicker: "CONTACTO DIRECTO",
+  text: "Nuestro equipo canalizará su consulta con el área correspondiente.",
+  address: "DIRECCIÓN",
+  phone: "TELÉFONO",
+  email: "CORREO",
+  hours: "HORARIO DE ATENCIÓN",
+  urgentTitle: "¿SU CONSULTA ES URGENTE?",
+  urgentText: (phone: string) => `Comuníquese al ${phone} durante nuestro horario de atención.`,
+};
+const copy: Record<Lang, typeof es> = {
+  es,
+  en: {
+    imageAlt: "Nueva Bonanza mining operation",
+    kicker: "DIRECT CONTACT",
+    text: "Our team will route your inquiry to the appropriate department.",
+    address: "ADDRESS",
+    phone: "PHONE",
+    email: "EMAIL",
+    hours: "BUSINESS HOURS",
+    urgentTitle: "IS YOUR INQUIRY URGENT?",
+    urgentText: (phone) => `Call us at ${phone} during our business hours.`,
+  },
+};
+const t = copy[lang];
+const contact = getContact(lang);
 ---
 <aside class="caside" data-reveal>
   <div class="caside__imgwrap">
     <Image
       class="caside__img"
       src={asideImg}
-      alt="Operación minera Nueva Bonanza"
+      alt={t.imageAlt}
       widths={[480, 800]}
       sizes="(max-width: 1100px) 100vw, 400px"
       formats={["webp"]}
@@ -20,30 +51,30 @@ import { contact } from "../../data/site";
   </div>
   <div class="caside__body">
     <div>
-      <b class="caside__kicker">CONTACTO DIRECTO</b>
-      <p>Nuestro equipo canalizará su consulta con el área correspondiente.</p>
+      <b class="caside__kicker">{t.kicker}</b>
+      <p>{t.text}</p>
     </div>
     <dl>
       <div>
         <Icon name="location-lg" size={18} color="var(--nb-gold)" />
-        <span><dt>DIRECCIÓN</dt><dd>{contact.address}</dd></span>
+        <span><dt>{t.address}</dt><dd>{contact.address}</dd></span>
       </div>
       <div>
         <Icon name="call" size={18} color="var(--nb-gold)" />
-        <span><dt>TELÉFONO</dt><dd>{contact.phone}</dd></span>
+        <span><dt>{t.phone}</dt><dd>{contact.phone}</dd></span>
       </div>
       <div>
         <Icon name="mail" size={18} color="var(--nb-gold)" />
-        <span><dt>CORREO</dt><dd>{contact.email}</dd></span>
+        <span><dt>{t.email}</dt><dd>{contact.email}</dd></span>
       </div>
       <div>
         <Icon name="calendar" size={18} color="var(--nb-gold)" />
-        <span><dt>HORARIO DE ATENCIÓN</dt><dd>{contact.hours}</dd></span>
+        <span><dt>{t.hours}</dt><dd>{contact.hours}</dd></span>
       </div>
     </dl>
     <div class="caside__urgent" id="contact-urgent" hidden>
-      <b>¿SU CONSULTA ES URGENTE?</b>
-      <span>Comuníquese al {contact.phone} durante nuestro horario de atención.</span>
+      <b>{t.urgentTitle}</b>
+      <span>{t.urgentText(contact.phone)}</span>
     </div>
   </div>
 </aside>

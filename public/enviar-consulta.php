@@ -15,13 +15,29 @@ if (!defined('EMPLEO_LABEL')) define('EMPLEO_LABEL', 'Empleo y prácticas');
 $DESTINOS = array(
   'Propuesta de proyecto'    => 'gerencia01@nbonanzamining.com',
   'Consulta comercial'       => 'hector.acevedo@nbonanzamining.com',
-  'Empleo y prácticas'       => 'axeldelsolar.dev@gmail.com',
+  'Empleo y prácticas'       => 'sally.falconi@nbonanzamining.com',
   'Prensa y comunicaciones'  => 'paola.acevedo@nbonanzamining.com',
   'Logística y transporte'   => 'logistica01@nbonanzamining.com',
   'Otro'                     => 'hector.acevedo@nbonanzamining.com',
 );
 
 $FROM = 'no-reply@nbonanzamining.com';
+
+// Idioma de la página que envió el formulario. Solo 'en' cambia el idioma;
+// cualquier otro valor (o ninguno) usa español. Nunca se arma una URL con el valor recibido.
+$LANG = (isset($_POST['lang']) && $_POST['lang'] === 'en') ? 'en' : 'es';
+
+$RUTAS = array(
+  'es' => array('contacto' => '/contacto', 'gracias' => '/gracias'),
+  'en' => array('contacto' => '/en/contact', 'gracias' => '/en/thanks'),
+);
+
+$IDIOMAS = array('es' => 'Español', 'en' => 'Inglés');
+
+function nb_ruta($clave) {
+  global $LANG, $RUTAS;
+  return $RUTAS[$LANG][$clave];
+}
 
 function nb_contains($haystack, $needle) {
   if ($needle === '') return true;
@@ -78,21 +94,21 @@ function nb_mimeheader($v) {
 
 function nb_fail($msg, $code = 422) {
   if (wants_json()) json_out($code, array('success' => false, 'error' => $msg));
-  header('Location: /contacto?error=1#contact-form', true, 303);
+  header('Location: ' . nb_ruta('contacto') . '?error=1#contact-form', true, 303);
   exit;
 }
 
 $method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
 if ($method !== 'POST') {
   if (wants_json()) json_out(405, array('success' => false, 'error' => 'Método no permitido.'));
-  header('Location: /contacto', true, 303);
+  header('Location: ' . nb_ruta('contacto'), true, 303);
   exit;
 }
 
 $honey = isset($_POST['_honey']) ? trim((string)$_POST['_honey']) : '';
 if ($honey !== '') {
   if (wants_json()) json_out(200, array('success' => true));
-  header('Location: /gracias', true, 303);
+  header('Location: ' . nb_ruta('gracias'), true, 303);
   exit;
 }
 
@@ -260,6 +276,7 @@ $boundary = 'nb_' . md5(uniqid((string)mt_rand(), true));
 $bodyText = "Nueva consulta desde la web\n"
   . "-------------------------------\n"
   . "Motivo: {$motivo}\n"
+  . "Idioma del formulario: {$IDIOMAS[$LANG]}\n"
   . "Nombre: {$nombre}\n"
   . "Empresa: {$empresa}\n"
   . "Correo: {$correo}\n"
@@ -305,12 +322,12 @@ if ($tmpPath !== null) @unlink($tmpPath);
 
 if (!$sent) {
   if (wants_json()) json_out(502, array('success' => false, 'error' => 'No pudimos enviar su consulta. Inténtelo nuevamente en unos minutos.'));
-  header('Location: /contacto?error=1#contact-form', true, 303);
+  header('Location: ' . nb_ruta('contacto') . '?error=1#contact-form', true, 303);
   exit;
 }
 
 if (wants_json()) {
   json_out(200, array('success' => true));
 }
-header('Location: /gracias', true, 303);
+header('Location: ' . nb_ruta('gracias'), true, 303);
 exit;

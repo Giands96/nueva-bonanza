@@ -1,15 +1,39 @@
 ---
 import { Image } from "astro:assets";
-import { mission, vision, values } from "../../data/about";
+import { getCompanyText, getValues } from "../../data/about";
 import Rule from "../Rule.astro";
 import principlesPhoto from "../../assets/img/principios-worker.png";
+import { getLang } from "../../i18n/utils";
+import type { Lang } from "../../i18n/ui";
+
+const lang = getLang(Astro.currentLocale);
+const es = {
+  kicker: "NUESTROS PRINCIPIOS",
+  title: "MISIÓN, VISIÓN Y VALORES",
+  mission: "MISIÓN",
+  vision: "VISIÓN",
+  photoAlt: "Trabajador con equipo de seguridad",
+};
+const copy: Record<Lang, typeof es> = {
+  es,
+  en: {
+    kicker: "OUR PRINCIPLES",
+    title: "MISSION, VISION AND VALUES",
+    mission: "MISSION",
+    vision: "VISION",
+    photoAlt: "Worker wearing safety equipment",
+  },
+};
+const t = copy[lang];
+const { mission, vision } = getCompanyText(lang);
+const values = getValues(lang);
 ---
 <section class="principles" aria-labelledby="principles-title">
   <div class="principles__photo" data-reveal="image">
     <Image
       class="principles__img"
       src={principlesPhoto}
-      alt="Trabajador con equipo de seguridad"
+      alt={t.photoAlt}
       widths={[480, 612, 900]}
       sizes="(max-width: 1100px) 100vw, 612px"
       format="webp"
@@ -20,18 +44,18 @@ import principlesPhoto from "../../assets/img/principios-worker.png";
   </div>
   <div class="principles__body">
     <div class="principles__head" data-reveal-stagger>
-      <b>NUESTROS PRINCIPIOS</b>
-      <h2 id="principles-title">MISIÓN, VISIÓN Y VALORES</h2>
+      <b>{t.kicker}</b>
+      <h2 id="principles-title">{t.title}</h2>
     </div>
     <div class="mv" data-reveal-stagger>
       <div>
         <Rule width={76} />
-        <h3>MISIÓN</h3>
+        <h3>{t.mission}</h3>
         <p>{mission}</p>
       </div>
       <div>
         <Rule width={76} />
-        <h3>VISIÓN</h3>
+        <h3>{t.vision}</h3>
         <p>{vision}</p>
       </div>
     </div>

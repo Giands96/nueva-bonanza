@@ -1,8 +1,20 @@
 ---
 import { getImage } from "astro:assets";
-import { milestones, historyNote } from "../../data/about";
+import { getCompanyText, getMilestones } from "../../data/about";
 import Rule from "../Rule.astro";
 import historyBg from "../../assets/img/hitos-plant.png";
+import { getLang } from "../../i18n/utils";
+import type { Lang } from "../../i18n/ui";
+
+const lang = getLang(Astro.currentLocale);
+const es = { kicker: "NUESTROS HITOS", title: "NUESTRA HISTORIA" };
+const copy: Record<Lang, typeof es> = {
+  es,
+  en: { kicker: "OUR MILESTONES", title: "OUR HISTORY" },
+};
+const t = copy[lang];
+const milestones = getMilestones(lang);
+const { historyNote } = getCompanyText(lang);
 
 // Fondo decorativo bajo overlay del 85%: basta una versión liviana.
 const historyBgOpt = await getImage({
@@ -14,8 +26,8 @@ const historyBgOpt = await getImage({
 ---
 <section class="history" aria-labelledby="history-title" style={`--history-bg:url(${historyBgOpt.src})`}>
   <div class="history__head" data-reveal-stagger>
-    <b>NUESTROS HITOS</b>
-    <h2 id="history-title">NUESTRA HISTORIA</h2>
+    <b>{t.kicker}</b>
+    <h2 id="history-title">{t.title}</h2>
   </div>
   <ol class="timeline" data-reveal-stagger style={`--count:${milestones.length}`}>
     {milestones.map((m, i) => (

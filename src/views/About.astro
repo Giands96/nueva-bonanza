@@ -1,0 +1,65 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import Company from "../components/about/Company.astro";
+import Timeline from "../components/about/Timeline.astro";
+import Principles from "../components/about/Principles.astro";
+import ContactBand from "../components/ContactBand.astro";
+import heroImage from "../assets/img/quienes_somos_hero.webp";
+import { heroPreload } from "../lib/hero";
+import { getLang } from "../i18n/utils";
+import type { Lang } from "../i18n/ui";
+
+const lang = getLang(Astro.currentLocale);
+const es = {
+  title: "Quiénes somos",
+  description:
+    "Nueva Bonanza Mining es una empresa minera arequipeña que opera la mina de oro Bonanza con altos estándares de seguridad y gestión ambiental.",
+  eyebrow: "NUESTRA IDENTIDAD",
+  heroTitle: "QUIÉNES SOMOS",
+  heroText: [
+    "Somos una empresa minera dedicada a la exploración, explotación y comercialización de minerales de oro y plata en Arequipa, Perú. Desarrollamos nuestras operaciones mediante procesos técnicos que comprenden la evaluación geológica, el mapeo y muestreo de estructuras mineralizadas, la estimación de leyes y el planeamiento de labores mineras, orientados al aprovechamiento eficiente y responsable de los recursos minerales.",
+    "Nuestras operaciones de minería subterránea abarcan el desarrollo y preparación de galerías, rampas y accesos, así como la perforación, voladura, sostenimiento de roca, ventilación, limpieza, carguío y acarreo de mineral. Gestionamos cada etapa priorizando la seguridad minera, la eficiencia productiva, el cumplimiento normativo y la responsabilidad ambiental, con un enfoque de mejora continua orientado a generar valor sostenible y contribuir al desarrollo de la minería peruana.",
+  ],
+};
+const copy: Record<Lang, typeof es> = {
+  es,
+  en: {
+    title: "About us",
+    description:
+      "Nueva Bonanza Mining is a mining company from Arequipa that operates the Bonanza gold mine with high standards of safety and environmental management.",
+    eyebrow: "OUR IDENTITY",
+    heroTitle: "ABOUT US",
+    heroText: [
+      "We are a mining company dedicated to the exploration, extraction and marketing of gold and silver ores in Arequipa, Peru. We carry out our operations through technical processes that include geological assessment, mapping and sampling of mineralized structures, grade estimation and mine planning, aimed at the efficient and responsible use of mineral resources.",
+      "Our underground mining operations cover the development and preparation of drifts, ramps and access ways, as well as drilling, blasting, ground support, ventilation, mucking, loading and ore haulage. We manage every stage prioritizing mine safety, productive efficiency, regulatory compliance and environmental responsibility, with a continuous improvement approach aimed at creating sustainable value and contributing to the development of Peruvian mining.",
+    ],
+  },
+};
+const t = copy[lang];
+
+const preload = await heroPreload(heroImage);
+---
+<BaseLayout
+  title={t.title}
+  description={t.description}
+  current="quienes-somos"
+  heroPreload={preload}
+>
+  <main>
+    <PageHero
+      eyebrow={t.eyebrow}
+      eyebrowColor="#fff"
+      title={t.heroTitle}
+      text={t.heroText}
+      focus="68% center"
+      image={heroImage}
+      tall
+    />
+    <Timeline />
+    <Principles />
+    <Company />
+    <ContactBand />
+    
+  </main>
+</BaseLayout>

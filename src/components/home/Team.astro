@@ -2,18 +2,39 @@
 import { Image } from "astro:assets";
 import Eyebrow from "../Eyebrow.astro";
 import teamPhoto from "../../assets/img/quienes_somos.webp";
+import { getLang } from "../../i18n/utils";
+import type { Lang } from "../../i18n/ui";
+
+const lang = getLang(Astro.currentLocale);
+const es = {
+  label: "Nuestro equipo",
+  eyebrow: "CONÓCENOS",
+  title: "NUESTRO EQUIPO",
+  text: "Profesionales especializados que combinan experiencia, conocimiento técnico y compromiso para sostener una minería eficiente y responsable.",
+  photoAlt: "Personal de Nueva Bonanza Mining frente a camiones mineros",
+};
+const copy: Record<Lang, typeof es> = {
+  es,
+  en: {
+    label: "Our team",
+    eyebrow: "GET TO KNOW US",
+    title: "OUR TEAM",
+    text: "Specialized professionals who combine experience, technical knowledge and commitment to sustain efficient and responsible mining.",
+    photoAlt: "Nueva Bonanza Mining staff in front of mining trucks",
+  },
+};
+const t = copy[lang];
 ---
-<section class="team" aria-label="Nuestro equipo" data-reveal-stagger>
-  <span class="team__eyebrow"><Eyebrow>CONÓCENOS</Eyebrow></span>
-  <h2 class="title">NUESTRO EQUIPO</h2>
+<section class="team" aria-label={t.label} data-reveal-stagger>
+  <span class="team__eyebrow"><Eyebrow>{t.eyebrow}</Eyebrow></span>
+  <h2 class="title">{t.title}</h2>
   <p>
-    Profesionales especializados que combinan experiencia, conocimiento técnico
-    y compromiso para sostener una minería eficiente y responsable.
+    {t.text}
   </p>
   <Image
     class="team__photo"
     src={teamPhoto}
-    alt="Personal de Nueva Bonanza Mining frente a camiones mineros"
+    alt={t.photoAlt}
     widths={[640, 1024, 1600]}
     sizes="100vw"
     format="webp"

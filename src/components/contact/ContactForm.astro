@@ -1,71 +1,160 @@
 ---
 import Button from "../Button.astro";
-import { contactReasons } from "../../data/site";
+import { getContactReasons } from "../../data/site";
+import { getLang, localizePath } from "../../i18n/utils";
+import type { Lang } from "../../i18n/ui";
+
+const lang = getLang(Astro.currentLocale);
+const es = {
+  title: "ENVÍENOS SU CONSULTA",
+  intro:
+    "Comparta los datos de su empresa y el motivo de contacto. Nuestro equipo evaluará su solicitud para derivarla al especialista correspondiente.",
+  required: "Los campos marcados con * son obligatorios.",
+  name: "Nombre y apellidos *",
+  namePlaceholder: "Ej. María Salazar",
+  company: "Empresa / organización *",
+  companyPlaceholder: "Nombre de la empresa",
+  email: "Correo corporativo *",
+  emailPlaceholder: "nombre@empresa.com",
+  phone: "Teléfono *",
+  phonePlaceholder: "+51 999 999 999",
+  position: "Cargo",
+  positionPlaceholder: "Ej. Gerente de Operaciones",
+  reason: "Motivo de contacto *",
+  reasonPlaceholder: "Seleccione una opción",
+  message: "Mensaje *",
+  messagePlaceholder: "Cuéntenos sobre su proyecto, requerimiento, ubicación y plazo estimado.",
+  cvLabel: "Adjuntar CV (PDF o Word) *",
+  cvChoose: "Elige tu archivo",
+  cvHelp: "Arrastra y suelta o haz clic · PDF o Word (.pdf, .doc, .docx), máx. 5 MB",
+  cvBrowse: "Examinar",
+  cvSample: "archivo.pdf",
+  cvRemove: "Quitar archivo adjunto",
+  cvLoaded: "Archivo cargado — haz clic para cambiarlo",
+  cvReady: "listo para enviar",
+  cvMissing: "Adjunta tu CV en PDF o Word para postularte.",
+  cvFormat: "Formato no válido. Solo se admite PDF (.pdf) o Word (.doc, .docx).",
+  cvTooBig: "El archivo supera los 5 MB. Comprímelo o usa un PDF más liviano.",
+  cvUnreadable: "No se pudo leer el archivo. Intenta con Examinar.",
+  consent: "Autorizo el tratamiento de mis datos para atender esta consulta. *",
+  privacy: "Sus datos serán tratados de forma confidencial y únicamente para atender esta solicitud.",
+  submit: "Enviar consulta",
+  error:
+    "No pudimos enviar su consulta. Inténtelo nuevamente en unos minutos o escríbanos directamente a nuestro correo.",
+};
+const copy: Record<Lang, typeof es> = {
+  es,
+  en: {
+    title: "SEND US YOUR INQUIRY",
+    intro:
+      "Share your company details and the reason for contacting us. Our team will review your request and refer it to the appropriate specialist.",
+    required: "Fields marked with * are required.",
+    name: "Full name *",
+    namePlaceholder: "E.g. María Salazar",
+    company: "Company / organization *",
+    companyPlaceholder: "Company name",
+    email: "Corporate email *",
+    emailPlaceholder: "name@company.com",
+    phone: "Phone *",
+    phonePlaceholder: "+51 999 999 999",
+    position: "Job title",
+    positionPlaceholder: "E.g. Operations Manager",
+    reason: "Reason for contact *",
+    reasonPlaceholder: "Select an option",
+    message: "Message *",
+    messagePlaceholder: "Tell us about your project, requirements, location and estimated timeline.",
+    cvLabel: "Attach CV (PDF or Word) *",
+    cvChoose: "Choose your file",
+    cvHelp: "Drag and drop or click · PDF or Word (.pdf, .doc, .docx), max. 5 MB",
+    cvBrowse: "Browse",
+    cvSample: "file.pdf",
+    cvRemove: "Remove attached file",
+    cvLoaded: "File uploaded — click to change it",
+    cvReady: "ready to send",
+    cvMissing: "Attach your CV as a PDF or Word file to apply.",
+    cvFormat: "Invalid format. Only PDF (.pdf) or Word (.doc, .docx) files are accepted.",
+    cvTooBig: "The file exceeds 5 MB. Compress it or use a smaller PDF.",
+    cvUnreadable: "The file could not be read. Try using Browse.",
+    consent: "I authorize the processing of my data to handle this inquiry. *",
+    privacy: "Your data will be treated confidentially and used only to handle this request.",
+    submit: "Send inquiry",
+    error:
+      "We could not send your inquiry. Please try again in a few minutes or write to us directly at our email address.",
+  },
+};
+const t = copy[lang];
+const reasons = getContactReasons(lang);
 ---
 
-<form class="cform" id="contact-form" data-reveal novalidate method="POST" action="/enviar-consulta.php" enctype="multipart/form-data">
+<form class="cform" id="contact-form" data-reveal novalidate method="POST" action="/enviar-consulta.php" enctype="multipart/form-data"
+  data-success-url={localizePath("gracias", lang)}
+  data-cv-choose={t.cvChoose}
+  data-cv-loaded={t.cvLoaded}
+  data-cv-ready={t.cvReady}
+  data-cv-missing={t.cvMissing}
+  data-cv-format={t.cvFormat}
+  data-cv-too-big={t.cvTooBig}
+  data-cv-unreadable={t.cvUnreadable}
+>
   <div class="cform__intro">
-    <h2>ENVÍENOS SU CONSULTA</h2>
-    <p>
-      Comparta los datos de su empresa y el motivo de contacto. Nuestro equipo
-      evaluará su solicitud para derivarla al especialista correspondiente.
-    </p>
-    <small>Los campos marcados con * son obligatorios.</small>
+    <h2>{t.title}</h2>
+    <p>{t.intro}</p>
+    <small>{t.required}</small>
   </div>
   <div class="fields">
     <label class="field">
-      <span>Nombre y apellidos *</span>
+      <span>{t.name}</span>
       <input
         name="nombre"
-        placeholder="Ej. María Salazar" 
+        placeholder={t.namePlaceholder}
         required
         autocomplete="name"
       />
     </label>
     <label class="field">
-      <span>Empresa / organización *</span>
+      <span>{t.company}</span>
       <input
         name="empresa"
-        placeholder="Nombre de la empresa"
+        placeholder={t.companyPlaceholder}
         required
         autocomplete="organization"
       />
     </label>
     <label class="field">
-      <span>Correo corporativo *</span>
+      <span>{t.email}</span>
       <input
         type="email"
         name="correo"
-        placeholder="nombre@empresa.com"
+        placeholder={t.emailPlaceholder}
         required
         autocomplete="email"
       />
     </label>
     <label class="field">
-      <span>Teléfono *</span>
+      <span>{t.phone}</span>
       <input
         type="tel"
         name="telefono"
-        placeholder="+51 999 999 999"
+        placeholder={t.phonePlaceholder}
         required
         autocomplete="tel"
       />
     </label>
     <label class="field">
-      <span>Cargo</span>
+      <span>{t.position}</span>
       <input
         name="cargo"
-        placeholder="Ej. Gerente de Operaciones"
+        placeholder={t.positionPlaceholder}
         autocomplete="organization-title"
       />
     </label>
     <label class="field">
-      <span>Motivo de contacto *</span>
+      <span>{t.reason}</span>
       <select name="motivo" required>
-        <option value="">Seleccione una opción</option>
+        <option value="">{t.reasonPlaceholder}</option>
         {
-          contactReasons.map((r) => (
-            <option value={r.label} data-to={r.to}>
+          reasons.map((r) => (
+            <option value={r.value} data-to={r.to}>
               {r.label}
             </option>
           ))
@@ -73,14 +162,14 @@ import { contactReasons } from "../../data/site";
       </select>
     </label>
     <label class="field field--full">
-      <span>Mensaje *</span>
+      <span>{t.message}</span>
       <textarea
         name="mensaje"
-        placeholder="Cuéntenos sobre su proyecto, requerimiento, ubicación y plazo estimado."
+        placeholder={t.messagePlaceholder}
         required></textarea>
     </label>
     <div class="field field--full" id="cv-field" hidden>
-      <span id="cv-label">Adjuntar CV (PDF o Word) *</span>
+      <span id="cv-label">{t.cvLabel}</span>
       <div
         class="cv-drop"
         id="cv-drop"
@@ -111,10 +200,10 @@ import { contactReasons } from "../../data/site";
           </svg>
         </span>
         <span class="cv-drop__main">
-          <strong id="cv-drop-title">Elige tu archivo</strong>
-          <small id="cv-help">Arrastra y suelta o haz clic · PDF o Word (.pdf, .doc, .docx), máx. 5 MB</small>
+          <strong id="cv-drop-title">{t.cvChoose}</strong>
+          <small id="cv-help">{t.cvHelp}</small>
         </span>
-        <span class="cv-drop__btn" aria-hidden="true" style="color:#fff">Examinar</span>
+        <span class="cv-drop__btn" aria-hidden="true" style="color:#fff">{t.cvBrowse}</span>
       </div>
       <div class="cv-file" id="cv-file" hidden>
         <span class="cv-file__icon" aria-hidden="true">
@@ -134,10 +223,10 @@ import { contactReasons } from "../../data/site";
           </svg>
         </span>
         <span class="cv-file__meta">
-          <strong id="cv-name">archivo.pdf</strong>
+          <strong id="cv-name">{t.cvSample}</strong>
           <small id="cv-size">1.2 MB</small>
         </span>
-        <button type="button" class="cv-file__remove" id="cv-remove" aria-label="Quitar archivo adjunto">
+        <button type="button" class="cv-file__remove" id="cv-remove" aria-label={t.cvRemove}>
           <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path
               d="M6 6l12 12M18 6L6 18"
@@ -153,9 +242,7 @@ import { contactReasons } from "../../data/site";
   </div>
   <label class="consent">
     <input type="checkbox" name="consentimiento" value="Sí" required />
-    <span
-      >Autorizo el tratamiento de mis datos para atender esta consulta. *</span
-    >
+    <span>{t.consent}</span>
   </label>
   <!-- Trampa anti-spam de FormSubmit: los humanos no la ven ni la rellenan. -->
   <input
@@ -166,25 +253,22 @@ import { contactReasons } from "../../data/site";
     autocomplete="off"
     aria-hidden="true"
   />
+  <!-- Idioma de la página: el PHP lo usa para redirigir y lo informa en el correo. -->
+  <input type="hidden" name="lang" value={lang} />
   <div class="cform__foot">
-    <small
-      >Sus datos serán tratados de forma confidencial y únicamente para atender
-      esta solicitud.</small
-    >
-    <Button variant="solid" type="submit" icon="arrow-right"
-      >Enviar consulta</Button
-    >
+    <small>{t.privacy}</small>
+    <Button variant="solid" type="submit" icon="arrow-right">{t.submit}</Button>
   </div>
-  <p class="cform__error" id="contact-error" role="alert" hidden>
-    No pudimos enviar su consulta. Inténtelo nuevamente en unos minutos o
-    escríbanos directamente a nuestro correo.
-  </p>
+  <p class="cform__error" id="contact-error" role="alert" hidden>{t.error}</p>
 </form>
 <script>
   // Envío al backend propio (public/enviar-consulta.php): valida campos y el
   // adjunto en servidor (anti-malware) y envía el correo. Éxito real ->
-  // redirige a /gracias; fallo real -> error inline debajo del form.
+  // redirige a la página de gracias; fallo real -> error inline debajo del form.
   const form = document.querySelector<HTMLFormElement>("#contact-form");
+  // Los textos y la URL de gracias vienen del servidor (data-*) para respetar
+  // el idioma de la página.
+  const text = (key: string) => form?.dataset[key] ?? "";
   const error = document.querySelector<HTMLElement>("#contact-error");
   const motivo = form?.querySelector<HTMLSelectElement>("[name=motivo]");
   const cvField = document.querySelector<HTMLElement>("#cv-field");
@@ -228,14 +312,14 @@ import { contactReasons } from "../../data/site";
 
   function clearCvFile() {
     cvFile?.setAttribute("hidden", "");
-    if (cvTitle) cvTitle.textContent = "Elige tu archivo";
+    if (cvTitle) cvTitle.textContent = text("cvChoose");
   }
 
   function renderCvFile(file: File) {
     if (cvName) cvName.textContent = file.name;
-    if (cvSize) cvSize.textContent = `${formatBytes(file.size)} · listo para enviar`;
+    if (cvSize) cvSize.textContent = `${formatBytes(file.size)} · ${text("cvReady")}`;
     cvFile?.removeAttribute("hidden");
-    if (cvTitle) cvTitle.textContent = "Archivo cargado — haz clic para cambiarlo";
+    if (cvTitle) cvTitle.textContent = text("cvLoaded");
   }
 
   function resetCv() {
@@ -258,7 +342,7 @@ import { contactReasons } from "../../data/site";
     const file = cvInput?.files?.[0];
     if (!file) {
       clearCvFile();
-      showCvError("Adjunta tu CV en PDF o Word para postularte.");
+      showCvError(text("cvMissing"));
       cvDrop?.setAttribute("aria-invalid", "true");
       return false;
     }
@@ -270,12 +354,12 @@ import { contactReasons } from "../../data/site";
     // identificarlo y quitarlo; si es inválido se bloquea el envío con error.
     renderCvFile(file);
     if (!extOk || !mimeOk) {
-      showCvError("Formato no válido. Solo se admite PDF (.pdf) o Word (.doc, .docx).");
+      showCvError(text("cvFormat"));
       cvDrop?.setAttribute("aria-invalid", "true");
       return false;
     }
     if (file.size > CV_MAX_BYTES) {
-      showCvError("El archivo supera los 5 MB. Comprímelo o usa un PDF más liviano.");
+      showCvError(text("cvTooBig"));
       cvDrop?.setAttribute("aria-invalid", "true");
       return false;
     }
@@ -352,7 +436,7 @@ import { contactReasons } from "../../data/site";
     cvDrop.classList.remove("is-dragover");
     const files = e.dataTransfer?.files;
     if (files?.length && setInputFiles(files)) validateCv();
-    else if (files?.length) showCvError("No se pudo leer el archivo. Intenta con Examinar.");
+    else if (files?.length) showCvError(text("cvUnreadable"));
   });
   updateCvVisibility();
 
@@ -390,7 +474,7 @@ import { contactReasons } from "../../data/site";
         if (!res.ok || json.success !== true)
           throw new Error(json.error ?? res.statusText);
       }
-      window.location.assign("/gracias");
+      window.location.assign(form.dataset.successUrl ?? "/gracias");
     } catch (err) {
       // Fallo real de envío: cuadro de error debajo del form, sin redirigir.
       console.error("[contacto] envío:", err);

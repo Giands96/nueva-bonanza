@@ -1,0 +1,75 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import PageHero from "../components/PageHero.astro";
+import ContactThanks from "../components/contact/ContactThanks.astro";
+import heroImage from "../assets/img/hero-mine.png";
+import { heroPreload } from "../lib/hero";
+import { getLang } from "../i18n/utils";
+import type { Lang } from "../i18n/ui";
+
+const lang = getLang(Astro.currentLocale);
+const es = {
+  title: "Gracias",
+  description:
+    "Hemos recibido su consulta. Un especialista de Nueva Bonanza Mining se comunicará con usted.",
+  eyebrow: "CONTACTO",
+  heroTitle: "HABLEMOS DE SU PROYECTO",
+  heroText:
+    "Conectamos oportunidades con experiencia minera, criterio técnico y una operación responsable.",
+  sectionLabel: "Confirmación de contacto",
+};
+const copy: Record<Lang, typeof es> = {
+  es,
+  en: {
+    title: "Thank you",
+    description:
+      "We have received your inquiry. A Nueva Bonanza Mining specialist will contact you.",
+    eyebrow: "CONTACT",
+    heroTitle: "LET'S TALK ABOUT YOUR PROJECT",
+    heroText:
+      "We connect opportunities with mining experience, technical judgment and responsible operations.",
+    sectionLabel: "Contact confirmation",
+  },
+};
+const t = copy[lang];
+
+const preload = await heroPreload(heroImage);
+---
+
+<BaseLayout
+  title={t.title}
+  description={t.description}
+  current="contacto"
+  heroPreload={preload}
+  noindex={true}
+>
+  <main>
+    <PageHero
+      eyebrow={t.eyebrow}
+      title={t.heroTitle}
+      text={t.heroText}
+      focus="30% center"
+      image={heroImage}
+      filled={true}
+      eyebrowColor="#fff"
+      compact
+    />
+    <section class="cwrap" aria-label={t.sectionLabel}>
+      <ContactThanks />
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .cwrap {
+    display: flex;
+    gap: 48px;
+    padding: 56px var(--pad-inline) 64px;
+    background: #fff;
+  }
+  @media (max-width: 760px) {
+    .cwrap {
+      padding: 40px 20px 48px;
+    }
+  }
+</style>

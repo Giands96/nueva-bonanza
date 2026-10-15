@@ -1,13 +1,32 @@
 ---
 import Icon from "../Icon.astro";
-import { sedes, comoLlegarUrl } from "../../data/sedes";
+import { getSedes, comoLlegarUrl } from "../../data/sedes";
 import { departamentos, PERU_VIEWBOX, proyectar } from "../../data/peru-map";
+import { getLang } from "../../i18n/utils";
+import type { Lang } from "../../i18n/ui";
+
+const lang = getLang(Astro.currentLocale);
+const es = {
+  mapLabel: (places: string) => `Mapa del Perú con las sedes de Nueva Bonanza Mining en ${places}`,
+  and: " y ",
+  directions: "Cómo llegar",
+  directionsHidden: (name: string) => ` a ${name} (abre Google Maps en una pestaña nueva)`,
+};
+const copy: Record<Lang, typeof es> = {
+  es,
+  en: {
+    mapLabel: (places) => `Map of Peru showing the Nueva Bonanza Mining locations in ${places}`,
+    and: " and ",
+    directions: "Get directions",
+    directionsHidden: (name) => ` to ${name} (opens Google Maps in a new tab)`,
+  },
+};
+const t = copy[lang];
+const sedes = getSedes(lang);
 
 const sedePorDepartamento = new Map(sedes.map((s) => [s.departamento, s.id]));
 const pines = sedes.map((s) => ({ ...s, ...proyectar(s.coords[0], s.coords[1]) }));
-const etiquetaMapa = `Mapa del Perú con las sedes de Nueva Bonanza Mining en ${sedes
-  .map((s) => s.direccion.at(-1))
-  .join(" y ")}`;
+const etiquetaMapa = t.mapLabel(sedes.map((s) => s.direccion.at(-1)).join(t.and));
 ---
 <div class="sedes" data-sedes>
   <div class="sedes__mapa">
@@ -63,7 +82,7 @@ const etiquetaMapa = `Mapa del Perú con las sedes de Nueva Bonanza Mining en ${
             </p>
           ))}
           <a class="sede__llegar" href={comoLlegarUrl(s)} target="_blank" rel="noopener">
-            Cómo llegar<span class="visually-hidden"> a {s.nombre} (abre Google Maps en una pestaña nueva)</span>
+            {t.directions}<span class="visually-hidden">{t.directionsHidden(s.nombre)}</span>
             <Icon name="arrow-right" size={14} />
           </a>
         </li>

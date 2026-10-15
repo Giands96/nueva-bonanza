@@ -2,25 +2,45 @@
 import Button from "./Button.astro";
 import Icon from "./Icon.astro";
 import SedesMap from "./contact/SedesMap.astro";
-import { contact } from "../data/site";
+import { getContact } from "../data/site";
+import { getLang, localizePath } from "../i18n/utils";
+import type { Lang } from "../i18n/ui";
+
+const lang = getLang(Astro.currentLocale);
+const es = {
+  title: "CONTÁCTANOS",
+  text: "Conversemos sobre nuestra operación y el futuro de una minería responsable en el Perú.",
+  cta: "Escríbenos",
+  email: "Correo",
+  hours: "Horario de atención",
+};
+const copy: Record<Lang, typeof es> = {
+  es,
+  en: {
+    title: "CONTACT US",
+    text: "Let's talk about our operation and the future of responsible mining in Peru.",
+    cta: "Write to us",
+    email: "Email",
+    hours: "Business hours",
+  },
+};
+const t = copy[lang];
+const contact = getContact(lang);
 ---
 <section class="contact" aria-labelledby="contact-title">
   <div class="contact__head" data-reveal-stagger>
-    <h2 id="contact-title">CONTÁCTANOS</h2>
-    <p>
-      Conversemos sobre nuestra operación y el futuro de una minería
-      responsable en el Perú.
-    </p>
-    <Button variant="solid" href="/contacto">Escríbenos</Button>
+    <h2 id="contact-title">{t.title}</h2>
+    <p>{t.text}</p>
+    <Button variant="solid" href={localizePath("contacto", lang)}>{t.cta}</Button>
   </div>
   <SedesMap>
     <dl class="contact__extra">
       <div>
-        <dt><Icon name="mail" size={18} color="var(--nb-gold)" />Correo</dt>
+        <dt><Icon name="mail" size={18} color="var(--nb-gold)" />{t.email}</dt>
         <dd><a href={`mailto:${contact.email}`}>{contact.email}</a></dd>
       </div>
       <div>
-        <dt><Icon name="calendar" size={18} color="var(--nb-gold)" />Horario de atención</dt>
+        <dt><Icon name="calendar" size={18} color="var(--nb-gold)" />{t.hours}</dt>
         <dd>{contact.hours}</dd>
       </div>
     </dl>
