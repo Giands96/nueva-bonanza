@@ -61,7 +61,11 @@ users, so the switch is user-driven.
     selector is T5.
   - User commits `fec2836` (Footer copy) and `2e01185` (BARRA image) sit on this branch
     after the reviewed boundary `996ccde`.
-- [ ] T4 — Contact form `lang` field and PHP redirects.
+- [x] T4 — Contact form `lang` field and PHP redirects. Hidden `lang` input; PHP whitelists
+  `en` (anything else → `es`), maps the 5 redirects through `nb_ruta()`, and adds
+  "Idioma del formulario: …" to the email body (approved by the user 2026-10-15).
+  Separate fix `9db00d2`: CV recipient changed from the test Gmail to
+  `sally.falconi@nbonanzamining.com` (user request).
 - [ ] T5 — Language selector and suggestion banner (after design approval).
 
 ## Checks
@@ -100,6 +104,8 @@ into T3:
   copies like the other getters.
 
 | T3c | delegated writer (3 views, 6 wrappers, 6 components, Impact fix, compat exports removed) | see git log `feat(i18n): productos` | `npm run build` OK (13 pages); Spanish diff vs post-T3b baseline: only JSON-LD `availableLanguage` `["es","en"]` on all pages, hreflang/`og:locale:alternate` on `/productos/`, `/contacto/`, `/gracias/`, 3 sitemap URLs, contact-form `data-*` strings + `data-success-url`, and scoped-style hash changes from moving page bodies into views (rules identical); English pages: lang/canonical/hreflang correct, leftover scan only proper nouns, addresses and example name; parent verified English `<option>` values stay Spanish with English text, `data-success-url="/en/thanks"`. Client to confirm: "CV" vs "résumé". Measures icons still paired by index (no icon field in data; low risk). |
+
+| T4 | inline (1 hidden input + 1 PHP file) | see git log `feat(contacto)` | `npm run build` OK (13 pages); hidden input renders `value="es"` on `/contacto/` and `value="en"` on `/en/contact/`; client script sends `new FormData(form)` so the field travels on the JS path too; no hardcoded `Location:` left in the PHP (5 via `nb_ruta`). PHP NOT executed: no PHP runtime on this machine — must be tested on Ferozo (submit from `/en/contact` with JavaScript disabled, plus one Spanish submission). |
 
 RDD review of slice `996ccde..d5a827a` (T3a+T3b plus user commits `fec2836`, `2e01185`;
 644 lines, medium): user granted consent; lineage `review-3da5ca8d8de831b0`, lens

@@ -253,6 +253,8 @@ const reasons = getContactReasons(lang);
     autocomplete="off"
     aria-hidden="true"
   />
+  <!-- Idioma de la página: el PHP lo usa para redirigir y lo informa en el correo. -->
+  <input type="hidden" name="lang" value={lang} />
   <div class="cform__foot">
     <small>{t.privacy}</small>
     <Button variant="solid" type="submit" icon="arrow-right">{t.submit}</Button>
