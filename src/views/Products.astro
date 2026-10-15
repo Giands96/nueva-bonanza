@@ -6,6 +6,7 @@ import ProcessSteps from "../components/products/ProcessSteps.astro";
 import Measures from "../components/products/Measures.astro";
 import ContactBand from "../components/ContactBand.astro";
 import heroImage from "../assets/img/productos.webp";
+import heroImageMobile from "../assets/img/PRODUCTOS_HERO_RESPONSIVE.webp";
 import { heroPreload } from "../lib/hero";
 import { getLang } from "../i18n/utils";
 import type { Lang } from "../i18n/ui";
@@ -34,7 +35,7 @@ const copy: Record<Lang, typeof es> = {
 };
 const t = copy[lang];
 
-const preload = await heroPreload(heroImage);
+const preload = await heroPreload(heroImage, heroImageMobile);
 ---
 <BaseLayout
   title={t.title}
@@ -49,6 +50,7 @@ const preload = await heroPreload(heroImage);
       text={t.heroText}
       focus="79% center"
       image={heroImage}
+      imageMobile={heroImageMobile}
     />
     <ProductList />
     <ProcessSteps />
