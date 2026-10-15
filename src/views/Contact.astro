@@ -47,10 +47,10 @@ const preload = await heroPreload(heroImage);
       eyebrow={t.eyebrow}
       title={t.heroTitle}
       text={t.heroText}
+      focus="35% center"
       image={heroImage}
       filled={true}
       eyebrowColor="#fff"
-      compact
     />
     <section class="cwrap" aria-label={t.sectionLabel}>
       <ContactInfo />
@@ -74,6 +74,9 @@ const preload = await heroPreload(heroImage);
     .cwrap {
       padding: 40px 20px 48px;
       gap: 36px;
+      text-align: center;
+      justify-content: center;
+      align-items: center;
     }
   }
 </style>

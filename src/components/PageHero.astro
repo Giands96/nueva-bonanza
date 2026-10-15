@@ -12,11 +12,13 @@ interface Props {
   compact?: boolean;
   tall?: boolean;
   eyebrowColor?: string;
+  /* Encuadre de la foto en móvil (object-position); desktop siempre centra. */
+  focus?: string;
 }
 
-const { eyebrow, title, text, image, filled = true, compact = false, tall = false, eyebrowColor } = Astro.props;
+const { eyebrow, title, text, image, filled = true, compact = false, tall = false, eyebrowColor, focus = "center" } = Astro.props;
 ---
-<section class:list={["phero", compact && "phero--compact", tall && "phero--tall"]}>
+<section class:list={["phero", compact && "phero--compact", tall && "phero--tall"]} style={`--phero-focus: ${focus}`}>
   <Image
     class="phero__bg"
     src={image}
@@ -111,12 +113,12 @@ const { eyebrow, title, text, image, filled = true, compact = false, tall = fals
   }
   @media (max-width: 760px) {
     .phero {
-      min-height: 420px;
-      padding: 48px 20px 40px;
-      align-items: flex-end;
+      min-height: 780px;
+      padding: 48px 20px;
+      align-items: center;
     }
-    .phero--compact {
-      min-height: 440px;
+    .phero__bg {
+      object-position: var(--phero-focus, center);
     }
     .phero--compact h1 {
       font-size: 40px;
@@ -126,6 +128,9 @@ const { eyebrow, title, text, image, filled = true, compact = false, tall = fals
     }
     .phero p {
       font-size: 16px;
+    }
+    .phero__content--long p {
+      font-size: 14px;
     }
   }
 </style>

@@ -50,11 +50,11 @@ const productData: ProductEntry[] = [
       imageAlt: "Planta de tratamiento de mineral",
     },
     en: {
-      name: "DORÉ BAR",
+      name: "DORE BAR",
       label: "Unrefined gold and silver",
       summary: "Gold bar obtained from the ore and delivered to refineries for purification.",
       description:
-        "The doré bar is an intermediate product intended for subsequent refining processes, where precious metals are recovered and purified for commercial use.",
+        "The dore bar is an intermediate product intended for subsequent refining processes, where precious metals are recovered and purified for commercial use.",
       imageAlt: "Ore processing plant",
     },
   },
