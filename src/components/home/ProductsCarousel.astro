@@ -1,18 +1,37 @@
 ---
 import Eyebrow from "../Eyebrow.astro";
 import ProductCard from "./ProductCard.astro";
-import { products } from "../../data/products";
+import { getProducts } from "../../data/products";
+import { getLang } from "../../i18n/utils";
+import type { Lang } from "../../i18n/ui";
 
-const featured = products.slice(0, 3);
+const lang = getLang(Astro.currentLocale);
+const es = {
+  eyebrow: "NUESTRA PRODUCCIÓN",
+  title: "PRODUCTOS",
+  text: "Conoce nuestra producción, las características de los minerales que obtenemos y las etapas de nuestra actividad minera.",
+  viewProduct: "Ver producto",
+};
+const copy: Record<Lang, typeof es> = {
+  es,
+  en: {
+    eyebrow: "OUR PRODUCTION",
+    title: "PRODUCTS",
+    text: "Learn about our production, the characteristics of the minerals we obtain and the stages of our mining activity.",
+    viewProduct: "View product",
+  },
+};
+const t = copy[lang];
+const featured = getProducts(lang).slice(0, 3);
 ---
 
 <section class="products" aria-labelledby="products-title">
   <div class="products__head">
     <div class="products__intro" data-reveal-stagger>
-      <Eyebrow filled>NUESTRA PRODUCCIÓN</Eyebrow>
-      <h2 id="products-title" class="title">PRODUCTOS</h2>
+      <Eyebrow filled>{t.eyebrow}</Eyebrow>
+      <h2 id="products-title" class="title">{t.title}</h2>
       <p id="products_description">
-        Conoce nuestra producción, las características de los minerales que obtenemos y las etapas de nuestra actividad minera.
+        {t.text}
       </p>
     </div>
   </div>
@@ -20,10 +39,10 @@ const featured = products.slice(0, 3);
     {featured.map((p) => <ProductCard product={p} />)}
   </div>
   <div class="dots">
-    <button type="button" class="is-active" aria-label="Ver producto 1"></button><button
+    <button type="button" class="is-active" aria-label={`${t.viewProduct} 1`}></button><button
       type="button"
-      aria-label="Ver producto 2"
-    ></button><button type="button" aria-label="Ver producto 3"></button>
+      aria-label={`${t.viewProduct} 2`}
+    ></button><button type="button" aria-label={`${t.viewProduct} 3`}></button>
   </div>
 </section>
 <script>

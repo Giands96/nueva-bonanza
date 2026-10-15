@@ -2,6 +2,16 @@
 import { Image } from "astro:assets";
 import Button from "../Button.astro";
 import heroMine from "../../assets/img/Hero.webp";
+import { getLang, localizePath } from "../../i18n/utils";
+import type { Lang } from "../../i18n/ui";
+
+const lang = getLang(Astro.currentLocale);
+const es = { lead: "EL FUTURO SE", emphasis: "EXTRAE HOY", cta: "Conoce nuestros productos" };
+const copy: Record<Lang, typeof es> = {
+  es,
+  en: { lead: "THE FUTURE IS", emphasis: "MINED TODAY", cta: "Explore our products" },
+};
+const t = copy[lang];
 ---
 <section class="hero">
   {/*
@@ -21,8 +31,8 @@ import heroMine from "../../assets/img/Hero.webp";
     fetchpriority="high"
   />
   <div class="hero__content">
-    <h1 class="hero__title">EL FUTURO SE{" "}<span>EXTRAE HOY</span></h1>
-    <Button variant="outline" href="/productos">Conoce nuestros productos</Button>
+    <h1 class="hero__title">{t.lead}{" "}<span>{t.emphasis}</span></h1>
+    <Button variant="outline" href={localizePath("productos", lang)}>{t.cta}</Button>
   </div>
 </section>
 <style>

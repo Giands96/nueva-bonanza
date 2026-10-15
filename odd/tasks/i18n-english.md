@@ -52,7 +52,7 @@ users, so the switch is user-driven.
   comes from `Astro.currentLocale`; client-script strings travel as `data-*` attributes.
   - [x] T3a — Shared chrome: Header, Footer, ContactBand locale-aware; shared keys in
     `ui.ts`; review fixes R3-002 (`Object.hasOwn`) and R3-003 (getters return copies).
-  - [ ] T3b — Views Home and About; `/en/` and `/en/about-us`; `home/*` and `about/*`
+  - [x] T3b — Views Home and About; `/en/` and `/en/about-us`; `home/*` and `about/*`
     components; English route entries for both.
   - [ ] T3c — Views Products, Contact, Thanks; `/en/products`, `/en/contact`,
     `/en/thanks`; `products/*` and `contact/*` components; remove T2 compatibility
@@ -85,6 +85,8 @@ users, so the switch is user-driven.
 | T2 | delegated writer (4 non-trivial files) | see git log `feat(i18n): datos` | `npm run build` OK; `diff -rq -x _astro dist-before dist` → no differences (Spanish HTML identical); parent re-ran build + diff. Type check NOT run: no TypeScript/`@astrojs/check` installed, build does not type-check. |
 
 | T3a | delegated writer (Header, Footer, ContactBand + 2 fixes) | see git log `feat(i18n): header` | `npm run build` OK; Spanish HTML vs `dist-base`: only the expected `data-label-open/close` attributes on the menu button, the header script hash, and a harmless reorder of two scoped `<style>` blocks in `index.html`; English render checked on a temporary `/en/` page (lang, nav labels, aria-labels, footer, ContactBand), page then deleted. Parent re-ran build. |
+
+| T3b | delegated writer (2 views, 4 wrappers, 10 components) | see git log `feat(i18n): inicio` | `npm run build` OK (10 pages); Spanish diff vs post-T3a baseline: only hreflang + `og:locale:alternate` on `/` and `/quienes-somos/`, two new sitemap URLs, and the known harmless scoped-style reorder in `index.html` (parent verified `quienes-somos` diff line by line); English pages: `lang="en"`, canonical and hreflang pairs correct, leftover-Spanish scan shows only proper nouns/addresses. To confirm with client: "THE FUTURE IS MINED TODAY", "explotación" → "mining". |
 
 RDD review of slice `master..996ccde` (T1+T2, 683 lines, medium): user granted consent;
 lineage `review-eced5cd23595e8e2`, lens `review-reliability` → **approved**, acknowledged

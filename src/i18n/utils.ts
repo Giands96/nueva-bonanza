@@ -23,8 +23,8 @@ export type RouteKey =
  * `hreflang`.
  */
 export const routes: Record<RouteKey, { es: string } & Partial<Record<Lang, string>>> = {
-  inicio: { es: "/" },
-  "quienes-somos": { es: "/quienes-somos" },
+  inicio: { es: "/", en: "/en/" },
+  "quienes-somos": { es: "/quienes-somos", en: "/en/about-us" },
   productos: { es: "/productos" },
   noticias: { es: "/noticias" },
   contacto: { es: "/contacto" },

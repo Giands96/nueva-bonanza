@@ -1,16 +1,18 @@
 ---
 import { Image } from "astro:assets";
 import type { Product } from "../../data/products";
+import { getLang, localizePath } from "../../i18n/utils";
 
 interface Props {
   product: Product;
 }
 
 const { product } = Astro.props;
+const lang = getLang(Astro.currentLocale);
 ---
 <a
   class="product"
-  href={`/productos#${product.id}`}
+  href={`${localizePath("productos", lang)}#${product.id}`}
 >
   <Image
     class="product__bg"
