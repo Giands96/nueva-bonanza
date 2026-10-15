@@ -5,7 +5,7 @@ import Company from "../components/about/Company.astro";
 import Timeline from "../components/about/Timeline.astro";
 import Principles from "../components/about/Principles.astro";
 import ContactBand from "../components/ContactBand.astro";
-import heroImage from "../assets/img/quienes_somos.webp";
+import heroImage from "../assets/img/quienes_somos_hero.webp";
 import { heroPreload } from "../lib/hero";
 
 const preload = await heroPreload(heroImage);
@@ -19,14 +19,15 @@ const preload = await heroPreload(heroImage);
   <main>
     <PageHero
       eyebrow="NUESTRA IDENTIDAD"
-      eyebrowColor="var(--nb-ink-800)"
+      eyebrowColor="#fff"
       title="QUIÉNES SOMOS"
       text="Somos una empresa minera dedicada a la exploración, extracción y comercialización de minerales de oro y plata en Arequipa. Desarrollamos nuestras operaciones con responsabilidad, priorizando la seguridad de las personas, la eficiencia operativa y el cuidado del medio ambiente."
       image={heroImage}
     />
-    <Company />
     <Timeline />
     <Principles />
+    <Company />
     <ContactBand />
+    
   </main>
 </BaseLayout>

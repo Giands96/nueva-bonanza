@@ -19,6 +19,36 @@ img { display: block; max-width: 100%; }
 
 :focus-visible { outline: 2px solid var(--nb-gold); outline-offset: 2px; }
 
+/* Textos descriptivos justificados (pedido de cliente).
+ * Solo <p>: títulos, botones, labels y spans mantienen su alineación.
+ * `hyphens` + `text-justify` evitan los "ríos" típicos del justificado. */
+p {
+  text-align: justify;
+  text-justify: inter-word;
+  hyphens: auto;
+}
+
+/* No descriptivos o centrados por diseño: estado original. */
+.milestone p,
+.step p,
+.team p,
+.notfound p,
+.thanks p,
+.flip__face p {
+  text-align: center;
+  hyphens: none;
+}
+.post__status {
+  text-align: left;
+  hyphens: none;
+}
+@media (max-width: 760px) {
+  .milestone p,
+  .step p {
+    text-align: left;
+  }
+}
+
 /* Icono por máscara CSS: <span class="icon" style="--i:url(...)"> */
 .icon {
   display: inline-block;
@@ -28,8 +58,12 @@ img { display: block; max-width: 100%; }
   mask: var(--i) center / contain no-repeat;
 }
 
-/* Título de sección*/
-.title { font: 700 64px / 1 var(--font-display); }
+
+
+/* Título de sección: line-height con aire para diacríticos (Á, É, Í, Ó, Ú, Ü)
+ * y descendentes (Q, J) de Oswald. Con `1` exacto esos glifos desbordan la
+ * caja de línea y cualquier ancestro con overflow los recorta. */
+.title { font: 700 64px / 1.08 var(--font-display); }
 
 /* Tarjetas de noticias: las dibuja `news-hydrate.ts` en el navegador, por eso
  * viven en CSS global y no en un componente (Astro elimina el CSS de los
@@ -106,6 +140,14 @@ img { display: block; max-width: 100%; }
   html.js [data-reveal="image"] {
     transform: none;
     clip-path: inset(8% 0 0 0);
+  }
+  /* Texto: solo fade, sin desplazamiento. El `translateY` sobre texto compone
+   * los glifos en una capa GPU con offsets fraccionales y recorta los píxeles
+   * extremos (tildes, cola de la Q) durante toda la animación: por eso el corte
+   * duraba "unos segundos" y se pasaba al terminar (transform: none). */
+  html.js [data-reveal]:is(h1, h2, h3, p),
+  html.js [data-reveal-stagger] > :is(h1, h2, h3, p) {
+    transform: none;
   }
   html.js [data-reveal-stagger] > :nth-child(2) { transition-delay: 90ms; }
   html.js [data-reveal-stagger] > :nth-child(3) { transition-delay: 180ms; }

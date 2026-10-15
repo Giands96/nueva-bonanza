@@ -21,19 +21,19 @@ export const products: Product[] = [
     id: "oro",
     name: "ORO",
     label: "Extracción de mineral aurífero",
-    summary: "Mineral con contenido de oro que extraemos del yacimiento de la mina Bonanza, en Arequipa.",
+    summary: "Mineral aurífero extraído de nuestras conseciones mineras ubicadas en Arequipa, Perú.",
     description:
-      "Extraemos mineral con contenido de oro mediante labores planificadas y controles operativos adaptados a las características del yacimiento, priorizando la seguridad y la eficiencia en cada etapa de la operación.",
+      "Desarrollamos nuestras operaciones mediante labores planificadas y controles técnicos adaptados a las características del yacimiento.",
     image: oroImage,
     imageAlt: "Frente de explotación de la mina",
   },
   {
     id: "barra-dore",
     name: "BARRA DORE",
-    label: "Oro sin refinar",
-    summary: "Barra de oro obtenida del mineral, que se entrega a refinerías para su purificación.",
+    label: "Oro y plata sin refinar",
+    summary: "Barra de oro obtenida del mineral que se entrega a refinerías para su purificación.",
     description:
-      "Extraemos mineral con contenido de oro mediante labores planificadas y controles operativos adaptados a las características del yacimiento, priorizando la seguridad y la eficiencia en cada etapa de la operación.",
+      "La barra doré constituye un producto intermedio destinado a procesos posteriores de refinación, donde se recuperan y purifican los metales preciosos para su aprovechamiento comercial.",
     image: doreImage,
     imageAlt: "Planta de tratamiento de mineral",
   },
@@ -43,7 +43,7 @@ export const products: Product[] = [
     label: "Metal asociado",
     summary: "Metal que acompaña al oro en el mineral y forma parte de la barra doré.",
     description:
-      "Metal precioso presente junto con el oro en determinados minerales y que puede formar parte de la composición de la barra doré. La plata se recupera durante el procesamiento del mineral y, cuando corresponde, se separa del oro en etapas posteriores de refinación. Su contenido depende de las características del mineral procesado.",
+      "Metal precioso presente en determinados minerales y asociado a las operaciones de extracción de oro. Su recuperación forma parte del procesamiento del mineral, puede integrarse en la barra doré y separarse posteriormente durante el proceso de refinación.",
     image: plataImage,
     imageAlt: "Camión de acarreo en la mina",
   },

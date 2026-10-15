@@ -8,7 +8,6 @@ export const navigation: NavItem[] = [
   { label: "Inicio", href: "/", key: "inicio" },
   { label: "Quiénes somos", href: "/quienes-somos", key: "quienes-somos" },
   { label: "Productos", href: "/productos", key: "productos" },
-  { label: "Noticias", href: "/noticias", key: "noticias" },
   { label: "Contacto", href: "/contacto", key: "contacto" },
 ];
 
@@ -47,7 +46,7 @@ export const contactReasons = [
   { label: "Otro", to: "aa8652f874dee24750d36e13603d5d5c" },
 ] as const;
 
-export const tagline ="Minería responsable con visión de futuro";
+export const tagline =``;
 
 /** Dominio canónico de producción (sitemap, canonical, Open Graph). */
 export const siteUrl = "https://nbonanzamining.com";
